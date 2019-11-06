@@ -1,0 +1,7 @@
+1) Add a .cs class file to the Models folder for a new table you want to make .
+2) Add all the neccessary fields (+DataAttributes like [MaxLength(50)] etc.)
+3) Add public DbSet property of new table to DBCtx.cs
+4) Create migration (in PM console): Add-Migration MyNewMigration
+5) Update DB (in PM console): Update-Database
+
+Use User.cs as an example.
