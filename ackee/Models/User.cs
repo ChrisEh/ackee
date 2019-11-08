@@ -20,6 +20,8 @@ namespace Ackee.Models
         public string LastName { get; set; }
         [Required]
         public int StudentNumber { get; set; }
+        [Required]
+        public ICollection<Role> Roles { get; set; }
         public DateTime? AccountCreatedAt { get; set; }
         public DateTime? SessionExpiresAt { get; set; }
         public DateTime? LastSeen { get; set; }
