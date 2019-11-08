@@ -1,0 +1,36 @@
+﻿.landingPage {
+    display: flex;
+    max-width: 1024px;
+    margin: 0 auto;
+    flex-direction: column-reverse;
+    width: 100%;
+}
+
+.landingPage_image {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.landingPage_image img {
+    width: 100%;
+    height: auto;
+}
+
+@media screen and (min-width: 600px) {
+    .landingPage {
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+
+    .landingPage > * {
+        width: 45%;
+    }
+
+    .landingPage_image {
+        display: flex;
+        align-items: flex-start;
+    }
+
+}

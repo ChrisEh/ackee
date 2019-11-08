@@ -1,16 +1,24 @@
-﻿@inherits LayoutComponentBase
+﻿@using Ackee.Components.UI
 
-<div class="sidebar">
+@inherits LayoutComponentBase
+
+
+@*<div class="sidebar">
     <NavMenu />
-</div>
+</div>*@
 
+<TopMenu />
 <div class="main">
     <div class="top-row px-4">
         <LoginDisplay />
         <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
     </div>
-
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code
+{
+    
+}
