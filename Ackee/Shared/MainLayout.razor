@@ -1,12 +1,24 @@
 ﻿@using Ackee.Shared.Components.UI.TopMenu
+@using Microsoft.AspNetCore.Identity
 @inherits LayoutComponentBase
 
-<div class="d-flex flex-column">
-    <header class="mainLayout">
-        <TopMenuComponent />
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="mainLayout d-flex flex-column">
+    <header>
+        <AuthorizeView>
+            <Authorized>
+                <TopMenuComponent IsUserAuthenticated=true />
+            </Authorized>
+            <NotAuthorized>
+                <TopMenuComponent IsUserAuthenticated=false />
+            </NotAuthorized>
+        </AuthorizeView>
+        
     </header>
 
-    <main class="mainLayout">
+    <main>
         @Body
     </main>
 </div>
@@ -14,5 +26,5 @@
 
 @code
 {
-    
+
 }

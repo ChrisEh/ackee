@@ -1,0 +1,113 @@
+﻿.topMenu {
+    background-color: #663366;
+    width: 100%;
+    padding: 0.5rem 0 !important;
+}
+
+/* container menu content*/
+.topMenu_container {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    padding: 0 0.5rem;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+@media screen and (min-width: 1040px) {
+    .topMenu_container {
+        padding: 0;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .topMenu_container {
+        flex-flow: row;
+    }
+}
+
+.topMenu_container__landingPage {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+/* Container of toggler and brand */
+.topMenu_togglerAndBrandContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (min-width: 992px) {
+    .topMenu_togglerAndBrandContainer {
+        width: auto;
+    }
+}
+
+/* Container of the menu items */
+
+
+/* Overwrite default navbar-brand font styling */
+.topMenu_container .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Overwrite default bootstrap links within the menut */
+.topMenu_container a{
+    color: white !important;
+}
+
+.topMenu_container #navbarTogglerTopMenu {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+/* ul */
+.topMenu_container .navbar-nav {
+    width: 100%;
+    align-items: center;
+}
+
+/* li */
+.topMenu_container .nav-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-top: 1rem;
+}
+
+@media screen and (min-width: 992px) {
+    .topMenu_container #navbarTogglerTopMenu {
+        width: auto;
+        padding: 0;
+    }
+
+
+    .topMenu_container .navbar-nav {
+        width: auto;
+    }
+
+    .topMenu_container .nav-item {
+        width: auto;
+        margin-left: 1.2rem;
+        margin-top: 0;
+    }
+}
+
+
+
+/* Overwrite default navbar-toggler styling */
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: rgb(255,255,255);
+} 
+
+
+/* Fix mobile menu */
+@media screen and (max-width: 991px) {
+
+}

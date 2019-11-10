@@ -1,33 +1,32 @@
-﻿@using Microsoft.AspNetCore.Identity
-
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
-
-<nav class="navbar navbar-expand-lg p-y-2 topMenu">    
-    <AuthorizeView>
-        <Authorized>
-            <div class="topMenu_container">
-                <div class="topMenu_togglerAndBrandContainer">
-                    <button class="navbar-toggler text-white custom-toggler ml-1" type="button" data-toggle="collapse" data-target="#navbarTogglerTopMenu" aria-controls="navbarTogglerTopMenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <a class="navbar-brand .topMenu_logo" href="/">ACKEE</a>
+﻿<div class="topMenu">
+    <div class="topMenu_container @(!IsUserAuthenticated ? "topMenu_container__landingPage" : "")">
+        <div class="topMenu_hamburgerAndLogoContainer">
+            <div id="menu-toggle" class="@(_isMenuExpanded ? "open" : "")" @onclick="ToggleMenu">
+                <div id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <TopMenuItems />
-            </div>
-        </Authorized>
-        <NotAuthorized>
-            <div class="topMenu_container topMenu_container__landingPage">
-                <div class="topMenu_togglerAndBrandContainer">
-                    <button class="navbar-toggler text-white custom-toggler ml-1" type="button" data-toggle="collapse" data-target="#navbarTogglerTopMenu" aria-controls="navbarTogglerTopMenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <a class="navbar-brand .topMenu_logo" href="/">ACKEE</a>
+                <div id="cross">
+                    <span></span>
+                    <span></span>
                 </div>
-                <TopMenuItems />
+            </div> 
+            <div class="topMenu_logo">
+                <a href="/">ACKEE</a>
             </div>
-            
-        </NotAuthorized>
-    </AuthorizeView>
-</nav>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsUserAuthenticated { get; set; }
+
+    private bool _isMenuExpanded = false;
+
+    private void ToggleMenu ()
+    {
+        _isMenuExpanded = !_isMenuExpanded;
+    }
+}
