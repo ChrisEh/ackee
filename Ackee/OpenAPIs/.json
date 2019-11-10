@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ackee</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+<script type="text/javascript">
+	
+    var appInsights=window.appInsights||function(a){
+        function b(a){c[a]=function(){var b=arguments;c.queue.push(function(){c[a].apply(c,b)})}}var c={config:a},d=document,e=window;setTimeout(function(){var b=d.createElement("script");b.src=a.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js",d.getElementsByTagName("script")[0].parentNode.appendChild(b)});try{c.cookie=d.cookie}catch(a){}c.queue=[];for(var f=["Event","Exception","Metric","PageView","Trace","Dependency"];f.length;)b("track"+f.pop());if(b("setAuthenticatedUserContext"),b("clearAuthenticatedUserContext"),b("startTrackEvent"),b("stopTrackEvent"),b("startTrackPage"),b("stopTrackPage"),b("flush"),!a.disableExceptionTracking){f="onerror",b("_"+f);var g=e[f];e[f]=function(a,b,d,e,h){var i=g&&g(a,b,d,e,h);return!0!==i&&c["_"+f](a,b,d,e,h),i}}return c
+    }({
+        instrumentationKey: 'a9d31119-00e3-463c-9e32-df1c9ee5d654'
+    });
+
+    window.appInsights=appInsights,appInsights.queue&&0===appInsights.queue.length&&appInsights.trackPageView();
+	
+    </script></head>
+<body>
+    <app>
+        <!--Blazor:{"sequence":0,"type":"server","prerenderId":"b68d933c46b941adb2be279cf77a874d","descriptor":"CfDJ8HrAvAWyykdLsi5fpQ0eOAgX_zENiwM0S-8BL8fWkGWDbtWCVZX1QMFJle4YYNH_rbDWWR6Pfiah-Z-o95oV8mXJlauXgR9JMuSVGaGo3gZPf55x7gAsLcyjxyBq1ylOg-Kl6IdeCQOd96YtUUJMhPvMgoZDKlnroaORbFQZiJIWxzJVmV5zZhHf82djdJHRQwFCyWgtPd3iHWJMlNh3Uu9zl6PvOCG1pNBS99tKbj1buettPVDD5V01UkJLwdcQYmVZxfK40bCLGKMMib3H2vQ"}-->
+        <div class="sidebar">
+    <div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href>Ackee</a>
+    <button class="navbar-toggler">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="collapse">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <a href="" class="nav-link active">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a href="counter" class="nav-link">
+                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a href="fetchdata" class="nav-link">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            </a>
+        </li>
+    </ul>
+</div>
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        
+        <a href="Identity/Account/Register">Register</a>
+        <a href="Identity/Account/Login">Log in</a>
+    
+        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+    </div>
+
+    <div class="content px-4">
+        <h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+    </div>
+</div>
+    <!--Blazor:{"prerenderId":"b68d933c46b941adb2be279cf77a874d"}-->
+    </app>
+
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>
