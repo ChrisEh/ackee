@@ -1,22 +1,16 @@
-﻿@using Ackee.Components.UI
-
+﻿@using Ackee.Shared.Components.UI.TopMenu
 @inherits LayoutComponentBase
 
+<div class="d-flex flex-column">
+    <header class="mainLayout">
+        <TopMenuComponent />
+    </header>
 
-@*<div class="sidebar">
-    <NavMenu />
-</div>*@
-
-<TopMenu />
-<div class="main">
-    <div class="top-row px-4">
-        <LoginDisplay />
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
-    </div>
-    <div class="content px-4">
+    <main class="mainLayout">
         @Body
-    </div>
+    </main>
 </div>
+
 
 @code
 {

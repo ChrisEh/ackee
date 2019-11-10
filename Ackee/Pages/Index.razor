@@ -1,15 +1,15 @@
 ﻿@page "/"
-@using Ackee.Services
-@inject AuthenticationService AuthenticationService
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
+<AuthorizeView>
+    <Authorized>
 
-@if (!AuthenticationService.GetUserAuthentication())
-{
-    <LandingPage />
-}
-else
-{
-    // load projects overview
-}
+    </Authorized>
+    <NotAuthorized>
+        <LandingPage />
+    </NotAuthorized>
+</AuthorizeView>
 
 
