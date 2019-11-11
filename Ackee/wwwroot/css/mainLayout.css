@@ -1,8 +1,10 @@
-﻿header.mainLayout {
+﻿.mainLayout > header {
     width: 100%;
-    box-shadow: 0 4px 2px -2px gray;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
-main.mainLayout .content {
+.mainLayout > main {
+    max-width: 1024px;
+    margin: 0 auto;
 }
 
