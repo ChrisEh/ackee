@@ -2,6 +2,7 @@
 @import url('mainLayout.css');
 @import url('UI/topMenu.css');
 @import url('landingPage.css');
+@import url('scaffoldingCustomLayout.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

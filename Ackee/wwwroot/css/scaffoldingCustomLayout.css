@@ -1,0 +1,11 @@
+﻿.mainLayout main.scaffolding {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+@media screen and (min-width: 1048px){
+    .mainLayout main.scaffolding {
+        padding: 1rem 0;
+    }
+}
