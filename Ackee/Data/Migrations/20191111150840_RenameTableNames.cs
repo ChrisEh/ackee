@@ -2,7 +2,7 @@
 
 namespace Ackee.Data.Migrations
 {
-    public partial class MyNewMigration : Migration
+    public partial class RenameTableNames : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

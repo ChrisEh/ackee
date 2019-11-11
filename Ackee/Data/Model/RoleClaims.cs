@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class AspNetRoleClaims
+    public partial class RoleClaims
     {
         public int Id { get; set; }
         [Required]
@@ -14,7 +14,7 @@ namespace AckeeDb.Data.Model
         public string ClaimValue { get; set; }
 
         [ForeignKey("RoleId")]
-        [InverseProperty("AspNetRoleClaims")]
-        public virtual AspNetRoles Role { get; set; }
+        [InverseProperty("RoleClaims")]
+        public virtual Roles Role { get; set; }
     }
 }

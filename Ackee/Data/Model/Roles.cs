@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class AspNetRoles
+    public partial class Roles
     {
-        public AspNetRoles()
+        public Roles()
         {
-            AspNetRoleClaims = new HashSet<AspNetRoleClaims>();
-            AspNetUserRoles = new HashSet<AspNetUserRoles>();
+            AspNetRoleClaims = new HashSet<RoleClaims>();
+            AspNetUserRoles = new HashSet<UserRoles>();
         }
 
         public string Id { get; set; }
@@ -21,8 +21,8 @@ namespace AckeeDb.Data.Model
         public string ConcurrencyStamp { get; set; }
 
         [InverseProperty("Role")]
-        public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+        public virtual ICollection<RoleClaims> AspNetRoleClaims { get; set; }
         [InverseProperty("Role")]
-        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual ICollection<UserRoles> AspNetUserRoles { get; set; }
     }
 }

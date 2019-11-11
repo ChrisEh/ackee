@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class AspNetUserRoles
+    public partial class UserRoles
     {
         public string UserId { get; set; }
         public string RoleId { get; set; }
 
         [ForeignKey("RoleId")]
-        [InverseProperty("AspNetUserRoles")]
-        public virtual AspNetRoles Role { get; set; }
+        [InverseProperty("UserRoles")]
+        public virtual Roles Role { get; set; }
         [ForeignKey("UserId")]
-        [InverseProperty("AspNetUserRoles")]
-        public virtual AspNetUsers User { get; set; }
+        [InverseProperty("UserRoles")]
+        public virtual Users User { get; set; }
     }
 }

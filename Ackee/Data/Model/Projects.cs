@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ackee.Data.Model
 {
-    public class AspNetProject
+    public class Projects
     {
 
         public string ProjectID { get; set; }//PK
@@ -29,8 +29,8 @@ namespace Ackee.Data.Model
 
 
         [ForeignKey("UserId")]//FK
-        [InverseProperty("AspNetProject")]
-        public virtual AspNetProject User { get; set; }
+        [InverseProperty("Projects")]
+        public virtual Projects User { get; set; }
         
     }
 }
