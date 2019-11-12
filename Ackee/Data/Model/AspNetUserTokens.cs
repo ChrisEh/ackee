@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class UserTokens
+    public partial class AspNetUserTokens
     {
         public string UserId { get; set; }
         [StringLength(128)]
@@ -15,7 +15,7 @@ namespace AckeeDb.Data.Model
         public string Value { get; set; }
 
         [ForeignKey("UserId")]
-        [InverseProperty("UserTokens")]
-        public virtual Users User { get; set; }
+        [InverseProperty("AspNetUserTokens")]
+        public virtual AspNetUsers User { get; set; }
     }
 }

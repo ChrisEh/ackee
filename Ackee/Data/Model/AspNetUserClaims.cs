@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class UserClaims
+    public partial class AspNetUserClaims
     {
         public int Id { get; set; }
         [Required]
@@ -14,7 +14,7 @@ namespace AckeeDb.Data.Model
         public string ClaimValue { get; set; }
 
         [ForeignKey("UserId")]
-        [InverseProperty("UserClaims")]
-        public virtual Users User { get; set; }
+        [InverseProperty("AspNetUserClaims")]
+        public virtual AspNetUsers User { get; set; }
     }
 }

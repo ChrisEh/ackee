@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AckeeDb.Data.Model
 {
-    public partial class Users
+    public partial class AspNetUsers
     {
-        public Users()
+        public AspNetUsers()
         {
-            AspNetUserClaims = new HashSet<UserClaims>();
-            AspNetUserLogins = new HashSet<UserLogins>();
-            AspNetUserRoles = new HashSet<UserRoles>();
-            AspNetUserTokens = new HashSet<UserTokens>();
+            AspNetUserClaims = new HashSet<AspNetUserClaims>();
+            AspNetUserLogins = new HashSet<AspNetUserLogins>();
+            AspNetUserRoles = new HashSet<AspNetUserRoles>();
+            AspNetUserTokens = new HashSet<AspNetUserTokens>();
         }
 
         public string Id { get; set; }
@@ -36,12 +36,12 @@ namespace AckeeDb.Data.Model
         public int AccessFailedCount { get; set; }
 
         [InverseProperty("User")]
-        public virtual ICollection<UserClaims> AspNetUserClaims { get; set; }
+        public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         [InverseProperty("User")]
-        public virtual ICollection<UserLogins> AspNetUserLogins { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         [InverseProperty("User")]
-        public virtual ICollection<UserRoles> AspNetUserRoles { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         [InverseProperty("User")]
-        public virtual ICollection<UserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
     }
 }
