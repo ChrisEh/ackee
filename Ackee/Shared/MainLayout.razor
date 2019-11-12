@@ -1,9 +1,10 @@
 ﻿@using Ackee.Shared.Components.UI.TopMenu
 @using Microsoft.AspNetCore.Identity
+@using Ackee.Data.Model
 @inherits LayoutComponentBase
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="mainLayout d-flex flex-column">
 
@@ -19,6 +20,7 @@
             </header>
         </NotAuthorized>
     </AuthorizeView>
+
 
     @* Render the pages here, the pages are wrapped in a main element *@
     @Body 
