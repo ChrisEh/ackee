@@ -1,13 +1,7 @@
 ﻿.landingPage {
     display: flex;
-    max-width: 1024px;
-    margin: 0 auto;
     flex-direction: column-reverse;
     width: 100%;
-}
-
-.landingPage_information {
-    padding: 1rem;
 }
 
 .landingPage_image {
@@ -23,7 +17,6 @@
     .landingPage {
         flex-direction: row;
         justify-content: space-between;
-        margin-top: 2rem;
     }
 
     .landingPage > * {
@@ -40,11 +33,6 @@
     .landingPage {
         flex-direction: row;
         justify-content: space-between;
-        margin-top: 2rem;
-    }
-
-    .landingPage_information {
-        padding: 0;
     }
 
     .landingPage > * {
@@ -52,7 +40,6 @@
     }
 
     .landingPage_image {
-        margin-top: 1rem;
         display: flex;
         align-items: flex-start;
     }

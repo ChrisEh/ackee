@@ -6,21 +6,22 @@
 @inject UserManager<IdentityUser> UserManager
 
 <div class="mainLayout d-flex flex-column">
-    <header>
-        <AuthorizeView>
-            <Authorized>
-                <TopMenuComponent IsUserAuthenticated=true />
-            </Authorized>
-            <NotAuthorized>
-                <TopMenuComponent IsUserAuthenticated=false />
-            </NotAuthorized>
-        </AuthorizeView>
-        
-    </header>
 
-    <main>
-        @Body
-    </main>
+    <AuthorizeView>
+        <Authorized>
+            <header>
+                <TopMenuComponent IsUserAuthenticated=true />
+            </header>
+        </Authorized>
+        <NotAuthorized>
+            <header>
+                <TopMenuComponent IsUserAuthenticated=false />
+            </header>
+        </NotAuthorized>
+    </AuthorizeView>
+
+    @* Render the pages here, the pages are wrapped in a main element *@
+    @Body 
 </div>
 
 
