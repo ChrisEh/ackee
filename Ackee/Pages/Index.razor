@@ -4,6 +4,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
 <AuthorizeView>
     <Authorized>
         <h1>You are logged in!</h1>
@@ -12,5 +13,7 @@
         <LandingPage />
     </NotAuthorized>
 </AuthorizeView>
+
+
 
 
