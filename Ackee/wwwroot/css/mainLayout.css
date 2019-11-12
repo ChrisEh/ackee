@@ -3,8 +3,15 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
-.mainLayout > main {
+.mainLayout_main__maxWidth {
     max-width: 1024px;
     margin: 0 auto;
+    padding: 1rem;
+}
+
+@media screen and (min-width: 1048px) {
+    .mainLayout_main__maxWidth {
+        padding: 1rem 0;
+    }
 }
 

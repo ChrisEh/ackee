@@ -24,10 +24,10 @@
 <body>
     <div class="mainLayout">
         <header>
-            @(await Html.RenderComponentAsync<TopMenuComponent>(RenderMode.ServerPrerendered))
+            @(await Html.RenderComponentAsync<TopMenuIdentityComponent>(RenderMode.ServerPrerendered))
         </header>
 
-        <main class="scaffolding">
+        <main class="mainLayout_main__maxWidth">
             @RenderBody()
         </main>
     </div>
