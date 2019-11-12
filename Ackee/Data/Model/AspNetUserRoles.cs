@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AckeeDb.Data.Model
+namespace Ackee.Data.Model
 {
     public partial class AspNetUserRoles
     {
