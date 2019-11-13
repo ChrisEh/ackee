@@ -7,6 +7,8 @@ namespace Ackee.Data
 {
     public class WeatherForecastService
     {
+        private AckeeCtx ctx = new AckeeCtx();
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -15,6 +17,11 @@ namespace Ackee.Data
         public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
         {
             var rng = new Random();
+            ctx.SaveChanges();
+
+
+
+
             //var weatherC = Summaries.Select(w => w.StartsWith("C"));
             //              same as:
 
