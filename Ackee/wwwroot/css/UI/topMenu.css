@@ -183,7 +183,37 @@
     line-height: 2.5rem;
 }
 
+.topMenu nav ul li form {
+    margin: 0;
+    padding: 0;
+}
+
+.topMenu nav ul li form button {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.topMenu nav ul li form button:hover {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    color: #FFCCFF;
+}
+
 .topMenu nav ul li * {
+    color: white;
+}
+
+.topMenu nav ul li:hover * {
+    color: #FFCCFF;
+}
+
+.topMenu nav ul li:hover > a.btn {
     color: white;
 }
 
@@ -224,10 +254,14 @@
         display: flex;
         align-items: center;
     }
+
+    .topMenu nav ul li form button {
+        margin-left: 0.5rem;
+    }
 }
 
 @media screen and (min-width: 1040px){
-    .topMenu_container {
+    .topMenu_container__landingPage {
         padding: 0.5rem 0;
     }
 }

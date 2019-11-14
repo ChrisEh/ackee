@@ -25,7 +25,7 @@
                     </li>
                     <li>
                         <form method="post" action="Identity/Account/LogOut">
-                            <button type="submit" class="nav-link btn btn-link">Log out</button>
+                            <button type="submit" class="">Log out</button>
                         </form>
                     </li>
                 }
@@ -45,7 +45,7 @@
 
 @code {
     [Parameter]
-    public bool IsUserAuthenticated { get; set; }
+    public bool IsUserAuthenticated { get; set; } = false;
 
     private bool _isMenuExpanded = false;
 

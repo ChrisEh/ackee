@@ -49,6 +49,13 @@
     margin-left: 0.5rem;
 }
 
+.topMenuIdentity nav ul li * {
+    color: white;
+}
+
+.topMenuIdentity nav ul li:hover * {
+    color: #FFCCFF;
+}
 
 @media screen and (min-width: 1040px) {
     .topMenuIdentity_container {
