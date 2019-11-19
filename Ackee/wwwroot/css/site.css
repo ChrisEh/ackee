@@ -4,6 +4,8 @@
 @import url('UI/topMenuIdentity.css');
 @import url('landingPage.css');
 @import url('scaffoldingCustomLayout.css');
+@import url('projectOverview.css');
+@import url('UI/projectListItem.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

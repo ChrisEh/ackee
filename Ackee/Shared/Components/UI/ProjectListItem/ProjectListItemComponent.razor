@@ -1,0 +1,14 @@
+﻿@using Ackee.Data.Model
+<div>
+    <figure>
+        <img src="#" alt="Project icon" />
+    </figure>
+</div>
+
+@code {
+    [Parameter]
+    public string projectName { get; set; }
+
+    [Parameter] 
+    public List<Projects> ListOfProjects { get; set; }
+}
