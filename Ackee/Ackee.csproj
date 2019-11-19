@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.cs" />
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,10 +20,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
