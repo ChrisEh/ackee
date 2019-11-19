@@ -8,6 +8,10 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.cs" />
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.cs" />
+    <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

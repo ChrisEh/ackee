@@ -4,14 +4,16 @@ using Ackee.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ackee.Data.Migrations
 {
     [DbContext(typeof(AckeeCtx))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191119135718_AspNetProjects")]
+    partial class AspNetProjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +100,7 @@ namespace Ackee.Data.Migrations
 
             modelBuilder.Entity("Ackee.Data.Model.AspNetMilestones", b =>
                 {
-                    b.Property<string>("MilestoneID")
+                    b.Property<string>("ProjectID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -112,13 +114,13 @@ namespace Ackee.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<string>("ProjectID")
+                    b.Property<string>("ProjectID1")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("MilestoneID");
+                    b.HasKey("ProjectID");
 
-                    b.HasIndex("ProjectID");
+                    b.HasIndex("ProjectID1");
 
                     b.ToTable("Milestones");
                 });
@@ -286,7 +288,7 @@ namespace Ackee.Data.Migrations
                 {
                     b.HasOne("Ackee.Data.Model.AspNetProjects", "Project")
                         .WithMany("Milestone")
-                        .HasForeignKey("ProjectID")
+                        .HasForeignKey("ProjectID1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

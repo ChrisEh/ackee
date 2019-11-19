@@ -6,6 +6,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAqJRZOn8dUUCxNWTqZC3OCQAAAAACAAAAAAAQZgAAAAEAACAAAADWZkTeXyi4rE+ek5sRlH8tAIONSJUMD5tPwj3UJBpI0wAAAAAOgAAAAAIAACAAAABj0GsK3yZg5270PXKkGQF9SWHhSJ57+8D1WTpZcRIRvYAAAAAsE/vnY8b6NoMOwJ925T1mbkgzz1KVbpUshpQbinXhN0YLxpVmpFlDQanL90tSxhgysR7yayp+fyS08w3LptHAhIQeM9b8PX2F+VG92C9ILSBmIiLfAG3EcV+uNvRJ5eZtEZedChiN4xSIf4nhMIMzbwUxOvNT673FgFrS0kTerEAAAAA6evAby8DbIU/ZkxBnoo6KwFWFFPoHERfog7A8Tc6XfWvjQ6wO9KRruL6dvLU+WdgM63aY3i5/RDBfqAwcYTYd</EncryptedPassword>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAb9d4JLeBzkSWVOyeqokGtgAAAAACAAAAAAAQZgAAAAEAACAAAAAgH/+1Y5lB6VAY/8i0RSzEjTq03ELmPH6P76Au2PoKpAAAAAAOgAAAAAIAACAAAADY/plpsnouHT13o826VzAN9PhoWR0rJ6OUITptP6htaIAAAABtZEzgs1ycpc7e1BHlfbk3Tk279Kq4a7ABjAWUFAWjh3gczNjb0ZlkO5f/ZLDd02ijEQr0zf4/rcLmHKLy8ELUia8FG0MBThvdHFhTbqZQcNHSF7CW4mkf3jMrl5ES05Stc5aITi/DISkK10CI4EPYfdTRCEVUeeiJtj9nAeIlJ0AAAACWHCb0+U4zF0voEab+OwgLadE7S/95mUHVQiTc9of+ioQyzMNMYWa0NVk7FiXfe/dTCog8uLGcjNhzSBoY48tx</EncryptedPassword>
   </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=tcp:ackeedbserver.database.windows.net,1433%3bInitial Catalog=Ackee_db%3bUser Id=bestAdmin%40ackeedbserver%3bPassword=AckeeWins1!</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
 </Project>
