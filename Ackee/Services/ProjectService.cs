@@ -15,9 +15,9 @@ namespace Ackee.Services
             _context = context;
         }
 
-        public async Task<List<Projects>> GetProjects()
+        public async Task<List<AspNetProjects>> GetProjects()
         {
-            List<Projects> listOfProjects = new List<Projects>();
+            List<AspNetProjects> listOfProjects = await Task.Run(() => _context.Project.ToList());
 
             return listOfProjects;
         }
