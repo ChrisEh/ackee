@@ -20,5 +20,8 @@ namespace Ackee.Data.Model
 
         [Required]
         public ApplicationUser Owner { get; set; }
+
+        [Required]
+        public List<AspNetMilestones> Milestone { get; set; }
     }
 }

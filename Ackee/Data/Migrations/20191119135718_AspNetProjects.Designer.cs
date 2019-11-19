@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ackee.Data.Migrations
 {
     [DbContext(typeof(AckeeCtx))]
-    [Migration("20191119132318_AspNetProjects")]
+    [Migration("20191119135718_AspNetProjects")]
     partial class AspNetProjects
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,33 @@ namespace Ackee.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Ackee.Data.Model.AspNetMilestones", b =>
+                {
+                    b.Property<string>("ProjectID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MilestoneName")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProjectID1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ProjectID");
+
+                    b.HasIndex("ProjectID1");
+
+                    b.ToTable("Milestones");
                 });
 
             modelBuilder.Entity("Ackee.Data.Model.AspNetProjects", b =>
@@ -255,6 +282,15 @@ namespace Ackee.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Ackee.Data.Model.AspNetMilestones", b =>
+                {
+                    b.HasOne("Ackee.Data.Model.AspNetProjects", "Project")
+                        .WithMany("Milestone")
+                        .HasForeignKey("ProjectID1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ackee.Data.Model.AspNetProjects", b =>

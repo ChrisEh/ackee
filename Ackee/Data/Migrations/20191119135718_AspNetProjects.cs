@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Ackee.Data.Migrations
 {
@@ -26,6 +27,32 @@ namespace Ackee.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Milestones",
+                columns: table => new
+                {
+                    ProjectID = table.Column<string>(nullable: false),
+                    MilestoneName = table.Column<string>(maxLength: 128, nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    ProjectID1 = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Milestones", x => x.ProjectID);
+                    table.ForeignKey(
+                        name: "FK_Milestones_Project_ProjectID1",
+                        column: x => x.ProjectID1,
+                        principalTable: "Project",
+                        principalColumn: "ProjectID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Milestones_ProjectID1",
+                table: "Milestones",
+                column: "ProjectID1");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Project_OwnerId",
                 table: "Project",
@@ -34,6 +61,9 @@ namespace Ackee.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Milestones");
+
             migrationBuilder.DropTable(
                 name: "Project");
         }
