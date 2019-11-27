@@ -1,16 +1,19 @@
 ﻿@using Ackee.Data.Model
-<div class="d-flex p-3">
-    <div class="float-left">
-        <figure class="p-2">
-            <img src="#" alt="Project icon" />
-        </figure>
-        <div>
-            <div class="p-2">
-                <h5>@projectName</h5>
-            </div>
-            <div>
-            
-            </div>
+<div class="projectListItem">
+    <figure class="projectIconContainer">
+        <img class="projectIcon"src="#" alt="Project icon" />
+    </figure>
+    <div class="projectSummary">
+        <div class="projectTitle">
+            <h5>@projectName</h5>
+        </div>
+        <div class="projectMembers">
+            @*@foreach(var member in ProjectMembers)
+            {
+                <div>
+                    
+                </div>
+            }*@
         </div>
     </div>
 </div>
@@ -20,5 +23,5 @@
     public string projectName { get; set; }
 
     [Parameter] 
-    public List<AspNetProjects> ListOfProjects { get; set; }
+    public List<AspNetUsers> ProjectMembers { get; set; }
 }

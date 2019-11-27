@@ -1,5 +1,19 @@
-﻿<h3>Button</h3>
+﻿<button class="button @(ActionButton ? "button_actionButton" : "")" @onclick=@HandleOnClick>
+    @ChildContent
+</button>
 
 @code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
 
+    [Parameter]
+    public bool ActionButton { get; set; }
+
+    [Parameter]
+    public Action OnClick { get; set; }
+
+    private void HandleOnClick()
+    {
+        OnClick?.Invoke();
+    }
 }

@@ -1,11 +1,12 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('mainLayout.css');
-@import url('UI/topMenu.css');
-@import url('UI/topMenuIdentity.css');
+@import url('UI/TopMenu/topMenu.css');
+@import url('UI/TopMenu/topMenuIdentity.css');
 @import url('landingPage.css');
 @import url('scaffoldingCustomLayout.css');
 @import url('projectOverview.css');
-@import url('UI/projectListItem.css');
+@import url('UI/ProjectListItem/projectListItem.css');
+@import url('UI/Button/button.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

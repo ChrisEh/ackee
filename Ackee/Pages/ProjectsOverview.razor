@@ -1,42 +1,44 @@
 ﻿@page  "/overview"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI.ProjectListItem
+@using Ackee.Shared.Components.UI;
 
 <main class="mainLayout_main__maxWidth">
-    <div class="">
-        <h3>Projects</h3>
-        <button type="button">Add a project</button>
+    <div class="projectsOverview">
+        <div class="projectsOverview_header">
+            <h3>Projects</h3>
+            <Button ActionButton=true>Add a project</Button>
+        </div>
+        
+        <div class="projectsOverview_navigation">
+            <ul>
+                <li class="@(_selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => onSelectTab("ALL")'>
+                    ALL
+                </li>
+                <li class="@(_selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => onSelectTab("MY TASKS")'>
+                    MY TASKS
+                </li>
+            </ul>
+        </div>
 
-        <ul>
-            <li>
-                <a href="#">ALL</a>
-            </li>
-            <li>
-                <a href="#">MY PROJECTS</a>
-            </li>
-        </ul>
-
-        <ProjectListItemComponent projectName="ProEPPPPP" />
-
-        <ul>
-            <li>
-                <img />
-                <h6>Project name</h6>
-            </li>
-            <li>
-                <img />
-                <h6>Project name</h6>
-            </li>
-            <li>
-                <img />
-                <h6>Project name</h6>
-            </li>
-        </ul>
+        <div class="projectsOverview_content">
+            @if (_selectedTab.Equals("ALL"))
+            {
+                <ProjectListItemComponent projectName="ProEPPPPP" />
+            }
+            else {
+                <h1>My personal tasks</h1>
+            }
+        </div>
     </div>
 
 </main>
 
 @code {
-    
+    private string _selectedTab = "ALL";
 
+    private void onSelectTab(string tab)
+    {
+        _selectedTab = tab;
+    }
 }
