@@ -1,0 +1,32 @@
+﻿@layout MainLayout
+@inherits LayoutComponentBase
+@using Ackee.Shared.Components.UI.LeftMenu
+
+<div class="dashboardLayout">
+    <AuthorizeView>
+        <Authorized>
+            <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
+                <LeftMenuComponent />
+            </nav>
+            <div class="dashboardLayout_content @(_menuExpanded ? "open" : "")">
+                <div class="dashboardLayout_content_toggleMenu" @onclick="toggleMenu">
+                    <span class="oi @(_menuExpanded ? "oi-arrow-left" : "oi-arrow-right")"></span>
+                </div>
+                @Body
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <h1>Requested page not found.</h1>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    private bool _menuExpanded = false;
+
+    private void toggleMenu()
+    {
+        _menuExpanded = !_menuExpanded;
+    }
+}
+

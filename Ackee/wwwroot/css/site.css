@@ -1,15 +1,21 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('mainLayout.css');
-@import url('UI/TopMenu/topMenu.css');
-@import url('UI/TopMenu/topMenuIdentity.css');
+
 @import url('landingPage.css');
 @import url('scaffoldingCustomLayout.css');
-@import url('projectOverview.css');
+@import url('projectsOverview.css');
+
 @import url('UI/ProjectListItem/projectListItem.css');
 @import url('UI/Button/button.css');
+@import url('UI/TopMenu/topMenu.css');
+@import url('UI/TopMenu/topMenuIdentity.css');
+
+@import url('DashboardLayout/dashboardLayout.css');
+@import url('DashboardLayout/LeftMenu/leftMenu.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
 }
 
 a {
@@ -20,4 +26,5 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }

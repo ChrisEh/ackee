@@ -1,0 +1,32 @@
+﻿.dashboardLayout {
+    display: flex;
+    height: 100%;
+}
+
+.dashboardLayout_leftMenuContainer {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 0;
+    transition: all 0.5s ease-in-out;
+    transform: translateX(-200px);
+}
+
+.dashboardLayout_leftMenuContainer.open {
+    transform: translateX(0);
+    width: 200px;
+}
+
+.dashboardLayout_content_toggleMenu{
+    background-color: #CC0070;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    padding-bottom: 3px;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    color: white;
+    border-radius: 3px;
+}
