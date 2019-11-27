@@ -26,9 +26,13 @@
 
 .button_actionButton {
     color: #fff;
-    background-color: rgb(220, 0, 78);
+    background-color: #CC0070;
 }
 
 .button_actionButton:hover {
-    background-color: rgb(154, 0, 54);
+    background-color: #AA0050;
+}
+
+.button_round {
+    border-radius: 1.5rem;
 }

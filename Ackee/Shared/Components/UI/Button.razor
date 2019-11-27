@@ -1,4 +1,7 @@
-﻿<button class="button @(ActionButton ? "button_actionButton" : "")" @onclick=@HandleOnClick>
+﻿<button class="button 
+        @(ActionButton ? "button_actionButton" : "")
+        @(Round ? "button_round" : "")
+        " @onclick=@HandleOnClick>
     @ChildContent
 </button>
 
@@ -7,7 +10,10 @@
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    public bool ActionButton { get; set; }
+    public bool ActionButton { get; set; } = false;
+
+    [Parameter]
+    public bool Round { get; set; } = false;
 
     [Parameter]
     public Action OnClick { get; set; }

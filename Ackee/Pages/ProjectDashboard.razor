@@ -1,0 +1,11 @@
+﻿@page "/project/{Id:int}"
+@using Ackee.Shared.Components.UI.LeftMenu;
+
+<main>
+    <LeftMenuComponent />
+</main>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+}

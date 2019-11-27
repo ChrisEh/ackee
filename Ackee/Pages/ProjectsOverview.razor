@@ -1,21 +1,22 @@
 ﻿@page  "/overview"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI.ProjectListItem
-@using Ackee.Shared.Components.UI;
+@using Ackee.Shared.Components.UI
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <main class="mainLayout_main__maxWidth">
     <div class="projectsOverview">
         <div class="projectsOverview_header">
             <h3>Projects</h3>
-            <Button ActionButton=true>Add a project</Button>
+            <Button ActionButton Round>Add a project</Button>
         </div>
         
         <div class="projectsOverview_navigation">
             <ul>
-                <li class="@(_selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => onSelectTab("ALL")'>
+                <li class="@(_selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
                     ALL
                 </li>
-                <li class="@(_selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => onSelectTab("MY TASKS")'>
+                <li class="@(_selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
                     MY TASKS
                 </li>
             </ul>
@@ -24,7 +25,7 @@
         <div class="projectsOverview_content">
             @if (_selectedTab.Equals("ALL"))
             {
-                <ProjectListItemComponent projectName="ProEPPPPP" />
+                <ProjectListItemComponent ProjectName="ProEPPPPP" ProjectID=1/>
             }
             else {
                 <h1>My personal tasks</h1>
@@ -37,7 +38,7 @@
 @code {
     private string _selectedTab = "ALL";
 
-    private void onSelectTab(string tab)
+    private void OnSelectTab(string tab)
     {
         _selectedTab = tab;
     }
