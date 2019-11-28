@@ -1,8 +1,11 @@
 ﻿@page "/project/{Id:int}"
-@using Ackee.Shared;
+@using Ackee.Shared.Components.UI.DashboardWigets;
 
 <DashboardLayout ProjectId=@Id PageName="Dashboard">
     This is the project dashboard! With a very long line.
+    <ListOfTasks>
+        
+    </ListOfTasks>
 </DashboardLayout>
 
 @code {

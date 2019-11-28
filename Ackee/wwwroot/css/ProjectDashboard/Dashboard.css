@@ -1,0 +1,22 @@
+﻿.dashboard {
+    margin-top: 1rem;
+}
+
+.dashboard .widget_header {
+    margin-left: 0.5rem;
+}
+
+.dashboard .widget_frame {
+    background-color: #ededed;
+    border: 1px solid #c4c4c4;
+    border-radius: 16px;
+    width: 20rem;
+}
+
+.dashboard .widget_frame .task > span{
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
