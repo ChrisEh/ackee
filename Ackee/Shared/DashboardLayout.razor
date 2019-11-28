@@ -7,10 +7,20 @@
                 <LeftMenuComponent />
             </nav>
             <div class="dashboardLayout_content @(_menuExpanded ? "open" : "")">
-                <div class="button button_actionButton dashboardLayout_content_toggleMenu" @onclick="toggleMenu">
-                    <span class="oi @(_menuExpanded ? "oi-arrow-left" : "oi-arrow-right")"></span>
-                </div>     
-                @ChildContent
+                <div class="dashboardLayout_content_menuTogglerAndPageName">
+                    <div class="dashboardLayout_content_menuTogglerContainer">
+                        <div class="button button_actionButton dashboardLayout_content_toggleMenu" @onclick="toggleMenu">
+                            <span class="oi @(_menuExpanded ? "oi-arrow-left" : "oi-arrow-right")"></span>
+                        </div>
+                    </div>                    
+                    <h1>
+                        @PageName
+                    </h1>
+                </div>
+                <main>
+                    @ChildContent
+                </main>
+                
             </div>
         </Authorized>
         <NotAuthorized>
@@ -22,6 +32,9 @@
 @code {
     [Parameter]
     public int ProjectId { get; set; }
+
+    [Parameter]
+    public string PageName { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }

@@ -3,6 +3,7 @@
         @(Round ? "button_round" : "")
         @(Padding ? "button_padding" : "")
         @(FontSmaller ? "button_fontSmaller" : "")
+        @(Uppercase ? "button_uppercase" : "")
         " @onclick=@HandleOnClick>
     @ChildContent
 </button>
@@ -22,6 +23,9 @@
 
     [Parameter]
     public bool FontSmaller { get; set; } = false;
+
+    [Parameter]
+    public bool Uppercase { get; set; } = false;
 
     [Parameter]
     public Action OnClick { get; set; }

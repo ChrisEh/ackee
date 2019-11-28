@@ -1,12 +1,9 @@
 ﻿@page "/project/{Id:int}"
 @using Ackee.Shared;
 
-<DashboardLayout ProjectId=@Id>
-    <main>
-        This is the project dashboard!
-    </main>
+<DashboardLayout ProjectId=@Id PageName="Dashboard">
+    This is the project dashboard! With a very long line.
 </DashboardLayout>
-
 
 @code {
     [Parameter]

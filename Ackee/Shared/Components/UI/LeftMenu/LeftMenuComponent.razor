@@ -4,11 +4,21 @@
     </div>
     <div class="leftMenu_navigation">
         <ul>
-            <li></li>
+            <li>Dashboard</li>
+            <li>Calendar</li>
+            <li>Tasks</li>
+            <li>Files</li>
+            <li>Communication</li>
+            <li>Settings</li>
+            <li>Progress</li>
         </ul>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public int ProjectId { get; set; }
 
+    // Get project object by project ID. If loaded, display it.
+    // Project project = ProjectService.GetProjectByID(ProjectID);
 }
