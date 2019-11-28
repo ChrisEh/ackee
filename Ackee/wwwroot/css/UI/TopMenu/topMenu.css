@@ -231,6 +231,8 @@
         flex-flow: row;
         justify-content: space-between;
         align-items: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .topMenu_container #menu-toggle {
@@ -264,10 +266,13 @@
     .topMenu_container__landingPage {
         padding: 0.5rem 0;
     }
+
+    .topMenu_container {
+
+    }
 }
 
 @keyframes slide-in {
-
     100% {
         visibility: visible;
     }

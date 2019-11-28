@@ -1,9 +1,14 @@
-﻿.mainLayout > header {
+﻿.mainLayout {
+    height: 100%;
+}
+
+.mainLayout > header {
     width: 100%;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .mainLayout_main__maxWidth {
+    width: 100%;
     max-width: 1024px;
     margin: 0 auto;
     padding: 1rem;

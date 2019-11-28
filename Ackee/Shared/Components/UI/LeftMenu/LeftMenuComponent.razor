@@ -1,0 +1,24 @@
+﻿<div class="leftMenu">
+    <div class="leftMenu_projectIcon">
+        <h1>P</h1>
+    </div>
+    <div class="leftMenu_navigation">
+        <ul>
+            <li>Dashboard</li>
+            <li>Calendar</li>
+            <li>Tasks</li>
+            <li>Files</li>
+            <li>Communication</li>
+            <li>Settings</li>
+            <li>Progress</li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    // Get project object by project ID. If loaded, display it.
+    // Project project = ProjectService.GetProjectByID(ProjectID);
+}

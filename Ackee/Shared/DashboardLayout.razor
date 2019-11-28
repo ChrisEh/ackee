@@ -1,0 +1,52 @@
+﻿@using Ackee.Shared.Components.UI.LeftMenu
+
+<div class="dashboardLayout">
+    <AuthorizeView>
+        <Authorized>
+            <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
+                <LeftMenuComponent />
+            </nav>
+            <div class="dashboardLayout_content @(_menuExpanded ? "open" : "")">
+                <div class="dashboardLayout_content_menuTogglerAndPageName">
+                    <div class="dashboardLayout_content_menuTogglerContainer">
+                        <div class="button button_actionButton dashboardLayout_content_toggleMenu dashboardLayout_content_toggleMenu__mobile" @onclick="ToggleMenu">
+                            <span class="oi @(_menuExpanded ? "oi-arrow-left" : "oi-arrow-right")"></span>
+                        </div>
+                        <div class="button button_actionButton dashboardLayout_content_toggleMenu dashboardLayout_content_toggleMenu__bigScreens" @onclick="ToggleMenu">
+                            <span class="oi @(_menuExpanded ? "oi-arrow-right" : "oi-arrow-left")"></span>
+                        </div>
+                    </div>                    
+                    <h1>
+                        @PageName
+                    </h1>
+                </div>
+                <main>
+                    @ChildContent
+                </main>
+                
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <h1>Requested page not found.</h1>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    [Parameter]
+    public string PageName { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private bool _menuExpanded = false;
+
+    private void ToggleMenu()
+    {
+        _menuExpanded = !_menuExpanded;
+    }
+}
+

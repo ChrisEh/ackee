@@ -1,0 +1,15 @@
+﻿@page "/project/{Id:int}"
+@using Ackee.Shared.Components.UI.DashboardWidgets
+
+<DashboardLayout ProjectId=@Id PageName="Dashboard">
+    <div class="projectDashboard_container">
+        <ListOfTasks />
+        <ListOfTasks />
+        <ListOfTasks />
+    </div>    
+</DashboardLayout>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+}
