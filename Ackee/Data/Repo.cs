@@ -22,5 +22,24 @@ namespace Ackee.Data
 
             return user.LastName ?? null;
         }
+        public static string GetProjectID(string proid)
+        {
+            var project = ctx.Project.FirstOrDefault(u => u.ProjectID==proid);
+
+            return project.ProjectName;
+        }
+
+        public static List<string> GetAllProject()
+        {
+            List<string> projectname = new List<string>();
+            var projects = ctx.Project;
+
+            foreach(var p in projects)
+            {
+                projectname.Add(p.ProjectName);
+            }
+            return projectname;
+        }
+
     }
 }

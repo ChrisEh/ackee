@@ -21,5 +21,7 @@ namespace Ackee.Data.Model
         public string Description { get; set; }
         [Required]
         public AspNetProjects Project { get; set; }
+
+        List<string> GetAllProject;
     }
 }
