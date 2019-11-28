@@ -19,9 +19,6 @@ namespace Ackee.Data
             var rng = new Random();
             ctx.SaveChanges();
 
-
-
-
             //var weatherC = Summaries.Select(w => w.StartsWith("C"));
             //              same as:
 

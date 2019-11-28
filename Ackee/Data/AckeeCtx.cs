@@ -29,5 +29,11 @@ namespace Ackee.Data
             // modelBuilder.Entity<UserProjects>().HasKey(up =>new { up.OwnerId, up.ProjectId });
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=tcp:ackeedbserver.database.windows.net,1433;Initial Catalog=Ackee_db;" +
+                "User Id=bestAdmin@ackeedbserver;Password=AckeeWins1!");
+        }
     }
 }

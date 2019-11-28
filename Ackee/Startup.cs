@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Ackee.Areas.Identity;
 using Ackee.Data;
 using Ackee.Data.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ackee
 {
@@ -35,6 +36,7 @@ namespace Ackee
             services.AddDbContext<AckeeCtx>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<AckeeCtx>();
             services.AddRazorPages();

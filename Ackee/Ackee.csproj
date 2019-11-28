@@ -6,12 +6,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
+    <Content Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.cs" />
     <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.Designer.cs" />
     <Compile Remove="Data\Migrations\20191119122611_Projects.cs" />
     <Compile Remove="Data\Migrations\20191119122611_Projects.Designer.cs" />
     <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.cs" />
     <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.Designer.cs" />
+    <Compile Remove="Pages\Shared\UserDetails.cshtml.cs" />
+    <Compile Remove="Pages\UserView.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Shared\UserDetails.cshtml" />
+    <Content Remove="Pages\UserView.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
