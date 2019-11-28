@@ -37,11 +37,11 @@
     [Parameter]
     public int ProjectID { get; set; }
 
-    private string GetProjectAbbreviation(string projectTitle)
+    private string GetProjectAbbreviation(string projectName)
     {
         string abbreviation = "";
 
-        if (string.IsNullOrEmpty(projectTitle))
+        if (string.IsNullOrEmpty(projectName))
         {
             return abbreviation;
         }

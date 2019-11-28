@@ -3,8 +3,8 @@
         @(Round ? "button_round" : "")
         @(Padding ? "button_padding" : "")
         @(FontSmaller ? "button_fontSmaller" : "")
-        @(Uppercase ? "button_uppercase" : "")
-        " @onclick=@HandleOnClick>
+        @(Uppercase ? "button_uppercase" : "")" 
+        @onclick="ButtonClickHandler">
     @ChildContent
 </button>
 
@@ -30,8 +30,8 @@
     [Parameter]
     public Action OnClick { get; set; }
 
-    private void HandleOnClick()
+    private void ButtonClickHandler()
     {
-        OnClick?.Invoke();
+        OnClick?.Invoke();        
     }
 }

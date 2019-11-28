@@ -3,10 +3,6 @@
     height: 100%;
 }
 
-.dashboardLayout * {
- 
-}
-
 .dashboardLayout_leftMenuContainer {
     padding: 0;
     margin: 0;
@@ -49,7 +45,6 @@
 
 .dashboardLayout_content_toggleMenu{
     background-color: #CC0070;
-    display: flex;
     justify-content: center;
     align-items: center;
     min-width: 35px;
@@ -60,6 +55,38 @@
     color: white;
 }
 
+.dashboardLayout_content_toggleMenu__bigScreens {
+    display: none;
+}
+
+.dashboardLayout_content_toggleMenu__mobile {
+    display: flex;
+}
+
+@media screen and (min-width: 1000px) {
+    .dashboardLayout_leftMenuContainer.open {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 0;
+        transition: all 0.5s ease-in-out;
+        transform: translateX(-230px);
+    }
+
+    .dashboardLayout_leftMenuContainer {
+        transform: translateX(0);
+        width: 230px;
+    }
+
+    .dashboardLayout_content_toggleMenu__mobile {
+        display: none;
+    }
+
+    .dashboardLayout_content_toggleMenu__bigScreens {
+        display: flex;
+    }
+
+}
 
 
 

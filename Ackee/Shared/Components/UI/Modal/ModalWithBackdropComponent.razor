@@ -1,0 +1,49 @@
+﻿<div class="backdrop
+     @(Show ? "show" : "")
+     "
+     @onclick="closeModal">    
+</div>
+<div class="modal
+     @(Show ? "show" : "")
+     @(Size_300x500 ? "modal_size__300x500" : "")
+     @(Size_500x500 ? "modal_size__500x500" : "")
+     @(Size_500x700 ? "modal_size__500x700" : "")
+     ">
+
+    @if (Header != null)
+    {
+        <div class="modal_header">
+            <h1>@Header</h1>
+            <span class="oi oi-circle-x" @onclick="closeModal"></span>
+        </div>
+    }
+
+    <div class="modal_body">
+        @ChildContent
+    </div>    
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public bool Size_300x500 { get; set; } = false;
+
+    [Parameter]
+    public bool Size_500x500 { get; set; } = false;
+
+    [Parameter]
+    public bool Size_500x700 { get; set; } = false;
+
+    [Parameter]
+    public string Header { get; set; } = null;
+
+    private void closeModal()
+    {
+        Show = false;
+    }
+}

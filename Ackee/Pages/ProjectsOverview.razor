@@ -2,13 +2,14 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI.ProjectListItem
 @using Ackee.Shared.Components.UI
+@using Ackee.Shared.Components.UI.Modal
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <main class="mainLayout_main__maxWidth">
     <div class="projectsOverview">
         <div class="projectsOverview_header">
             <h3>Projects</h3>
-            <Button ActionButton Round Padding FontSmaller Uppercase>Add a project</Button>
+            <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
         </div>
         
         <div class="projectsOverview_navigation">
@@ -32,14 +33,24 @@
             }
         </div>
     </div>
+    <ModalWithBackdropComponent Show="_showModal" Header="Add A Project">
+        Some text in a modal!
+    </ModalWithBackdropComponent>
 
 </main>
 
 @code {
     private string _selectedTab = "ALL";
+    private bool _showModal = false;
 
     private void OnSelectTab(string tab)
     {
         _selectedTab = tab;
+    }
+
+    private void ShowModal()
+    {
+        _showModal = true;        
+        StateHasChanged();
     }
 }

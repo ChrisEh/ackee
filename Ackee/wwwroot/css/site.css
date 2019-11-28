@@ -12,6 +12,7 @@
 
 @import url('DashboardLayout/dashboardLayout.css');
 @import url('DashboardLayout/LeftMenu/leftMenu.css');
+@import url('UI/Modal/modalWithBackdrop.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
