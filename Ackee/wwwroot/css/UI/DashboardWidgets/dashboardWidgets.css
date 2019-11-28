@@ -1,19 +1,20 @@
-﻿.dashboard {
-    margin-top: 1rem;
+﻿.widget {
+    margin: 1rem;
+    width: 30%;
 }
 
-.dashboard .widget_header {
-    margin-left: 0.5rem;
+.widget .widget_header {
+    margin: 0.5rem;
 }
 
-.dashboard .widget_frame {
+.widget .widget_frame {
     background-color: #ededed;
     border: 1px solid #c4c4c4;
     border-radius: 16px;
-    width: 20rem;
+    width: 100%;
 }
 
-.dashboard .widget_frame .task > span{
+.widget .widget_frame .task > span {
     height: 25px;
     width: 25px;
     background-color: #bbb;

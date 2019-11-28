@@ -14,7 +14,8 @@
 @import url('DashboardLayout/LeftMenu/leftMenu.css');
 @import url('UI/Modal/modalWithBackdrop.css');
 
-@import url('ProjectDashboard/dashboard.css');
+@import url('ProjectDashboard/projectDashboard.css');
+@import url('UI/DashboardWidgets/dashboardWidgets.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
