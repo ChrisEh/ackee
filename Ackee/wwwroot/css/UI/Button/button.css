@@ -10,10 +10,7 @@
     border-radius: 0;
     vertical-align: middle;
     justify-content: center;
-    text-decoration: none;
-    padding: 6px 16px;
-    font-size: 0.875rem;
-    min-width: 64px;
+    text-decoration: none;        
     box-sizing: border-box;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     font-weight: 500;
@@ -36,3 +33,12 @@
 .button_round {
     border-radius: 1.5rem;
 }
+
+.button_padding {
+    padding: 6px 16px;
+}
+
+.button_fontSmaller {
+    font-size: 0.875rem;
+}
+

@@ -1,6 +1,8 @@
 ﻿<button class="button 
         @(ActionButton ? "button_actionButton" : "")
         @(Round ? "button_round" : "")
+        @(Padding ? "button_padding" : "")
+        @(FontSmaller ? "button_fontSmaller" : "")
         " @onclick=@HandleOnClick>
     @ChildContent
 </button>
@@ -14,6 +16,12 @@
 
     [Parameter]
     public bool Round { get; set; } = false;
+
+    [Parameter]
+    public bool Padding { get; set; } = false;
+
+    [Parameter]
+    public bool FontSmaller { get; set; } = false;
 
     [Parameter]
     public Action OnClick { get; set; }

@@ -1,10 +1,12 @@
 ﻿@page "/project/{Id:int}"
-@layout DashboardLayout
-@using Ackee.Shared.Components.UI.LeftMenu;
+@using Ackee.Shared;
 
-<main>
-    
-</main>
+<DashboardLayout ProjectId=@Id>
+    <main>
+        This is the project dashboard!
+    </main>
+</DashboardLayout>
+
 
 @code {
     [Parameter]
