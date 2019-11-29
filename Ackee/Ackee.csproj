@@ -19,6 +19,8 @@
     <Compile Remove="Data\Migrations\20191119122611_Projects.Designer.cs" />
     <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.cs" />
     <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191129111530_projectTable6.cs" />
+    <Compile Remove="Data\Migrations\20191129111530_projectTable6.Designer.cs" />
     <Compile Remove="Pages\Shared\UserDetails.cshtml.cs" />
     <Compile Remove="Pages\UserView.cshtml.cs" />
   </ItemGroup>

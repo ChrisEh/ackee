@@ -23,5 +23,7 @@ namespace Ackee.Data.Model
 
         [Required]
         public List<AspNetMilestones> Milestone { get; set; }
+
+        public IEnumerable<UserProject> UserProjects { get; set; }
     }
 }

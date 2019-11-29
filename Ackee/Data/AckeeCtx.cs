@@ -14,6 +14,7 @@ namespace Ackee.Data
         //public DbSet<UserProjects> UserProjects { get; set; }
         public DbSet<AspNetProjects> Project { get; set; }
         public DbSet<AspNetMilestones> Milestones { get; set; }
+        
 
         public AckeeCtx() : base()
         {
@@ -26,8 +27,20 @@ namespace Ackee.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<UserProjects>().HasKey(up =>new { up.OwnerId, up.ProjectId });
+            modelBuilder.Entity<UserProject>()
+                .HasKey(u => new { u.UserId, u.ProjectId });
+
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserProject>()
+            .HasOne(pt => pt.User)
+            .WithMany(u => u.UserProjects)
+            .HasForeignKey(pt => pt.UserId).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserProject>()
+            .HasOne(pt => pt.Project)
+            .WithMany(t => t.UserProjects)
+            .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

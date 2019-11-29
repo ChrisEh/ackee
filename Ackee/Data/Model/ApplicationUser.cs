@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,6 @@ namespace Ackee.Data.Model
 
         public int StudentNumber { get; set; }
 
-        //public IEnumerable<UserProjects> UserProjects { get; set; }
+        public IEnumerable<UserProject> UserProjects { get; set; }
     }
 }
