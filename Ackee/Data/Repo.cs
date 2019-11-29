@@ -24,7 +24,7 @@ namespace Ackee.Data
         }
         public static string GetProjectID(string proid)
         {
-            var project = ctx.Project.FirstOrDefault(u => u.ProjectID==proid);
+            var project = ctx.Projects.FirstOrDefault(u => u.ProjectID==proid);
 
             return project.ProjectName;
         }
@@ -32,7 +32,7 @@ namespace Ackee.Data
         public static List<string> GetAllProject()
         {
             List<string> projectname = new List<string>();
-            var projects = ctx.Project;
+            var projects = ctx.Projects;
 
             foreach(var p in projects)
             {

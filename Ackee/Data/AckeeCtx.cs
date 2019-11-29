@@ -10,11 +10,8 @@ namespace Ackee.Data
     public partial class AckeeCtx : IdentityDbContext<ApplicationUser>
     {
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        //public DbSet<Projects> Projects { get; set; }
-        //public DbSet<UserProjects> UserProjects { get; set; }
-        public DbSet<AspNetProjects> Project { get; set; }
-        public DbSet<AspNetMilestones> Milestones { get; set; }
-        
+        public DbSet<AspNetProjects> Projects { get; set; }
+        public DbSet<AspNetMilestones> Milestones { get; set; }           
 
         public AckeeCtx() : base()
         {
