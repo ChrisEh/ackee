@@ -17,9 +17,9 @@ namespace Ackee.Data.Controllers
 
         // GET api/projects
         [HttpGet]
-        public IEnumerable<AspNetProjects> GetAllProjects()
+        public async Task<IEnumerable<AspNetProjects>> GetAllProjects()
         {
-            return ctx.Projects;
+            return await ctx.Projects.ToListAsync();
         }
 
         [HttpGet("{userId}")]

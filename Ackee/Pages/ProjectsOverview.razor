@@ -3,45 +3,60 @@
 @using Ackee.Shared.Components.UI.ProjectListItem
 @using Ackee.Shared.Components.UI
 @using Ackee.Shared.Components.UI.Modal
+@*@using Ackee.Data.Controllers*@
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<main class="mainLayout_main__maxWidth">
-    <div class="projectsOverview">
-        <div class="projectsOverview_header">
-            <h3>Projects</h3>
-            <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
-        </div>
-        
-        <div class="projectsOverview_navigation">
-            <ul>
-                <li class="@(_selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
-                    ALL
-                </li>
-                <li class="@(_selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
-                    MY TASKS
-                </li>
-            </ul>
-        </div>
 
-        <div class="projectsOverview_content">
-            @if (_selectedTab.Equals("ALL"))
+    <main class="mainLayout_main__maxWidth">
+        <div class="projectsOverview">
+            <div class="projectsOverview_header">
+                <h3>Projects</h3>
+                <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
+            </div>
+
+            <div class="projectsOverview_navigation">
+                <ul>
+                    <li class="@(_selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
+                        ALL
+                    </li>
+                    <li class="@(_selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
+                        MY TASKS
+                    </li>
+                </ul>
+            </div>
+
+            <div class="projectsOverview_content">
+                @if (_selectedTab.Equals("ALL"))
+                {
+                    <ProjectListItemComponent ProjectName="ProEP" ProjectID=1 />
+                }
+                else
+                {
+                    <h1>My personal tasks</h1>
+                }
+            </div>
+        </div>
+        <ModalWithBackdropComponent Show="_showModal" Header="Add A Project">
+            Some text in a modal!
+        </ModalWithBackdropComponent>
+
+        @if (_users == null)
+        {
+            <h1>Loading...</h1>
+        }
+        else
+        {
+            @foreach (var user in _users)
             {
-                <ProjectListItemComponent ProjectName="ProEP" ProjectID=1/>
+                <h1>@user.Email</h1>
             }
-            else {
-                <h1>My personal tasks</h1>
-            }
-        </div>
-    </div>
-    <ModalWithBackdropComponent Show="_showModal" Header="Add A Project">
-        Some text in a modal!
-    </ModalWithBackdropComponent>
-
-</main>
+        }
+    </main>
 
 @code {
     private string _selectedTab = "ALL";
     private bool _showModal = false;
+    private List<AspNetUsers> _users;
 
     private void OnSelectTab(string tab)
     {
@@ -50,7 +65,18 @@
 
     private void ShowModal()
     {
-        _showModal = true;        
+        _showModal = true;
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshProjects();
+    }
+
+    private async Task RefreshProjects()
+    {
+        _users = await (new HttpClient()).GetJsonAsync<List<AspNetUsers>>("http://localhost:53508/api/users");
         StateHasChanged();
     }
 }

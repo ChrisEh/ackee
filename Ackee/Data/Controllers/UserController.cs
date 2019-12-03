@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ackee.Data.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ackee.Data.Controllers
 {
@@ -13,11 +14,11 @@ namespace Ackee.Data.Controllers
     {
         AckeeCtx ctx = new AckeeCtx();
 
-        // GET: api/user
+        // GET: api/users
         [HttpGet]
-        public IEnumerable<ApplicationUser> Get()
+        public async Task<IEnumerable<ApplicationUser>> Get()
         {
-            return ctx.Users;
+            return await ctx.Users.ToListAsync();
         }
 
         // GET api/user/3137a909-73ee-4665-a74e-1ad574962795
