@@ -29,7 +29,7 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpGet("create/{userId}/{projectName}")]
-        public AspNetProjects CreateProjectForOwner (string userId, string projectName)
+        public AspNetProjects CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
@@ -46,7 +46,7 @@ namespace Ackee.Data.Controllers
             newProject.Owner = user;
             newProject.ProjectName = projectName;
             newProject.UserProjects = new List<UserProject>()
-            {                
+            {
                 new UserProject
                 {
                     Project = newProject,
@@ -60,12 +60,27 @@ namespace Ackee.Data.Controllers
             return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
 
+        [HttpGet("delete/{projectId}")]
+        public bool DeleteProject(string projectId)
+        {
+            // Get the project.
+            var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+
+            if (project == null)
+                return false;
+
+            ctx.Projects.Remove(project);
+            ctx.SaveChanges();
+            return true;
+        }
+
         [HttpGet("delete/{ownerId}/{projectId}")]
         public bool DeleteOwnerProject(string ownerId, string projectId)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);
-            var existingProjectForUser = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId && p.UserProjects.Any(up => up.UserId == ownerId));
+            var existingProjectForUser = ctx.Projects.FirstOrDefault(
+                p => p.ProjectID == projectId && p.UserProjects.Any(up => up.UserId == ownerId));
 
             // Return if project for user already exists or userName is null.
             if (user == null || existingProjectForUser == null)
@@ -80,7 +95,8 @@ namespace Ackee.Data.Controllers
         public IEnumerable<ApplicationUser> GetProjectMembers(string projectId)
         {
             // Get the project. 
-            var users = ctx.Users.Where(u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToList();
+            var users = ctx.Users.Where(
+                u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToList();
 
             if (users == null)
                 return null;
