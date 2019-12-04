@@ -33,10 +33,13 @@ namespace Ackee.Data.Controllers
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+            var existingProjectForUser = ctx.Projects.FirstOrDefault(p => p.UserProjects.Any(u => u.UserId == userId));
 
-            if (user == null)
+            // Return if project for user already exists or userName is null.
+            if (user == null && existingProjectForUser != null)
                 return null;
 
+            // Create the new project.
             var newProject = new AspNetProjects();
             newProject.ProjectID = ctx.Projects.Count().ToString();
             newProject.Owner = user;
@@ -50,9 +53,13 @@ namespace Ackee.Data.Controllers
                 }
             };
 
+            // Add project to DB.
             ctx.Projects.Add(newProject);
             ctx.SaveChanges();
             return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
+
+        [HttpGet("{userId}/{projectName}"]
+
     }
 }
