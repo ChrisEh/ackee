@@ -27,17 +27,17 @@ namespace Ackee.Data
             modelBuilder.Entity<UserProject>()
                 .HasKey(u => new { u.UserId, u.ProjectId });
 
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<UserProject>()
             .HasOne(pt => pt.User)
             .WithMany(u => u.UserProjects)
-            .HasForeignKey(pt => pt.UserId).OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(pt => pt.UserId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<UserProject>()
             .HasOne(pt => pt.Project)
             .WithMany(t => t.UserProjects)
-            .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -28,15 +28,16 @@ namespace Ackee.Data.Controllers
             return ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId));
         }
 
-        [HttpGet("{userId}/{projectName}")]
+        [HttpGet("create/{userId}/{projectName}")]
         public AspNetProjects CreateProjectForOwner (string userId, string projectName)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
-            var existingProjectForUser = ctx.Projects.FirstOrDefault(p => p.UserProjects.Any(u => u.UserId == userId));
+            var existingProjectForUser = ctx.Projects.FirstOrDefault(
+                p => p.UserProjects.Any(u => u.UserId == userId));
 
             // Return if project for user already exists or userName is null.
-            if (user == null && existingProjectForUser != null)
+            if (user == null || existingProjectForUser != null)
                 return null;
 
             // Create the new project.
@@ -59,7 +60,21 @@ namespace Ackee.Data.Controllers
             return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
 
-        [HttpGet("{userId}/{projectName}"]
+        [HttpGet("delete/{ownerId}/{projectId}")]
+        public bool DeleteOwnerProject(string ownerId, string projectId)
+        {
+            // Get the user.
+            var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);
+            var existingProjectForUser = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId && p.UserProjects.Any(up => up.UserId == ownerId));
+
+            // Return if project for user already exists or userName is null.
+            if (user == null || existingProjectForUser == null)
+                return false;
+
+            ctx.Projects.Remove(existingProjectForUser);
+            ctx.SaveChanges();
+            return true;
+        }
 
     }
 }
