@@ -22,10 +22,37 @@ namespace Ackee.Data.Controllers
             return ctx.Projects;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("user/{id}")]
         public IEnumerable<AspNetProjects> GetUserProjects(string userId)
         {
             return ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId));
+        }
+
+        [HttpGet("{userId}/{projectName}")]
+        public AspNetProjects CreateProjectForOwner (string userId, string projectName)
+        {
+            // Get the user.
+            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+                return null;
+
+            var newProject = new AspNetProjects();
+            newProject.ProjectID = ctx.Projects.Count().ToString();
+            newProject.Owner = user;
+            newProject.ProjectName = projectName;
+            newProject.UserProjects = new List<UserProject>()
+            {                
+                new UserProject
+                {
+                    Project = newProject,
+                    User = user
+                }
+            };
+
+            ctx.Projects.Add(newProject);
+            ctx.SaveChanges();
+            return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
     }
 }
