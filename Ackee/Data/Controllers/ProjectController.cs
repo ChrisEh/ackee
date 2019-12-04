@@ -29,7 +29,7 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpGet("create/{userId}/{projectName}")]
-        public AspNetProjects CreateProjectForOwner(string userId, string projectName)
+        public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
@@ -56,12 +56,12 @@ namespace Ackee.Data.Controllers
 
             // Add project to DB.
             ctx.Projects.Add(newProject);
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
             return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
 
         [HttpGet("delete/{projectId}")]
-        public bool DeleteProject(string projectId)
+        public async Task<bool> DeleteProject(string projectId)
         {
             // Get the project.
             var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
@@ -70,12 +70,12 @@ namespace Ackee.Data.Controllers
                 return false;
 
             ctx.Projects.Remove(project);
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
             return true;
         }
 
         [HttpGet("delete/{ownerId}/{projectId}")]
-        public bool DeleteOwnerProject(string ownerId, string projectId)
+        public async Task<bool> DeleteOwnerProject(string ownerId, string projectId)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);
@@ -87,7 +87,7 @@ namespace Ackee.Data.Controllers
                 return false;
 
             ctx.Projects.Remove(existingProjectForUser);
-            ctx.SaveChanges();
+            await ctx.SaveChangesAsync();
             return true;
         }
 

@@ -12,6 +12,5 @@ namespace Ackee.Data.Model
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-
     }
 }
