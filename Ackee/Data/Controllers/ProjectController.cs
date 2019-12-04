@@ -36,7 +36,7 @@ namespace Ackee.Data.Controllers
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
                 p => p.UserProjects.Any(u => u.UserId == userId));
 
-            // Return if project for user already exists or userName is null.
+            // Return if project for user already exists or userId is null.
             if (user == null || existingProjectForUser != null)
                 return null;
 
@@ -76,5 +76,16 @@ namespace Ackee.Data.Controllers
             return true;
         }
 
+        [HttpGet("members/{projectId}")]
+        public IEnumerable<ApplicationUser> GetProjectMembers(string projectId)
+        {
+            // Get the project. 
+            var users = ctx.Users.Where(u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToList();
+
+            if (users == null)
+                return null;
+
+            return users;
+        }
     }
 }
