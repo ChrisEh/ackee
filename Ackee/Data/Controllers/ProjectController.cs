@@ -28,13 +28,15 @@ namespace Ackee.Data.Controllers
             return await ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId)).ToListAsync();
         }
 
+
         [HttpGet("create/{userId}/{projectName}")]
         public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.UserName == userId);
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
-                p => p.UserProjects.Any(u => u.UserId == userId));
+                p => p.UserProjects.Any(u => u.UserId == userId && 
+                    u.ProjectId == projectName));
 
             // Return if project for user already exists or userId is null.
             if (user == null || existingProjectForUser != null)
@@ -75,7 +77,7 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpDelete("delete/{ownerId}/{projectId}")]
-        public async Task<bool> DeleteOwnerProject(string ownerId, string projectId)
+        public async Task<bool> DeleteProjectOfOwner(string ownerId, string projectId)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);

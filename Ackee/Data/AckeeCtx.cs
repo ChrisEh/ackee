@@ -24,6 +24,7 @@ namespace Ackee.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Many-to-many project/ApplicartionUser
             modelBuilder.Entity<UserProject>()
                 .HasKey(u => new { u.UserId, u.ProjectId });
 
@@ -36,6 +37,11 @@ namespace Ackee.Data
             .HasOne(pt => pt.Project)
             .WithMany(t => t.UserProjects)
             .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Cascade);
+
+            // One-to-many project-milestones
+            modelBuilder.Entity<AspNetMilestones>()
+                .HasOne(m => m.Project)
+                .WithMany(p => p.Milestones);
 
             base.OnModelCreating(modelBuilder);
         }
