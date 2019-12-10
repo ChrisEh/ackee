@@ -1,6 +1,5 @@
 ﻿@using Ackee.Data.Model
 @using Ackee.Data.Controllers
-@inject ProjectController ProjectController
 
 
 <EditForm Model="@_createFormModel" OnValidSubmit="@HandleValidSubmit">
@@ -31,10 +30,9 @@
     [Parameter]
     public string UserId { get; set; }
 
-
     private async Task CreateProject(string userId)
     {
-        _updatedProject = await (new HttpClient()).GetJsonAsync<AspNetProjects>("http://localhost:53508/api/create/{UserId}/{_createFormModel.ProjectName}");
+        _updatedProject = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/create/{userId}/{_createFormModel.ProjectName}");
         StateHasChanged();
     }
 

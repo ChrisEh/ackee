@@ -32,7 +32,7 @@ namespace Ackee.Data.Controllers
         public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
-            var user = ctx.Users.FirstOrDefault(u => u.UserName == userId);
+            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
                 p => p.UserProjects.Any(u => u.UserId == userId));
 

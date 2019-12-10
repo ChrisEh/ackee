@@ -22,11 +22,11 @@ namespace Ackee.Data.Controllers
         }
 
         // GET api/users/3137a909-73ee-4665-a74e-1ad574962795
-        [HttpGet("{userId}")]
-        public ApplicationUser GetUser(string id)
-        {
-            return ctx.Users.FirstOrDefault(u => u.Id == id);
-        }
+        //[HttpGet("{userId}")]
+        //public ApplicationUser GetUser(string id)
+        //{
+        //    return ctx.Users.FirstOrDefault(u => u.Id == id);
+        //}
 
         // GET: api/users/3137a909-73ee-4665-a74e-1ad574962795
         [HttpGet("projects/{userId}")]

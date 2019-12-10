@@ -7,12 +7,42 @@
 
 <AuthorizeView>
     <Authorized>
-        <ProjectsOverview UserId="@context.User.Identity.Name"/>
+        @if (_currentUser != null)
+        {
+            <ProjectsOverview UserId="@_currentUser.Id"/>
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
     </Authorized>
     <NotAuthorized>
         <LandingPage />
     </NotAuthorized>
 </AuthorizeView>
+
+@code {    
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ApplicationUser _currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+    }
+
+    private async Task RefreshUser()
+    {
+
+        _currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+
+
+        StateHasChanged();
+    }
+}
 
 
 
