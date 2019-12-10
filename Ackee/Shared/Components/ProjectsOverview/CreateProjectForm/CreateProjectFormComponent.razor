@@ -1,0 +1,53 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Data.Controllers
+@inject ProjectController ProjectController
+
+
+<EditForm Model="@_createFormModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    @if (string.IsNullOrEmpty(_statusMessage))
+    {
+        <p>
+            @_statusMessage
+        </p>
+    }    
+
+    <p>
+        <label for="projectName">Project Name: </label>
+        <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
+    </p>
+
+    <button type="submit">Submit</button>
+
+</EditForm>
+
+@code {
+    private CreateFormModel _createFormModel = new CreateFormModel();
+    private AspNetProjects _updatedProject = null;
+    private string _statusMessage = "";
+
+    [Parameter]
+    public string UserId { get; set; }
+
+
+    private async Task CreateProject(string userId)
+    {
+        _updatedProject = await (new HttpClient()).GetJsonAsync<AspNetProjects>("http://localhost:53508/api/create/{UserId}/{_createFormModel.ProjectName}");
+        StateHasChanged();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await CreateProject(UserId);
+        if (_updatedProject != null)
+        {
+            _statusMessage = "Cool, it worked!";
+        }
+        else
+        {
+            _statusMessage = "Sorry, this didn't quite work.";
+        }
+    }
+}

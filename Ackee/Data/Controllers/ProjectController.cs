@@ -28,11 +28,11 @@ namespace Ackee.Data.Controllers
             return await ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId)).ToListAsync();
         }
 
-        [HttpPost("create/{userId}/{projectName}")]
+        [HttpGet("create/{userId}/{projectName}")]
         public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
-            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+            var user = ctx.Users.FirstOrDefault(u => u.UserName == userId);
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
                 p => p.UserProjects.Any(u => u.UserId == userId));
 

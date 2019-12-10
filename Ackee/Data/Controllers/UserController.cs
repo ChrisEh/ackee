@@ -37,7 +37,7 @@ namespace Ackee.Data.Controllers
 
         // GET: api/users/userEmail
         [HttpGet("{userEmail}")]
-        public async ApplicationUser GetUserByEmail(string userEmail)
+        public async Task<ApplicationUser> GetUserByEmail(string userEmail)
         {
             return await ctx.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
         }
