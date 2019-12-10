@@ -34,5 +34,12 @@ namespace Ackee.Data.Controllers
         {
             return ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId));
         }
+
+        // GET: api/users/userEmail
+        [HttpGet("{userEmail}")]
+        public async ApplicationUser GetUserByEmail(string userEmail)
+        {
+            return ctx.Users.Where(u => u.Email == userEmail).ToListAsync();
+        }
     }
 }
