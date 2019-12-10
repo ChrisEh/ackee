@@ -32,7 +32,8 @@ namespace Ackee.Data.Controllers
         [HttpGet("projects/{userId}")]
         public IEnumerable<AspNetProjects> GetUserprojects(string userId)
         {
-            return ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId));
+            return ctx.Projects.Where(
+                p => p.UserProjects.Any(up => up.UserId == userId));
         }
 
         // GET: api/users/userEmail

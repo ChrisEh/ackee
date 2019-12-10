@@ -23,6 +23,8 @@
     <Compile Remove="Data\Migrations\20191129111530_projectTable6.Designer.cs" />
     <Compile Remove="Data\Migrations\20191204122839_fixedDelete.cs" />
     <Compile Remove="Data\Migrations\20191204122839_fixedDelete.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191210154411_addedRelationshipForMilestones.cs" />
+    <Compile Remove="Data\Migrations\20191210154411_addedRelationshipForMilestones.Designer.cs" />
     <Compile Remove="Pages\Shared\UserDetails.cshtml.cs" />
     <Compile Remove="Pages\UserView.cshtml.cs" />
   </ItemGroup>
