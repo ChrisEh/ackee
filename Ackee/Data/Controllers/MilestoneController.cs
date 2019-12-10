@@ -16,10 +16,16 @@ namespace Ackee.Data.Controllers
         AckeeCtx ctx = new AckeeCtx();
 
         [HttpGet]
-        public async Task<IEnumerable<AspNetMilestones>> GetAllmilestones()
+        public async Task<IEnumerable<AspNetMilestones>> GetAllMilestones()
         {
             return await ctx.Milestones.ToListAsync();
         }
 
+        //[HttpGet("{milestoneId}")]
+        //public async Task<bool> DeleteMilestone(string mileStoneId)
+        //{
+        //    var ms = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == mileStoneId);
+
+        //}
     }
 }

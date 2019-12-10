@@ -29,12 +29,13 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpPost("create/{userId}/{projectName}")]
-        public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
+        public async Task<object> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
-                p => p.UserProjects.Any(u => u.UserId == userId));
+                p => p.UserProjects.Any(u => u.UserId == userId && 
+                    u.ProjectId == projectName));
 
             // Return if project for user already exists or userId is null.
             if (user == null || existingProjectForUser != null)
