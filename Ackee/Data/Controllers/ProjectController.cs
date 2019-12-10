@@ -23,12 +23,12 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpGet("user/{id}")]
-        public IEnumerable<AspNetProjects> GetUserProjects(string userId)
+        public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
         {
-            return ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId));
+            return await ctx.Projects.Where(p => p.UserProjects.Any(up => up.UserId == userId)).ToListAsync();
         }
 
-        [HttpGet("create/{userId}/{projectName}")]
+        [HttpPost("create/{userId}/{projectName}")]
         public async Task<AspNetProjects> CreateProjectForOwner(string userId, string projectName)
         {
             // Get the user.
@@ -60,7 +60,7 @@ namespace Ackee.Data.Controllers
             return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
         }
 
-        [HttpGet("delete/{projectId}")]
+        [HttpDelete("delete/{projectId}")]
         public async Task<bool> DeleteProject(string projectId)
         {
             // Get the project.
@@ -74,7 +74,7 @@ namespace Ackee.Data.Controllers
             return true;
         }
 
-        [HttpGet("delete/{ownerId}/{projectId}")]
+        [HttpDelete("delete/{ownerId}/{projectId}")]
         public async Task<bool> DeleteOwnerProject(string ownerId, string projectId)
         {
             // Get the user.
@@ -92,11 +92,11 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpGet("members/{projectId}")]
-        public IEnumerable<ApplicationUser> GetProjectMembers(string projectId)
+        public async Task<IEnumerable<ApplicationUser>> GetProjectMembers(string projectId)
         {
             // Get the project. 
-            var users = ctx.Users.Where(
-                u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToList();
+            var users = await ctx.Users.Where(
+                u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToListAsync();
 
             if (users == null)
                 return null;
