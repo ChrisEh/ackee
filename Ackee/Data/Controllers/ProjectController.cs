@@ -75,7 +75,7 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpDelete("delete/{ownerId}/{projectId}")]
-        public async Task<bool> DeleteOwnerProject(string ownerId, string projectId)
+        public async Task<bool> DeleteProjectOfOwner(string ownerId, string projectId)
         {
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);

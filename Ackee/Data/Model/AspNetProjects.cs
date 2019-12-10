@@ -22,7 +22,7 @@ namespace Ackee.Data.Model
         public ApplicationUser Owner { get; set; }
 
         [Required]
-        public List<AspNetMilestones> Milestone { get; set; }
+        public IEnumerable<AspNetMilestones> Milestones { get; set; }
 
         public IEnumerable<UserProject> UserProjects { get; set; }
     }
