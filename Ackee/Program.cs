@@ -25,8 +25,6 @@ namespace Ackee
             }
 
             host.Run();
-
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

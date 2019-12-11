@@ -21,11 +21,18 @@ namespace Ackee.Data.Controllers
             return await ctx.Milestones.ToListAsync();
         }
 
-        //[HttpGet("{milestoneId}")]
-        //public async Task<bool> DeleteMilestone(string mileStoneId)
-        //{
-        //    var ms = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == mileStoneId);
+        [HttpGet("delete/{milestoneId}")]
+        public async Task<bool> DeleteMilestone(string mileStoneId)
+        {
+            var ms = await ctx.Milestones.FirstOrDefaultAsync(
+                m => m.MilestoneID == mileStoneId);
 
-        //}
+            if (ms != null)
+            {
+                ctx.Remove(ms);
+                return true;
+            }
+            return false; 
+        }
     }
 }
