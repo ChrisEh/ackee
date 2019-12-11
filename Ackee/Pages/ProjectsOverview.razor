@@ -3,6 +3,7 @@
 @using Ackee.Shared.Components.UI.ProjectListItem
 @using Ackee.Shared.Components.UI
 @using Ackee.Shared.Components.UI.Modal
+@using Ackee.Shared.Components.ProjectsOverview.CreateProjectForm
 @*@using Ackee.Data.Controllers*@
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
@@ -37,26 +38,19 @@
             </div>
         </div>
         <ModalWithBackdropComponent Show="_showModal" Header="Add A Project">
-            Some text in a modal!
+            <CreateProjectFormComponent UserId="@UserId"/>
         </ModalWithBackdropComponent>
-
-        @if (_users == null)
-        {
-            <h1>Loading...</h1>
-        }
-        else
-        {
-            @foreach (var user in _users)
-            {
-                <h1>@user.Email</h1>
-            }
-        }
     </main>
 
 @code {
+    [Parameter]
+    public string UserId { get; set; }
+
     private string _selectedTab = "ALL";
     private bool _showModal = false;
     private List<AspNetUsers> _users;
+
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
 
     private void OnSelectTab(string tab)
     {
