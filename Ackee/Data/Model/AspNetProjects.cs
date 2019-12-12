@@ -26,5 +26,7 @@ namespace Ackee.Data.Model
         public IEnumerable<AspNetMilestones> Milestones { get; set; }
 
         public IEnumerable<UserProject> UserProjects { get; set; }
+
+        public DateTime DateCreated { get; set; }
     }
 }

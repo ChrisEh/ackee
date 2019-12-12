@@ -47,6 +47,7 @@ namespace Ackee.Data.Controllers
             newProject.ProjectID = ctx.Projects.Count().ToString();
             newProject.Owner = user;
             newProject.ProjectName = projectName;
+            newProject.DateCreated = DateTime.Now;
 
             // Add project to DB.
             ctx.Projects.Add(newProject);
@@ -111,6 +112,14 @@ namespace Ackee.Data.Controllers
                 return null;
 
             return users;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<AspNetMilestones>> AddMilestone(AspNetMilestones milestone)
+        {
+            ctx.Milestones.Add(milestone);
+            await ctx.SaveChangesAsync();
+            return CreatedAtAction("Milestone", new { id = milestone.MilestoneID }, milestone);
         }
     }
 }

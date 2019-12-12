@@ -30,6 +30,7 @@ namespace Ackee.Data.Controllers
             if (ms != null)
             {
                 ctx.Remove(ms);
+                await ctx.SaveChangesAsync();
                 return true;
             }
             return false; 
