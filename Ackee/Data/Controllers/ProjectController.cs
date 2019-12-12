@@ -26,10 +26,11 @@ namespace Ackee.Data.Controllers
         [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
         {
-            var ctx = new AckeeCtx();
-
-            return await ctx.Projects.Where(p => p.UserProjects.Any(
-                up => up.UserId == userId)).ToListAsync();
+            using (var ctx = new AckeeCtx())
+            {
+                return await ctx.Projects.Where(p => p.UserProjects.Any(
+                    up => up.UserId == userId)).ToListAsync();
+            }                
         }
 
         [HttpGet("create/{userId}/{projectName}")]

@@ -44,7 +44,7 @@
         @if (_currentUser != null)
         {
             <ModalWithBackdropComponent Show="@_showModal" Header="Add A Project">
-                <CreateProjectFormComponent UserId="@_currentUser.Id" />
+                <CreateProjectFormComponent UserId="@_currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
             </ModalWithBackdropComponent>
         }
     </main>
@@ -74,7 +74,6 @@
     private async Task RefreshUser()
     {
         _currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
-        StateHasChanged();
     }
 
     private void OnSelectTab(string tab)

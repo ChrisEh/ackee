@@ -27,7 +27,7 @@ else
     private string _statusMessage = "";
 
     [Parameter]
-    public Action ProjectCreatedSuccessfully { get; set; }
+    public Action OnSuccess { get; set; }
 
     [Parameter]
     public string UserId { get; set; }
@@ -44,13 +44,10 @@ else
 
         if (_updatedProject != null)
         {
-
+            OnSuccess?.Invoke();
         }
-    }    
-
-    private void ProjectCreatedSuccessfullyHandler()
-    {
-        ProjectCreatedSuccessfully?.Invoke();        
     }
+
+
 
 }
