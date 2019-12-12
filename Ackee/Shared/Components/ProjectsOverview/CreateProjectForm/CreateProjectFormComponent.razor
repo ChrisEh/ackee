@@ -2,30 +2,35 @@
 @using Ackee.Data.Controllers
 
 
-<EditForm Model="@_createFormModel" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    
-    @if (string.IsNullOrEmpty(_statusMessage))
-    {
+@if (_updatedProject == null)
+{
+    <EditForm Model="@_createFormModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
         <p>
-            @_statusMessage
+            <label for="projectName">Project Name: </label>
+            <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
         </p>
-    }    
 
-    <p>
-        <label for="projectName">Project Name: </label>
-        <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
-    </p>
+        <button type="submit">Submit</button>
 
-    <button type="submit">Submit</button>
+    </EditForm>
+}
+else
+{
+    <h1>You did it motherfucker!</h1>
+}
 
-</EditForm>
+
 
 @code {
     private CreateFormModel _createFormModel = new CreateFormModel();
     private AspNetProjects _updatedProject = null;
     private string _statusMessage = "";
+
+    [Parameter]
+    public Action ProjectCreatedSuccessfully { get; set; }
 
     [Parameter]
     public string UserId { get; set; }
@@ -39,13 +44,16 @@
     private async void HandleValidSubmit()
     {
         await CreateProject(UserId);
+
         if (_updatedProject != null)
         {
-            _statusMessage = "Cool, it worked!";
+
         }
-        else
-        {
-            _statusMessage = "Sorry, this didn't quite work.";
-        }
+    }    
+
+    private void ProjectCreatedSuccessfullyHandler()
+    {
+        ProjectCreatedSuccessfully?.Invoke();        
     }
+
 }

@@ -29,7 +29,11 @@
             <div class="projectsOverview_content">
                 @if (_selectedTab.Equals("ALL"))
                 {
-                    <ProjectListItemComponent ProjectName="ProEP" ProjectID=1 />
+                    if (_projects != null)
+                    @foreach (var project in _projects)
+                    {
+                        <ProjectListItemComponent ProjectName="@project.ProjectName" ProjectID="@project.ProjectID" />
+                    }
                 }
                 else
                 {
@@ -48,8 +52,9 @@
 
     private string _selectedTab = "ALL";
     private bool _showModal = false;
-    private List<AspNetUsers> _users;
+    private List<AspNetProjects> _projects;
 
+    
     private void OnSelectTab(string tab)
     {
         _selectedTab = tab;
@@ -68,7 +73,7 @@
 
     private async Task RefreshProjects()
     {
-        _users = await (new HttpClient()).GetJsonAsync<List<AspNetUsers>>("http://localhost:53508/api/users");
+        _projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>("http://localhost:53508/api/projects");
         StateHasChanged();
     }
 }

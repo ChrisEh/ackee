@@ -47,19 +47,11 @@ namespace Ackee.Data.Controllers
             newProject.ProjectID = ctx.Projects.Count().ToString();
             newProject.Owner = user;
             newProject.ProjectName = projectName;
-            newProject.UserProjects = new List<UserProject>()
-            {
-                new UserProject
-                {
-                    Project = newProject,
-                    User = user
-                }
-            };
 
             // Add project to DB.
             ctx.Projects.Add(newProject);
             await ctx.SaveChangesAsync();
-            return ctx.Projects.FirstOrDefault(p => p.ProjectID == newProject.ProjectID);
+            return newProject;
         }
 
         [HttpDelete("delete/{projectId}")]
