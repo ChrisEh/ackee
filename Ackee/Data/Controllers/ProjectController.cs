@@ -22,7 +22,7 @@ namespace Ackee.Data.Controllers
             return await ctx.Projects.ToListAsync();
         }
 
-        [HttpGet("user/{id}")]
+        [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
         {
             return await ctx.Projects.Where(p => p.UserProjects.Any(
