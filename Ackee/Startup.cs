@@ -39,7 +39,7 @@ namespace Ackee
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            //services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<AckeeCtx>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));

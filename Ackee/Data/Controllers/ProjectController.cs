@@ -6,6 +6,7 @@ using Ackee.Data.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 
 namespace Ackee.Data.Controllers
 {
@@ -13,18 +14,20 @@ namespace Ackee.Data.Controllers
     [Route("api/projects")]
     public class ProjectController : ControllerBase
     {
-        AckeeCtx ctx = new AckeeCtx();
-
         // GET api/projects
         [HttpGet]
         public async Task<IEnumerable<AspNetProjects>> GetAllProjects()
         {
+            var ctx = new AckeeCtx();
+
             return await ctx.Projects.ToListAsync();
         }
 
         [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
         {
+            var ctx = new AckeeCtx();
+
             return await ctx.Projects.Where(p => p.UserProjects.Any(
                 up => up.UserId == userId)).ToListAsync();
         }
@@ -32,46 +35,47 @@ namespace Ackee.Data.Controllers
         [HttpGet("create/{userId}/{projectName}")]
         public async Task<object> CreateProjectForOwner(string userId, string projectName)
         {
-            // Get the user.
-            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
-
-            var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
-                up => up.UserId == userId && up.Project.ProjectName == projectName);
-
-            // Return if project for user already exists or userId is null.
-            if (user == null || existingProject != null)
-                return null;
-
-            // Create the new project.
-            var newProject = new AspNetProjects();
-            newProject.ProjectID = ctx.Projects.Count().ToString();
-            newProject.Owner = user;
-            newProject.ProjectName = projectName;
-            newProject.DateCreated = DateTime.Now;
-
-            // Add project to DB.
-            ctx.Projects.Add(newProject);
-            await ctx.SaveChangesAsync();
-
-            var savedProject = ctx.Projects.FirstOrDefault(
-                p => p.ProjectID == newProject.ProjectID);
-
-            var userProject = new UserProject()
+            using (var ctx = new AckeeCtx())
             {
-                Project = savedProject,
-                ProjectId = savedProject.ProjectID,
-                User = user,
-                UserId = user.Id
-            };
+                // Get the user.
+                var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
 
-            ctx.UserProjects.Add(userProject);
-            await ctx.SaveChangesAsync();
-            return savedProject;
+                var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
+                    up => up.UserId == userId &&
+                        up.Project.ProjectName == projectName);
+
+                // Return if project for user already exists or userId is null.
+                if (user == null || existingProject != null)
+                    return null;
+
+                // Create the new project.
+                var newProject = new AspNetProjects();
+                newProject.Owner = user;
+                newProject.ProjectName = projectName;
+                var projectId = (ctx.Projects.Count() + 1).ToString();
+                newProject.ProjectID = projectId;
+                newProject.DateCreated = DateTime.Now;
+
+                // Add project to DB.
+                ctx.Projects.Add(newProject);
+
+                var userProject = new UserProject()
+                {
+                    ProjectId = projectId,
+                    UserId = user.Id
+                };
+
+                ctx.UserProjects.Add(userProject);
+                await ctx.SaveChangesAsync();
+                return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+            }
         }
 
         [HttpDelete("delete/{projectId}")]
         public async Task<bool> DeleteProject(string projectId)
         {
+            var ctx = new AckeeCtx();
+
             // Get the project.
             var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
 
@@ -86,6 +90,8 @@ namespace Ackee.Data.Controllers
         [HttpDelete("delete/{ownerId}/{projectId}")]
         public async Task<bool> DeleteProjectOfOwner(string ownerId, string projectId)
         {
+            var ctx = new AckeeCtx();
+
             // Get the user.
             var user = ctx.Users.FirstOrDefault(u => u.Id == ownerId);
             var existingProjectForUser = ctx.Projects.FirstOrDefault(
@@ -104,6 +110,8 @@ namespace Ackee.Data.Controllers
         [HttpGet("members/{projectId}")]
         public async Task<IEnumerable<ApplicationUser>> GetProjectMembers(string projectId)
         {
+            var ctx = new AckeeCtx();
+
             // Get the project. 
             var users = await ctx.Users.Where(
                 u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToListAsync();
@@ -114,12 +122,32 @@ namespace Ackee.Data.Controllers
             return users;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<AspNetMilestones>> AddMilestone(AspNetMilestones milestone)
+        [HttpGet("addMilestone/{projectId}/{endDate}/{name}/{description}")]
+        public async Task<ActionResult<AspNetMilestones>> AddMilestone(
+            string projectId, DateTime endDate, string name, string description)
         {
-            ctx.Milestones.Add(milestone);
+            var ctx = new AckeeCtx();
+
+            var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+
+            if (project == null || string.IsNullOrWhiteSpace(name))
+                return null;
+
+            var newMilestone = new AspNetMilestones()
+            {
+                MilestoneID = (await ctx.Milestones.CountAsync()).ToString(),
+                Description = description,
+                EndDate = endDate,
+                MilestoneName = name,
+                Project = project
+            };
+
+            project.Milestones.ToList().Add(newMilestone);
+
+            ctx.Update(project);
+
             await ctx.SaveChangesAsync();
-            return CreatedAtAction("Milestone", new { id = milestone.MilestoneID }, milestone);
+            return CreatedAtAction("Milestone", await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == newMilestone.MilestoneID));
         }
     }
 }
