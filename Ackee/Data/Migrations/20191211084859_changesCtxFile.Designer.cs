@@ -4,14 +4,16 @@ using Ackee.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ackee.Data.Migrations
 {
     [DbContext(typeof(AckeeCtx))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191211084859_changesCtxFile")]
+    partial class changesCtxFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,9 +129,6 @@ namespace Ackee.Data.Migrations
                 {
                     b.Property<string>("ProjectID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()

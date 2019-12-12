@@ -11,7 +11,8 @@ namespace Ackee.Data
     {
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<AspNetProjects> Projects { get; set; }
-        public DbSet<AspNetMilestones> Milestones { get; set; }           
+        public DbSet<AspNetMilestones> Milestones { get; set; }   
+        public DbSet<UserProject> UserProjects { get; set; }
 
         public AckeeCtx() : base()
         {
