@@ -2,14 +2,21 @@
     display: flex;
     align-items: stretch;
     height: 100%;
+    overflow: hidden;
 }
 
 .dashboardLayout_leftMenuContainer {
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    bottom: 0;
     padding: 0;
     margin: 0;
     width: 0;
     transition: all 0.5s ease-in-out;
     transform: translateX(-230px);
+    overflow: auto;
+    z-index: 50;
 }
 
 .dashboardLayout_leftMenuContainer.open {
@@ -27,9 +34,18 @@
     padding: 1rem;
 }
 
+.dashboardLayout_content {
+    margin-left: 230px;
+    transition: all 0.5s ease-in-out; 
+}
+
+.dashboardLayout_content.open {
+    margin-left: 0;
+}
+
 .dashboardLayout_content_menuTogglerAndPageName {
     display: flex;
-    align-items: center stretch;    
+    align-items: center stretch;
     padding: 1rem;
     padding-bottom: 0;
 }
@@ -83,6 +99,14 @@
 
     .dashboardLayout_content_toggleMenu__bigScreens {
         display: flex;
+    }
+
+    .dashboardLayout_content {
+        margin-left: 0;
+    }
+
+    .dashboardLayout_content.open {
+        margin-left: 230px;
     }
 
 }

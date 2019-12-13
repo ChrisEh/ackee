@@ -35,7 +35,7 @@
     public List<AspNetUsers> ProjectMembers { get; set; }
 
     [Parameter]
-    public int ProjectID { get; set; }
+    public string ProjectID { get; set; }
 
     private string GetProjectAbbreviation(string projectName)
     {
@@ -60,7 +60,7 @@
             }
         }
 
-        return abbreviation;
+        return abbreviation.ToUpper();
     }
 
     private void NavigateToProject()

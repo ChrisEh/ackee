@@ -7,9 +7,9 @@
 
 <AuthorizeView>
     <Authorized>
-        <ProjectsOverview UserId="@context.User.Identity.Name"/>
+        <ProjectsOverview />
     </Authorized>
-    <NotAuthorized>
+    <NotAuthorized>     
         <LandingPage />
     </NotAuthorized>
 </AuthorizeView>

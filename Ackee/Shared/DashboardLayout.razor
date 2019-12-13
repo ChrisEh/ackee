@@ -6,7 +6,7 @@
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
                 <LeftMenuComponent />
             </nav>
-            <div class="dashboardLayout_content @(_menuExpanded ? "open" : "")">
+            <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">
                 <div class="dashboardLayout_content_menuTogglerAndPageName">
                     <div class="dashboardLayout_content_menuTogglerContainer">
                         <div class="button button_actionButton dashboardLayout_content_toggleMenu dashboardLayout_content_toggleMenu__mobile" @onclick="ToggleMenu">
