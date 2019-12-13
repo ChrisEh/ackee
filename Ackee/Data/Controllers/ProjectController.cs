@@ -35,40 +35,38 @@ namespace Ackee.Data.Controllers
         [HttpGet("create/{userId}/{projectName}")]
         public async Task<object> CreateProjectForOwner(string userId, string projectName)
         {
-            using (var ctx = new AckeeCtx())
+            using var ctx = new AckeeCtx();
+            // Get the user.
+            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+
+            var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
+                up => up.UserId == userId &&
+                    up.Project.ProjectName == projectName);
+
+            // Return if project for user already exists or userId is null.
+            if (user == null || existingProject != null)
+                return null;
+
+            // Create the new project.
+            var newProject = new AspNetProjects();
+            newProject.Owner = user;
+            newProject.ProjectName = projectName;
+            var projectId = (ctx.Projects.Count() + 1).ToString();
+            newProject.ProjectID = projectId;
+            newProject.DateCreated = DateTime.Now;
+
+            // Add project to DB.
+            ctx.Projects.Add(newProject);
+
+            var userProject = new UserProject()
             {
-                // Get the user.
-                var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+                ProjectId = projectId,
+                UserId = user.Id
+            };
 
-                var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
-                    up => up.UserId == userId &&
-                        up.Project.ProjectName == projectName);
-
-                // Return if project for user already exists or userId is null.
-                if (user == null || existingProject != null)
-                    return null;
-
-                // Create the new project.
-                var newProject = new AspNetProjects();
-                newProject.Owner = user;
-                newProject.ProjectName = projectName;
-                var projectId = (ctx.Projects.Count() + 1).ToString();
-                newProject.ProjectID = projectId;
-                newProject.DateCreated = DateTime.Now;
-
-                // Add project to DB.
-                ctx.Projects.Add(newProject);
-
-                var userProject = new UserProject()
-                {
-                    ProjectId = projectId,
-                    UserId = user.Id
-                };
-
-                ctx.UserProjects.Add(userProject);
-                await ctx.SaveChangesAsync();
-                return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
-            }
+            ctx.UserProjects.Add(userProject);
+            await ctx.SaveChangesAsync();
+            return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
         }
 
         [HttpDelete("delete/{projectId}")]

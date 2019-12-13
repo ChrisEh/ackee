@@ -38,7 +38,8 @@ namespace Ackee
         {
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    options.SerializerSettings.ReferenceLoopHandling = 
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<AckeeCtx>(options =>
                 options.UseSqlServer(
@@ -48,7 +49,8 @@ namespace Ackee
                 .AddEntityFrameworkStores<AckeeCtx>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+            services.AddScoped<AuthenticationStateProvider, 
+                RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ProjectController>();
         }
