@@ -1,7 +1,15 @@
 ﻿.projectDashboard_container {
     margin-top: 1rem;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    width: 100%;
 }
+
+.projectDashboard_container > .widgets{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1000px;
+}
+
 

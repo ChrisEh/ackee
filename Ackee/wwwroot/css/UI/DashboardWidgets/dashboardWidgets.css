@@ -1,6 +1,17 @@
 ﻿.widget {
-    margin: 1rem;
-    width: 30%;
+    width: 100%;
+}
+
+@media screen and (min-width: 600px){
+    .widget {
+        width: 48%;
+    }
+}
+
+@media screen and (min-width: 1048px){
+    .widget {
+        width: 30%;
+    }
 }
 
 .widget .widget_header {
@@ -99,3 +110,4 @@
     background-color: #E5007D;
 }
     
+
