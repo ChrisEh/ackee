@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Microsoft.AspNetCore.ResponseCompression;
 using Ackee.Data.Controllers;
+using Ackee.Shared.Services;
 
 namespace Ackee
 {
@@ -53,6 +54,7 @@ namespace Ackee
                 RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ProjectController>();
+            services.AddScoped<ProjectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

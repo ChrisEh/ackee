@@ -4,7 +4,7 @@
     <AuthorizeView>
         <Authorized>
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
-                <LeftMenuComponent />
+                <LeftMenuComponent ProjectId="@ProjectId"/>
             </nav>
             <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">
                 <div class="dashboardLayout_content_menuTogglerAndPageName">
@@ -34,7 +34,7 @@
 
 @code {
     [Parameter]
-    public int ProjectId { get; set; }
+    public string ProjectId { get; set; }
 
     [Parameter]
     public string PageName { get; set; }

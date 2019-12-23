@@ -26,6 +26,13 @@
     color: white;
 }
 
+.leftMenu_projectName {
+    text-align: center;
+    font-size: 1.2rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
 .leftMenu_navigation {
     margin-top: 3rem;
 }
@@ -42,4 +49,14 @@
     padding-left: 1rem;
     font-size: 1.25rem;
     border-bottom: 3px solid grey;
+    cursor: pointer;
 }
+
+.leftMenu_navigation ul li:hover {
+    background: #ccc; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ccc, #efefef); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ccc, #efefef); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-bottom-color: #663366;
+    color: #663366;
+}
+

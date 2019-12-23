@@ -23,6 +23,15 @@ namespace Ackee.Data.Controllers
             return await ctx.Projects.ToListAsync();
         }
 
+        [HttpGet("{projectId}")]
+        public async Task<ActionResult<AspNetProjects>> GetProjectById(string projectId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                return await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+            }           
+        }
+
         [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
         {

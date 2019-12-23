@@ -22,29 +22,8 @@
         <div class="landingPage_image">
             <img src="img/dashboard_lp.PNG" alt="Example pages, for no reason at all." />
         </div>
-        
-        <div>
-            <table>
-                @foreach (var firstName in firstNames)
-                {
-                    <tr>
-                        <td>@firstName</td>
-                    </tr>
-                }
-            </table>
-        </div>
     </main>
 
 @code
 {
-    // DEMO.
-    string[] firstNames { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        using (var context = new AckeeCtx())
-        {
-            firstNames = context.Users.Select(u => u.FirstName).ToArray();
-        }
-    }
 }

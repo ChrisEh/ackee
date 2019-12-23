@@ -1,10 +1,11 @@
 ﻿@using Ackee.Data.Model
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inject Ackee.Shared.Services.ProjectService ProjectService
 
 <div class="projectListItem" @onclick='()=>NavigateToProject()'>
     <figure class="projectIconContainer">
         <h1>
-            @GetProjectAbbreviation(ProjectName)
+            @ProjectService.GetProjectAbbreviation(ProjectName)
         </h1>
     </figure>
     <div class="projectSummary">
@@ -35,33 +36,7 @@
     public List<AspNetUsers> ProjectMembers { get; set; }
 
     [Parameter]
-    public string ProjectID { get; set; }
-
-    private string GetProjectAbbreviation(string projectName)
-    {
-        string abbreviation = "";
-
-        if (string.IsNullOrEmpty(projectName))
-        {
-            return abbreviation;
-        }
-
-        List<string> separateWords = ProjectName.Split(' ').ToList();
-
-        if (separateWords.Count == 1)
-        {
-            abbreviation = separateWords[0][0].ToString();
-        }
-        else
-        {
-            for (int i = 0; i <= 1; i++)
-            {
-                abbreviation += separateWords[i][0].ToString();
-            }
-        }
-
-        return abbreviation.ToUpper();
-    }
+    public string ProjectID { get; set; }    
 
     private void NavigateToProject()
     {

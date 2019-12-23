@@ -1,28 +1,55 @@
 ﻿@using Ackee.Data.Model
+@inject Ackee.Shared.Services.ProjectService ProjectService
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <div class="leftMenu">
     <div class="leftMenu_projectIcon">
-        <h1>P</h1>
+        @if (project != null)
+        {
+            <h1>@ProjectService.GetProjectAbbreviation(project.ProjectName)</h1>
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
     </div>
+    @if (project != null)
+    {
+        <p class="leftMenu_projectName">@project.ProjectName</p>
+    }
     <div class="leftMenu_navigation">
         <ul>
-            <li>Dashboard</li>
-            <li>Calendar</li>
-            <li>Tasks</li>
-            <li>Files</li>
-            <li>Communication</li>
-            <li>Progress</li>
-            <li>Settings</li>
+            <li @onclick='() => NavigateToProjectPage("dashboard")'>Dashboard</li>
+            <li @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
+            <li @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
+            <li @onclick='() => NavigateToProjectPage("files")'>Files</li>
+            <li @onclick='() => NavigateToProjectPage("communication")'>Communication</li>
+            <li @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
+            <li @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
         </ul>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public int ProjectId { get; set; }
+    public string ProjectId { get; set; }
 
     private AspNetProjects project = null;
 
     // Get project object by project ID. If loaded, display it.
-    // Project project = ProjectService.GetProjectByID(ProjectID);
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshProject();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{ProjectId}");
+        StateHasChanged();
+    }
+
+    private void NavigateToProjectPage(string pageName)
+    {
+        NavigationManager.NavigateTo($"/project/{ProjectId}/{pageName}");
+    }
 }
