@@ -64,10 +64,6 @@
     {
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
-        //while (_currentUser == null)
-        //{
-        //    await Task.Delay(25);
-        //}
         await RefreshProjects();
     }
 
