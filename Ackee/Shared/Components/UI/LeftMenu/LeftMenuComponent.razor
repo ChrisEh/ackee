@@ -1,12 +1,12 @@
 ﻿@using Ackee.Data.Model
-@inject Ackee.Shared.Services.ProjectService ProjectService
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <div class="leftMenu">
     <div class="leftMenu_projectIcon">
         @if (project != null)
         {
-            <h1>@ProjectService.GetProjectAbbreviation(project.ProjectName)</h1>
+            <h1>@StringManipulationService.GetStringAbbreviation(project.ProjectName)</h1>
         }
         else
         {
@@ -19,13 +19,13 @@
     }
     <div class="leftMenu_navigation">
         <ul>
-            <li @onclick='() => NavigateToProjectPage("dashboard")'>Dashboard</li>
-            <li @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
-            <li @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
-            <li @onclick='() => NavigateToProjectPage("files")'>Files</li>
-            <li @onclick='() => NavigateToProjectPage("communication")'>Communication</li>
-            <li @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
-            <li @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
+            <li class='@(PageName.Equals("dashboard") ? "active" : "")' @onclick='() => NavigateToProjectPage("")'>Dashboard</li>
+            <li class='@(PageName.Equals("calendar") ? "active" : "")' @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
+            <li class='@(PageName.Equals("tasks") ? "active" : "")' @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
+            <li class='@(PageName.Equals("files") ? "active" : "")' @onclick='() => NavigateToProjectPage("files")'>Files</li>
+            <li class='@(PageName.Equals("communication") ? "active" : "")' @onclick='() => NavigateToProjectPage("communication")'>Communication</li>
+            <li class='@(PageName.Equals("progress") ? "active" : "")' @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
+            <li class='@(PageName.Equals("settings") ? "active" : "")' @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
         </ul>
     </div>
 </div>
@@ -33,6 +33,9 @@
 @code {
     [Parameter]
     public string ProjectId { get; set; }
+
+    [Parameter]
+    public string PageName { get; set; }
 
     private AspNetProjects project = null;
 

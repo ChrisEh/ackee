@@ -17,6 +17,7 @@
     transform: translateX(-230px);
     overflow: auto;
     z-index: 50;
+    box-shadow: 5px 0 5px -5px #333;
 }
 
 .dashboardLayout_leftMenuContainer.open {

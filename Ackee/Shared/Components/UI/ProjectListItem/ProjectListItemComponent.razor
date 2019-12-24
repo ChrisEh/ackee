@@ -1,11 +1,11 @@
 ﻿@using Ackee.Data.Model
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
-@inject Ackee.Shared.Services.ProjectService ProjectService
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 
 <div class="projectListItem" @onclick='()=>NavigateToProject()'>
     <figure class="projectIconContainer">
         <h1>
-            @ProjectService.GetProjectAbbreviation(ProjectName)
+            @StringManipulationService.GetStringAbbreviation(ProjectName)
         </h1>
     </figure>
     <div class="projectSummary">

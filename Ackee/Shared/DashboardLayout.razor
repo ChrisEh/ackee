@@ -4,7 +4,7 @@
     <AuthorizeView>
         <Authorized>
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
-                <LeftMenuComponent ProjectId="@ProjectId"/>
+                <LeftMenuComponent ProjectId="@ProjectId" PageName="@PageName"/>
             </nav>
             <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">
                 <div class="dashboardLayout_content_menuTogglerAndPageName">
