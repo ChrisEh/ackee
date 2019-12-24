@@ -1,12 +1,12 @@
 ﻿@page "/project/{Id}"
-@using Ackee.Shared.Components.UI.DashboardWidgets
+@using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
 
-<DashboardLayout ProjectId=@Id PageName="dashboard">
+<DashboardLayout ProjectId=@Id PageName="Dashboard">
     <div class="projectDashboard_container">
-        <div class="widgets">
-            <ListOfTasks />
-            <ListOfTasks />
-            <ListOfTasks />
+        <div class="widgets">            
+            <ListOfTasksComponent />
+            <ListOfTasksComponent />
+            <ListOfTasksComponent />
         </div>
     </div>
 </DashboardLayout>
