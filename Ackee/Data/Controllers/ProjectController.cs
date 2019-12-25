@@ -81,7 +81,7 @@ namespace Ackee.Data.Controllers
         }
 
         [HttpPut("user/{userId}")]
-        public async Task<object> UpdateProjectForOwner([FromRoute] string userId, [FromBody] AspNetProjects project)
+        public async Task<Object> UpdateProjectForOwner([FromRoute] string userId, [FromBody] AspNetProjects project)
         {
             using (var ctx = new AckeeCtx())
             {
@@ -91,13 +91,13 @@ namespace Ackee.Data.Controllers
                 // Get the UserProject
                 var userProject = await ctx.UserProjects.FirstOrDefaultAsync(
                     up => up.UserId == userId &&
-                        up.Project.ProjectName == project.ProjectName);
+                        up.Project.ProjectID == project.ProjectID);
 
                 // Get the project
                 var existingProject = ctx.Projects.FirstOrDefault(p => p.ProjectID == project.ProjectID);
 
                 // Return if project for user already exists or userId is null.
-                if (user == null || userProject == null || user.Id != project.Owner.Id || existingProject == null)
+                if (user == null || userProject == null || user.Id != existingProject.Owner.Id || existingProject == null)
                     return BadRequest();
 
                 // Update the project
@@ -106,7 +106,7 @@ namespace Ackee.Data.Controllers
 
                 // Save changes
                 await ctx.SaveChangesAsync();
-                return ctx.Projects.FirstOrDefault(p => p.ProjectID == project.ProjectID);
+                return true;
             }
         }
 

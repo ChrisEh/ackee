@@ -4,18 +4,11 @@
 
 <div class="leftMenu">
     <div class="leftMenu_projectIcon">
-        @if (project != null)
-        {
-            <h1>@StringManipulationService.GetStringAbbreviation(project.ProjectName)</h1>
-        }
-        @*else
-        {
-            <p>Loading...</p>
-        }*@
+        <h1>@StringManipulationService.GetStringAbbreviation(Project.ProjectName)</h1>
     </div>
-    @if (project != null)
+    @if (Project != null)
     {
-        <p class="leftMenu_projectName">@project.ProjectName</p>
+        <p class="leftMenu_projectName">@Project.ProjectName</p>
     }
     <div class="leftMenu_navigation">
         <ul>
@@ -32,27 +25,13 @@
 
 @code {
     [Parameter]
-    public string ProjectId { get; set; }
-
-    [Parameter]
     public string PageName { get; set; }
 
-    private AspNetProjects project = null;
-
-    // Get project object by project ID. If loaded, display it.
-    protected override async Task OnInitializedAsync()
-    {
-        await RefreshProject();
-    }
-
-    private async Task RefreshProject()
-    {
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{ProjectId}");
-        StateHasChanged();
-    }
+    [Parameter]
+    public AspNetProjects Project { get; set; }
 
     private void NavigateToProjectPage(string pageName)
     {
-        NavigationManager.NavigateTo($"/project/{ProjectId}/{pageName}");
+        NavigationManager.NavigateTo($"/project/{Project.ProjectID}/{pageName}");
     }
 }

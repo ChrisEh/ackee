@@ -1,11 +1,15 @@
 ﻿@using Ackee.Shared.Components.UI.LeftMenu
+@using Ackee.Data.Model
 @inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 
 <div class="dashboardLayout">
     <AuthorizeView>
         <Authorized>
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
-                <LeftMenuComponent ProjectId="@ProjectId" PageName="@PageName"/>
+                @if (Project != null)
+                {
+                    <LeftMenuComponent Project="@Project" PageName="@PageName" />
+                }
             </nav>
             <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">
                 <div class="dashboardLayout_content_menuTogglerAndPageName">
@@ -35,7 +39,7 @@
 
 @code {
     [Parameter]
-    public string ProjectId { get; set; }
+    public AspNetProjects Project { get; set; }
 
     [Parameter]
     public string PageName { get; set; }
@@ -44,7 +48,6 @@
     public RenderFragment ChildContent { get; set; }
 
     private bool _menuExpanded = false;
-
     private void ToggleMenu()
     {
         _menuExpanded = !_menuExpanded;
