@@ -6,7 +6,12 @@
 {
     <DashboardLayout Project="@project" PageName="settings">
         <div class="settings_content">
-            <UpdateProjectInformationComponent OnSuccess="() => RefreshProject()" Project="@project" UserId="@currentUser.Id" />
+            @if (project.Owner.Id == currentUser.Id)
+            {
+                <UpdateProjectInformationComponent OnSuccess="() => RefreshProject()" Project="@project" UserId="@currentUser.Id" />
+                <hr />
+            }
+
         </div>
     </DashboardLayout>
 }

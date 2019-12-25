@@ -10,19 +10,19 @@
 
         <p>
             <label for="projectName">Project Name: </label>
-            <InputText id="projectName" @bind-Value="updateFormModel.ProjectName" />
+            <InputText id="projectName" @bind-Value="updateFormModel.ProjectName" placeholder="@Project.ProjectName" />
         </p>
 
         <p>
             <label for="projectDescription">Project Description: </label>
-            <InputTextArea id="projectDescription" @bind-Value="updateFormModel.ProjectDescription" />
+            <InputTextArea id="projectDescription" @bind-Value="updateFormModel.ProjectDescription" placeholder="@Project.ProjectDescription" />
         </p>
 
-        <button type="submit">Update Information</button>
+        <button class="button button_actionButton button_padding" type="submit">Update Information</button>
 
         @if (!string.IsNullOrEmpty(statusMessage))
         {
-            <p>@statusMessage</p>
+            <p class="my-2">@statusMessage</p>
         }
 
     </EditForm>
@@ -44,7 +44,13 @@
     [Parameter]
     public string UserId { get; set; }
 
-    private async Task CreateProject(string userId)
+    protected override void OnInitialized()
+    {
+        updateFormModel.ProjectName = Project.ProjectName;
+        updateFormModel.ProjectDescription = Project.ProjectDescription;
+    }
+
+    private async Task UpdateProject(string userId)
     {
         try
         {
@@ -66,7 +72,7 @@
 
     private async void HandleValidSubmit()
     {
-        await CreateProject(UserId);
+        await UpdateProject(UserId);
 
         if (success)
         {

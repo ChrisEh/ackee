@@ -28,9 +28,10 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
-                return await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                return await ctx.Projects.Include(p => p.Owner).Include(p => p.UserProjects).FirstOrDefaultAsync(p => p.ProjectID == projectId);
             }           
         }
+
 
         [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AspNetProjects>> GetUserProjects(string userId)
@@ -101,8 +102,15 @@ namespace Ackee.Data.Controllers
                     return BadRequest();
 
                 // Update the project
-                existingProject.ProjectName = project.ProjectName;
-                existingProject.ProjectDescription = project.ProjectDescription;
+                if (!string.IsNullOrWhiteSpace(project.ProjectName))
+                {
+                    existingProject.ProjectName = project.ProjectName;
+                }
+
+                if (!string.IsNullOrWhiteSpace(project.ProjectDescription))
+                {
+                    existingProject.ProjectDescription = project.ProjectDescription;
+                }
 
                 // Save changes
                 await ctx.SaveChangesAsync();

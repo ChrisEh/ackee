@@ -5,7 +5,6 @@ namespace Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInforma
 {
     public class UpdateFormModel
     {
-        [Required]
         public string ProjectName { get; set; }
 
         public string ProjectDescription { get; set; }
