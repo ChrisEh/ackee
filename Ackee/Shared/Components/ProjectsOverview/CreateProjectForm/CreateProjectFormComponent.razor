@@ -15,6 +15,11 @@
             <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
         </p>
 
+        <p>
+            <label for="projectDescription">Project Description: </label>
+            <InputTextArea id="projectDescription" @bind-Value="_createFormModel.ProjectDescription" />
+        </p>
+
         <button type="submit">Submit</button>
 
     </EditForm>
@@ -40,11 +45,17 @@ else
     {
         try
         {
-            _updatedProject = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/create/{userId}/{_createFormModel.ProjectName}");
+            string projectName = _createFormModel.ProjectName;
+            string projectDescription = _createFormModel.ProjectDescription;
+            AspNetProjects newProject = new AspNetProjects();
+            newProject.ProjectName = projectName;
+            newProject.ProjectDescription = projectDescription;
+
+            _updatedProject = await (new HttpClient()).PostJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/user/{userId}", newProject);
         }
-        catch 
+        catch (Exception e)
         {
-            _statusMessage = "Something went wrong.";
+            _statusMessage ="Something went wrong:\n" + e.Message;
         }
         finally
         {

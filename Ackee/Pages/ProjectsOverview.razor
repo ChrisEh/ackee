@@ -84,7 +84,7 @@
     }
 
     private async Task RefreshProjects()
-    {
+    {        
         _projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{_currentUser.Id}");
         StateHasChanged();
     }

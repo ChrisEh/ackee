@@ -1,0 +1,85 @@
+﻿@using Ackee.Data.Model
+
+@if (updatedProject == null)
+{
+    <div class="updateProjectInfoForm">
+        <EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
+            <h1>Project general information</h1>
+
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <p>
+                <label for="projectName">Project Name: </label>
+                <InputText id="projectName" @bind-Value="updateFormModel.ProjectName" />
+            </p>
+
+            <p>
+                <label for="projectDescription">Project Description: </label>
+                <InputTextArea id="projectDescription" @bind-Value="updateFormModel.ProjectDescription" />
+            </p>
+
+            <button type="submit">Update Information</button>
+
+            @if (!string.IsNullOrEmpty(statusMessage))
+            {
+                <p>@statusMessage</p>
+            }
+
+        </EditForm>
+    </div>
+    
+}
+else
+{
+    <h4>Project added successfully</h4>
+}
+
+
+@code {
+    private UpdateFormModel updateFormModel;
+    private AspNetProjects updatedProject = null;
+    private string statusMessage = "";
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    private async Task CreateProject(string userId)
+    {
+        try
+        {
+            string projectName = updateFormModel.ProjectName;
+            string projectDescription = updateFormModel.ProjectDescription;
+            AspNetProjects newProject = new AspNetProjects();
+            newProject.ProjectName = projectName;
+            newProject.ProjectDescription = projectDescription;
+
+            updatedProject = await (new HttpClient()).PutJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/user/{userId}", newProject);
+            statusMessage = "Project updated successfully!";
+        }
+        catch (Exception e)
+        {
+            statusMessage = "Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await CreateProject(UserId);
+
+        if (updatedProject != null)
+        {
+            OnSuccess?.Invoke();
+        }
+    }
+
+
+
+}

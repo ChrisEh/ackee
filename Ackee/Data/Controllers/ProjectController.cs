@@ -42,42 +42,112 @@ namespace Ackee.Data.Controllers
             }                
         }
 
-        [HttpGet("create/{userId}/{projectName}")]
-        public async Task<object> CreateProjectForOwner(string userId, string projectName)
+        [HttpPost("user/{userId}")]
+        public async Task<object> CreateProjectForOwner([FromRoute] string userId, [FromBody] AspNetProjects project)
         {
-            using var ctx = new AckeeCtx();
-            // Get the user.
-            var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
-
-            var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
-                up => up.UserId == userId &&
-                    up.Project.ProjectName == projectName);
-
-            // Return if project for user already exists or userId is null.
-            if (user == null || existingProject != null)
-                return null;
-
-            // Create the new project.
-            var newProject = new AspNetProjects();
-            newProject.Owner = user;
-            newProject.ProjectName = projectName;
-            var projectId = (ctx.Projects.Count() + 1).ToString();
-            newProject.ProjectID = projectId;
-            newProject.DateCreated = DateTime.Now;
-
-            // Add project to DB.
-            ctx.Projects.Add(newProject);
-
-            var userProject = new UserProject()
+            using (var ctx = new AckeeCtx())
             {
-                ProjectId = projectId,
-                UserId = user.Id
-            };
+                // Get the user.
+                var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
 
-            ctx.UserProjects.Add(userProject);
-            await ctx.SaveChangesAsync();
-            return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+                var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
+                    up => up.UserId == userId &&
+                        up.Project.ProjectName == project.ProjectName);
+
+                // Return if project for user already exists or userId is null.
+                if (user == null || existingProject != null)
+                    return BadRequest();
+
+                // Create the new project.
+                var projectId = (ctx.Projects.Count() + 1).ToString();
+                project.Owner = user;
+                project.ProjectID = projectId;
+                project.DateCreated = DateTime.Now;
+
+                // Add project to DB.
+                ctx.Projects.Add(project);
+
+                var userProject = new UserProject()
+                {
+                    ProjectId = projectId,
+                    UserId = user.Id
+                };
+
+                ctx.UserProjects.Add(userProject);
+                await ctx.SaveChangesAsync();
+                return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+            }
+            
         }
+
+        [HttpPut("user/{userId}")]
+        public async Task<object> UpdateProjectForOwner([FromRoute] string userId, [FromBody] AspNetProjects project)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                // Get the user.
+                var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+
+                // Get the UserProject
+                var userProject = await ctx.UserProjects.FirstOrDefaultAsync(
+                    up => up.UserId == userId &&
+                        up.Project.ProjectName == project.ProjectName);
+
+                // Get the project
+                var existingProject = ctx.Projects.FirstOrDefault(p => p.ProjectID == project.ProjectID);
+
+                // Return if project for user already exists or userId is null.
+                if (user == null || userProject == null || user.Id != project.Owner.Id || existingProject == null)
+                    return BadRequest();
+
+                // Update the project
+                existingProject.ProjectName = project.ProjectName;
+                existingProject.ProjectDescription = project.ProjectDescription;
+
+                // Save changes
+                await ctx.SaveChangesAsync();
+                return ctx.Projects.FirstOrDefault(p => p.ProjectID == project.ProjectID);
+            }
+        }
+
+        //[HttpGet("create/{userId}/{projectName}")]
+        //public async Task<object> CreateProjectForOwner(string userId, string projectName)
+        //{
+        //    using var ctx = new AckeeCtx();
+        //    // Get the user.
+        //    var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
+
+        //    var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
+        //        up => up.UserId == userId &&
+        //            up.Project.ProjectName == projectName);
+
+        //    // Return if project for user already exists or userId is null.
+        //    if (user == null || existingProject != null)
+        //        return null;
+
+        //    // Create the new project.
+        //    var newProject = new AspNetProjects();
+        //    newProject.Owner = user;
+        //    newProject.ProjectName = projectName;
+        //    var projectId = (ctx.Projects.Count() + 1).ToString();
+        //    newProject.ProjectID = projectId;
+        //    newProject.DateCreated = DateTime.Now;
+
+        //    // Add project to DB.
+        //    ctx.Projects.Add(newProject);
+
+        //    var userProject = new UserProject()
+        //    {
+        //        ProjectId = projectId,
+        //        UserId = user.Id
+        //    };
+
+        //    ctx.UserProjects.Add(userProject);
+        //    await ctx.SaveChangesAsync();
+        //    return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+        //}
+
+        
 
         [HttpDelete("delete/{projectId}")]
         public async Task<bool> DeleteProject(string projectId)

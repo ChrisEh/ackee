@@ -1,0 +1,16 @@
+﻿.updateProjectInfoForm {
+    width: 100%;
+}
+
+.updateProjectInfoForm h1{
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.updateProjectInfoForm label{
+    display: block;
+}
+
+.updateProjectInfoForm textarea, input {
+    width: 100%;
+}

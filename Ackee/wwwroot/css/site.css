@@ -16,6 +16,8 @@
 
 @import url('ProjectDashboard/projectDashboard.css');
 @import url('UI/DashboardWidgets/dashboardWidgets.css');
+@import url('ProjectDashboard/Settings/settings.css'); 
+@import url('ProjectDashboard/Settings/UpdateProjectInfoForm/updateProjectInfoForm.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

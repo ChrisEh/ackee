@@ -1,4 +1,5 @@
 ﻿@using Ackee.Shared.Components.UI.LeftMenu
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 
 <div class="dashboardLayout">
     <AuthorizeView>
@@ -17,7 +18,7 @@
                         </div>
                     </div>                    
                     <h1>
-                        @PageName
+                        @StringManipulationService.ToTitleCase(PageName)
                     </h1>
                 </div>
                 <main>

@@ -1,0 +1,13 @@
+﻿@page "/project/{Id}/settings"
+@using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
+
+<DashboardLayout ProjectId=@Id PageName="settings">
+    <div class="settings_content">
+        @*<UpdateProjectInformationComponent />*@
+    </div>
+</DashboardLayout>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}
