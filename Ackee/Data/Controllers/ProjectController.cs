@@ -14,6 +14,10 @@ namespace Ackee.Data.Controllers
     [Route("api/projects")]
     public class ProjectController : ControllerBase
     {
+        //
+        //  Project Endpoints
+        //
+
         // GET api/projects
         [HttpGet]
         public async Task<IEnumerable<AspNetProjects>> GetAllProjects()
@@ -28,7 +32,12 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
-                return await ctx.Projects.Include(p => p.Owner).Include(p => p.UserProjects).FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                // Query user projects, so that they are in memory
+                var userprojects = await ctx.UserProjects.Include(up => up.User).ToListAsync();
+
+                return await ctx.Projects.Include(p => p.Owner)
+                    .Include(p => p.UserProjects)
+                    .FirstOrDefaultAsync(p => p.ProjectID == projectId);                
             }           
         }
 
@@ -116,46 +125,7 @@ namespace Ackee.Data.Controllers
                 await ctx.SaveChangesAsync();
                 return true;
             }
-        }
-
-        //[HttpGet("create/{userId}/{projectName}")]
-        //public async Task<object> CreateProjectForOwner(string userId, string projectName)
-        //{
-        //    using var ctx = new AckeeCtx();
-        //    // Get the user.
-        //    var user = ctx.Users.FirstOrDefault(u => u.Id == userId);
-
-        //    var existingProject = await ctx.UserProjects.FirstOrDefaultAsync(
-        //        up => up.UserId == userId &&
-        //            up.Project.ProjectName == projectName);
-
-        //    // Return if project for user already exists or userId is null.
-        //    if (user == null || existingProject != null)
-        //        return null;
-
-        //    // Create the new project.
-        //    var newProject = new AspNetProjects();
-        //    newProject.Owner = user;
-        //    newProject.ProjectName = projectName;
-        //    var projectId = (ctx.Projects.Count() + 1).ToString();
-        //    newProject.ProjectID = projectId;
-        //    newProject.DateCreated = DateTime.Now;
-
-        //    // Add project to DB.
-        //    ctx.Projects.Add(newProject);
-
-        //    var userProject = new UserProject()
-        //    {
-        //        ProjectId = projectId,
-        //        UserId = user.Id
-        //    };
-
-        //    ctx.UserProjects.Add(userProject);
-        //    await ctx.SaveChangesAsync();
-        //    return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
-        //}
-
-        
+        }        
 
         [HttpDelete("delete/{projectId}")]
         public async Task<bool> DeleteProject(string projectId)
@@ -193,7 +163,10 @@ namespace Ackee.Data.Controllers
             return true;
         }
 
-        [HttpGet("members/{projectId}")]
+        //
+        // Project Member Endpoints
+        //
+        [HttpGet("{projectId}/members")]
         public async Task<IEnumerable<ApplicationUser>> GetProjectMembers(string projectId)
         {
             var ctx = new AckeeCtx();
@@ -206,6 +179,49 @@ namespace Ackee.Data.Controllers
                 return null;
 
             return users;
+        }
+
+        [HttpPost("{projectId}/members")]
+        public async Task<ActionResult<bool>> AddProjectMember(string projectId, [FromBody] string userEmail)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                var user = await ctx.ApplicationUser.FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                if (user == null || project == null)
+                {
+                    return NotFound();
+                }
+
+                var userProject = new UserProject();
+                userProject.ProjectId = projectId;
+                userProject.UserId = user.Id;
+
+                ctx.Add(userProject);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        [HttpDelete("{projectId}/members")]
+        public async Task<ActionResult<bool>> DeleteProjectMember(string projectId, [FromBody] string userEmail)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                var user = await ctx.ApplicationUser.FirstOrDefaultAsync(u => u.Email == userEmail);
+                var userProject = await ctx.UserProjects.FirstOrDefaultAsync(up => up.ProjectId == projectId && up.UserId == user.Id);
+
+                if (user == null || project == null || userProject == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Remove(userProject);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
         }
 
         [HttpGet("addMilestone/{projectId}/{endDate}/{name}/{description}")]

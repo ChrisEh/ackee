@@ -1,0 +1,54 @@
+﻿<div class="addMemberForm">
+
+    <EditForm Model="@addFormModel" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <p>
+            <label for="emailAddress">Email address: </label>
+            <InputText id="emailAddress" @bind-Value="addFormModel.UserEmail" placeholder="johndoe@student.fontys.nl" />
+        </p>
+
+        <button class="button button_actionButton button_padding" type="submit">Add Member</button>
+
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <p class="my-2">@statusMessage</p>
+        }
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    private AddFormModel addFormModel = new AddFormModel();
+    private string statusMessage;
+
+    private async Task AddMemberToProject(string userEmail)
+    {
+        try
+        {
+            await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{ProjectId}/members", userEmail);
+            statusMessage = "Member added successfully!";
+        }
+        catch (Exception e)
+        {
+            statusMessage = "Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await AddMemberToProject(addFormModel.UserEmail);
+        OnSuccess?.Invoke();
+    }
+}

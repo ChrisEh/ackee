@@ -1,6 +1,7 @@
 ﻿@page "/project/{Id}/settings"
 @using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview
 
 @if (project != null)
 {
@@ -8,43 +9,52 @@
         <div class="settings_content">
             @if (project.Owner.Id == currentUser.Id)
             {
-                <UpdateProjectInformationComponent OnSuccess="() => RefreshProject()" Project="@project" UserId="@currentUser.Id" />
+                <UpdateProjectInformationComponent OnSuccess="async () => await RefreshProject()" Project="@project" UserId="@currentUser.Id" />
                 <hr />
             }
+
+            <MembersOverviewComponent Project="@project" CurrentUser="@currentUser" OnMemberAddedSuccessfully="async () => await OnMemberAddedSuccessfully()" />
 
         </div>
     </DashboardLayout>
 }
 
-    @code {
-        [CascadingParameter]
-        Task<AuthenticationState> authenticationStateTask { get; set; }
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
 
-        [Parameter]
-        public string Id { get; set; }
+    [Parameter]
+    public string Id { get; set; }
 
-        private AspNetProjects project = null;
+    private AspNetProjects project = null;
 
-        private ApplicationUser currentUser = null;
-        System.Security.Claims.ClaimsPrincipal CurrentUser;
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
 
-        // Get project object by project ID. If loaded, display it.
-        protected override async Task OnInitializedAsync()
-        {
-            CurrentUser = (await authenticationStateTask).User;
-            await RefreshUser();
-            await RefreshProject();
-        }
-
-        private async Task RefreshProject()
-        {
-            project = null;
-            project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
-            StateHasChanged();
-        }
-
-        private async Task RefreshUser()
-        {
-            currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
-        }
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
     }
+
+    private async Task RefreshProject()
+    {
+        project = null;
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private async Task OnMemberAddedSuccessfully()
+    {
+        await RefreshProject();
+        StateHasChanged();
+    }
+}

@@ -52,4 +52,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\ProjectDashboard\Settings\MembersOverview\AddMemberForm\" />
+  </ItemGroup>
+
 </Project>

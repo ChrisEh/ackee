@@ -16,8 +16,11 @@
 
 @import url('ProjectDashboard/projectDashboard.css');
 @import url('UI/DashboardWidgets/dashboardWidgets.css');
+
 @import url('ProjectDashboard/Settings/settings.css'); 
 @import url('ProjectDashboard/Settings/UpdateProjectInfoForm/updateProjectInfoForm.css');
+@import url('ProjectDashboard/Settings/MembersOverview/membersOverview.css');
+@import url('ProjectDashboard/Settings/MembersOverview/MemberListItem/memberListItem.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -1,0 +1,16 @@
+﻿@using Ackee.Data.Model
+
+<div class="memberListItem">
+    <p class="emailAddress">
+        @User.Email
+    </p>
+    <span class="removeIcon oi oi-x"></span>
+</div>
+
+@code {
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public ApplicationUser User { get; set; }
+}

@@ -1,0 +1,29 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview.MemberListItem
+@using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview.AddMemberForm
+
+<div class="membersOverview">
+    <h1>Project Members</h1>
+    @foreach (var userProject in Project.UserProjects)
+    {
+        <MemberListItemComponent ProjectId="@Project.ProjectID" User="@userProject.User" />
+    }
+
+    @if (CurrentUser.Id == Project.Owner.Id)
+    {
+        <AddMemberFormComponent ProjectId="@Project.ProjectID" OnSuccess="@OnMemberAddedSuccessfully" />
+    }
+</div>
+
+
+
+@code {
+    [Parameter]
+    public AspNetProjects Project { get; set; }
+
+    [Parameter]
+    public Action OnMemberAddedSuccessfully { get; set; }
+
+    [Parameter]
+    public ApplicationUser CurrentUser { get; set; }
+}
