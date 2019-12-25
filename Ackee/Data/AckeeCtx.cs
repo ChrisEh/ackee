@@ -49,8 +49,7 @@ namespace Ackee.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=tcp:ackeedbserver.database.windows.net,1433;Initial Catalog=Ackee_db;" +
-                "User Id=bestAdmin@ackeedbserver;Password=AckeeWins1!");
+            optionsBuilder.UseSqlServer("Server=tcp:ackeeservicedbserver.database.windows.net,1433;Initial Catalog=AckeeService2_db;Persist Security Info=False;User ID=alexlievense;Password=AckeeDBPass123!;");
         }
     }
 }
