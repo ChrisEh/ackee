@@ -6,7 +6,12 @@
     <h1>Project Members</h1>
     @foreach (var userProject in Project.UserProjects)
     {
-        <MemberListItemComponent ProjectId="@Project.ProjectID" User="@userProject.User" />
+        <MemberListItemComponent 
+                                 ProjectId="@Project.ProjectID" 
+                                 User="@userProject.User" 
+                                 CurrentUserId="@CurrentUser.Id"
+                                 ProjectOwnerId="@Project.Owner.Id"
+                                 OnMemberRemovedSuccessfully="@OnMemberRemovedSuccessfully"/>
     }
 
     @if (CurrentUser.Id == Project.Owner.Id)
@@ -15,14 +20,15 @@
     }
 </div>
 
-
-
 @code {
     [Parameter]
     public AspNetProjects Project { get; set; }
 
     [Parameter]
     public Action OnMemberAddedSuccessfully { get; set; }
+
+    [Parameter]
+    public Action OnMemberRemovedSuccessfully { get; set; }
 
     [Parameter]
     public ApplicationUser CurrentUser { get; set; }

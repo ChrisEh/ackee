@@ -13,7 +13,11 @@
                 <hr />
             }
 
-            <MembersOverviewComponent Project="@project" CurrentUser="@currentUser" OnMemberAddedSuccessfully="async () => await OnMemberAddedSuccessfully()" />
+            <MembersOverviewComponent 
+                Project="@project" 
+                CurrentUser="@currentUser" 
+                OnMemberAddedSuccessfully="async () => await OnMemberAddedOrRemoved()" 
+                OnMemberRemovedSuccessfully="async () => await OnMemberAddedOrRemoved()" />
 
         </div>
     </DashboardLayout>
@@ -52,7 +56,7 @@
         StateHasChanged();
     }
 
-    private async Task OnMemberAddedSuccessfully()
+    private async Task OnMemberAddedOrRemoved()
     {
         await RefreshProject();
         StateHasChanged();

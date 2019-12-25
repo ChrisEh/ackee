@@ -181,8 +181,8 @@ namespace Ackee.Data.Controllers
             return users;
         }
 
-        [HttpPost("{projectId}/members")]
-        public async Task<ActionResult<bool>> AddProjectMember(string projectId, [FromBody] string userEmail)
+        [HttpPost("{projectId}/members/{userEmail}")]
+        public async Task<ActionResult<bool>> AddProjectMember(string projectId, string userEmail)
         {
             using (var ctx = new AckeeCtx())
             {
@@ -204,8 +204,8 @@ namespace Ackee.Data.Controllers
             }
         }
 
-        [HttpDelete("{projectId}/members")]
-        public async Task<ActionResult<bool>> DeleteProjectMember(string projectId, [FromBody] string userEmail)
+        [HttpDelete("{projectId}/members/{userEmail}")]
+        public async Task<ActionResult<bool>> DeleteProjectMember(string projectId, string userEmail)
         {
             using (var ctx = new AckeeCtx())
             {

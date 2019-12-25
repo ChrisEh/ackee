@@ -33,7 +33,7 @@
     {
         try
         {
-            await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{ProjectId}/members", userEmail);
+            await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}", null);
             statusMessage = "Member added successfully!";
         }
         catch (Exception e)
