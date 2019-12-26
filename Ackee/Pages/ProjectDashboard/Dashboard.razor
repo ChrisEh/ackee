@@ -14,7 +14,7 @@
         </div>
     </DashboardLayout>
 }
-    
+
 
 @code {
     [CascadingParameter]
@@ -26,7 +26,7 @@
     private AspNetProjects project = null;
 
     private ApplicationUser currentUser = null;
-    System.Security.Claims.ClaimsPrincipal CurrentUser;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;    
 
     // Get project object by project ID. If loaded, display it.
     protected override async Task OnInitializedAsync()

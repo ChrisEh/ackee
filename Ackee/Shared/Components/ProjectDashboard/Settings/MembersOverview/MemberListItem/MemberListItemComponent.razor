@@ -5,9 +5,19 @@
             @User.Email
         </p>
 
-        @if (ProjectOwnerId != User.Id)
+        @if (CurrentUserId == ProjectOwnerId)
         {
-            <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+            @if (ProjectOwnerId != User.Id)
+            {
+                <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+            }
+        }
+        else
+        {
+            @if (CurrentUserId == User.Id)
+            {
+                <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+            }
         }
     </div>
 
@@ -29,20 +39,15 @@
 
     private async Task RemoveMemberFromProject(string userEmail)
     {
-        try
-        {
-            await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}");
-        }
-        finally
-        {
-            StateHasChanged();
-        }
+
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}");
+        StateHasChanged();
+
     }
 
     public async Task OnDelete()
     {
         await RemoveMemberFromProject(User.Email);
-
         OnMemberRemovedSuccessfully?.Invoke();
     }
 }

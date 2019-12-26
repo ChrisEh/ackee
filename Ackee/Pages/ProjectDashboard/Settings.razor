@@ -1,7 +1,9 @@
 ﻿@page "/project/{Id}/settings"
-@using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
 @using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview
+@using Ackee.Shared.Components.ProjectDashboard.Settings.DeleteProjectForm
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (project != null)
 {
@@ -9,15 +11,37 @@
         <div class="settings_content">
             @if (project.Owner.Id == currentUser.Id)
             {
-                <UpdateProjectInformationComponent OnSuccess="async () => await RefreshProject()" Project="@project" UserId="@currentUser.Id" />
-                <hr />
+                <UpdateProjectInformationComponent OnSuccess="async () => await RefreshProject()"
+                                                   Project="@project"
+                                                   UserId="@currentUser.Id" />
             }
+            else
+            {
+                <h1>Project General Information</h1>
 
-            <MembersOverviewComponent 
-                Project="@project" 
-                CurrentUser="@currentUser" 
-                OnMemberAddedSuccessfully="async () => await OnMemberAddedOrRemoved()" 
-                OnMemberRemovedSuccessfully="async () => await OnMemberAddedOrRemoved()" />
+                <h2>Project Name</h2>
+                <p>@project.ProjectName</p>
+
+                <h2>Project Description</h2>
+                <p>@project.ProjectDescription</p>
+            }
+            <hr />
+
+            <MembersOverviewComponent Project="@project"
+                                      CurrentUser="@currentUser"
+                                      OnMemberAddedSuccessfully="async () => await RefreshProject()"
+                                      OnMemberRemovedSuccessfully="async () => await RefreshProject()" />
+
+
+
+            @if (project.Owner.Id == currentUser.Id)
+            {
+                <hr />
+
+                <DeleteProjectFormComponent UserId="@currentUser.Id"
+                                            Project="@project"
+                                            OnSuccess="@RedirectToProjectsOverview" />
+            }
 
         </div>
     </DashboardLayout>
@@ -47,6 +71,12 @@
     {
         project = null;
         project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
         StateHasChanged();
     }
 
@@ -56,9 +86,21 @@
         StateHasChanged();
     }
 
-    private async Task OnMemberAddedOrRemoved()
+    private void RedirectToProjectsOverview()
     {
-        await RefreshProject();
-        StateHasChanged();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

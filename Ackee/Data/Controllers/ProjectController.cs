@@ -127,8 +127,8 @@ namespace Ackee.Data.Controllers
             }
         }        
 
-        [HttpDelete("delete/{projectId}")]
-        public async Task<bool> DeleteProject(string projectId)
+        [HttpDelete("{projectId}")]
+        public async Task<Object> DeleteProject(string projectId)
         {
             var ctx = new AckeeCtx();
 
@@ -136,7 +136,7 @@ namespace Ackee.Data.Controllers
             var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
 
             if (project == null)
-                return false;
+                return BadRequest();
 
             ctx.Projects.Remove(project);
             await ctx.SaveChangesAsync();
