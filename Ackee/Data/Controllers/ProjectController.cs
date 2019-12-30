@@ -38,6 +38,7 @@ namespace Ackee.Data.Controllers
 
                 return await ctx.Projects.Include(p => p.Owner)
                     .Include(p => p.UserProjects)
+                    .Include(p => p.Milestones)
                     .FirstOrDefaultAsync(p => p.ProjectID == projectId);                
             }           
         }
@@ -204,7 +205,7 @@ namespace Ackee.Data.Controllers
                 userProject.ProjectId = projectId;
                 userProject.UserId = user.Id;
 
-                ctx.Add(userProject);
+                ctx.UserProjects.Add(userProject);
                 await ctx.SaveChangesAsync();
                 return true;
             }
@@ -239,7 +240,7 @@ namespace Ackee.Data.Controllers
             var ctx = new AckeeCtx();
 
             // Get the milestones
-            var milestones = await ctx.Milestones.Where(m => m.Project.ProjectID == projectId).ToListAsync();
+            var milestones = await ctx.Milestones.Where(m => m.ProjectId == projectId).ToListAsync();
 
             return milestones;
         }
@@ -248,20 +249,45 @@ namespace Ackee.Data.Controllers
         // This method expects a Milestone object to be sent in the body of the request.
         // This object can have null for the project and the milestone id, as they will be set inside this method.
         [HttpPost("{projectId}/milestones")]
-        public async Task<AspNetMilestones> AddProjectMilestone([FromRoute] string projectId, [FromBody] AspNetMilestones newMilestone)
+        public async Task<Object> AddProjectMilestone([FromRoute] string projectId, [FromBody] AspNetMilestones newMilestone)
         {
-            var ctx = new AckeeCtx();
+            using (var ctx = new AckeeCtx())
+            {
+                var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
 
-            var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                if (project == null || string.IsNullOrWhiteSpace(newMilestone.MilestoneName))
+                    return BadRequest();
 
-            if (project == null || string.IsNullOrWhiteSpace(newMilestone.MilestoneName))
-                return null;
+                newMilestone.Project = project;
 
-            newMilestone.Project = project;
+                ctx.Milestones.Add(newMilestone);
+                await ctx.SaveChangesAsync();
+                return newMilestone;
+            }            
+        }
 
-            ctx.Milestones.Add(newMilestone);
-            await ctx.SaveChangesAsync();
-            return newMilestone;
+        [HttpPut("{projectId}/milestones")]
+        public async Task<Object> UpdateMilestoneById([FromRoute] string projectId, [FromBody] AspNetMilestones updatedMilestone)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                // Get the project 
+                var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+
+                // Get the milestone
+                var milestone = ctx.Milestones.FirstOrDefault(m => m.MilestoneID == updatedMilestone.MilestoneID);                
+
+                // Update the milestone
+                milestone.ProjectId = updatedMilestone.ProjectId;
+                milestone.Project = updatedMilestone.Project;
+                milestone.MilestoneName = updatedMilestone.MilestoneName;
+                milestone.Description = updatedMilestone.Description;
+                milestone.EndDate = updatedMilestone.EndDate;
+
+                // Save changes
+                await ctx.SaveChangesAsync();
+                return true;
+            }
         }
 
         [HttpDelete("{projectId}/milestones/{milestoneId}")]

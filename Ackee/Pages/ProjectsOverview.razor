@@ -81,6 +81,7 @@
     private async Task RefreshProjects()
     {        
         projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"https://ackee.azurewebsites.net/api/projects/user/{currentUser.Id}");
+        StateHasChanged();
     }
 
     private async Task RefreshUser()

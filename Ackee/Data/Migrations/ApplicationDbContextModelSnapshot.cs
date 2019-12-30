@@ -99,6 +99,7 @@ namespace Ackee.Data.Migrations
             modelBuilder.Entity("Ackee.Data.Model.AspNetMilestones", b =>
                 {
                     b.Property<string>("MilestoneID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Completed")
@@ -115,13 +116,12 @@ namespace Ackee.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<string>("ProjectID")
-                        .IsRequired()
+                    b.Property<string>("ProjectId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MilestoneID");
 
-                    b.HasIndex("ProjectID");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Milestones");
                 });
@@ -129,6 +129,7 @@ namespace Ackee.Data.Migrations
             modelBuilder.Entity("Ackee.Data.Model.AspNetProjects", b =>
                 {
                     b.Property<string>("ProjectID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateCreated")
@@ -307,9 +308,8 @@ namespace Ackee.Data.Migrations
                 {
                     b.HasOne("Ackee.Data.Model.AspNetProjects", "Project")
                         .WithMany("Milestones")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ackee.Data.Model.AspNetProjects", b =>

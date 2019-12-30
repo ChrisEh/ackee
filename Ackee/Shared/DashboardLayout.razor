@@ -1,8 +1,8 @@
 ﻿@using Ackee.Shared.Components.UI.LeftMenu
 @using Ackee.Data.Model
 @using Ackee.Shared.Services
+@using Ackee.Shared.Components.Auxiliary.BreadCrumbs
 @inject Ackee.Shared.Services.StringManipulationService StringManipulationService
-@inject Ackee.Shared.Services.BreadCrumbService BreadCrumbService
 
 <div class="dashboardLayout">
     <AuthorizeView>
@@ -27,17 +27,9 @@
                         @StringManipulationService.ToTitleCase(PageName)
                     </h1>
                 </div>
-                @if (breadCrumbs.Count > 0)
-                {
-            <div class="dashboardLayout_content_breadcrumbs">
-                
-                @foreach (BreadCrumb bc in breadCrumbs.Except(new List<BreadCrumb>() { breadCrumbs.Last() }))
-                {
-                    <NavLink href=@bc.Route>@bc.Name</NavLink><span class="mx-1">&nbsp;&gt;</span>
-                }
-                <NavLink href=@breadCrumbs.Last().Route>@breadCrumbs.Last().Name</NavLink>
-            </div>
-                }
+                <BreadCrumbsComponent PageRoute=@PageRoute
+                                      PageRouteCustomIndexes=@PageRouteCustomIndexes
+                                      PageRouteCustomNames=@PageRouteCustomNames />
                 <main>
                     @ChildContent
                 </main>
@@ -69,13 +61,7 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
-    private bool _menuExpanded = false;
-    private List<BreadCrumb> breadCrumbs = new List<BreadCrumb>();
-
-    protected override void OnParametersSet()
-    {
-        breadCrumbs = BreadCrumbService.GetBreadCrumbs(PageRoute, PageRouteCustomIndexes, PageRouteCustomNames);
-    }
+    private bool _menuExpanded = false;    
 
     private void ToggleMenu()
     {

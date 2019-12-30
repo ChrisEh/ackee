@@ -1,0 +1,32 @@
+﻿@using Ackee.Shared.Services
+@inject Ackee.Shared.Services.BreadCrumbService BreadCrumbService
+
+@if (breadCrumbs.Count > 0)
+{
+    <div class="dashboardLayout_content_breadcrumbs">
+
+        @foreach (BreadCrumb bc in breadCrumbs.Except(new List<BreadCrumb>() { breadCrumbs.Last() }))
+        {
+            <NavLink href=@bc.Route>@bc.Name</NavLink><span class="mx-1">&nbsp;&gt;</span>
+        }
+        <NavLink href=@breadCrumbs.Last().Route>@breadCrumbs.Last().Name</NavLink>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string PageRoute { get; set; }
+
+    [Parameter]
+    public List<int> PageRouteCustomIndexes { get; set; }
+
+    [Parameter]
+    public List<string> PageRouteCustomNames { get; set; }
+
+    private List<BreadCrumb> breadCrumbs = new List<BreadCrumb>();
+
+    protected override void OnParametersSet()
+    {
+        breadCrumbs = BreadCrumbService.GetBreadCrumbs(PageRoute, PageRouteCustomIndexes, PageRouteCustomNames);
+    }
+}

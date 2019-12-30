@@ -1,5 +1,6 @@
 ﻿@page "/projects/{ProjectId}/milestones/{MilestoneId}"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Milestones.UpdateMilestoneForm
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (milestone != null)
@@ -9,7 +10,7 @@
                      PageRoute="@($"/projects/{ProjectId}/milestones/{MilestoneId}")"
                      PageRouteCustomIndexes=@(new List<int> { 1, 3 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName, milestone.MilestoneName })>
-        
+        <UpdateMilestoneFormComponent Milestone="@milestone" Project="@project"/>
     </DashboardLayout>
 }
 

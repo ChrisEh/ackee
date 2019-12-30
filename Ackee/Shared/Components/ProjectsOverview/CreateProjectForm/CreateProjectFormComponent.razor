@@ -12,16 +12,16 @@
         }
 
         <p>
-            <label for="projectName">Project Name: </label>
+            <label class="d-block" for="projectName">Project Name: </label>
             <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
         </p>
 
         <p>
-            <label for="projectDescription">Project Description: </label>
-            <InputTextArea id="projectDescription" @bind-Value="_createFormModel.ProjectDescription" />
+            <label class="d-block" for="projectDescription">Project Description: </label>
+            <InputTextArea class="w-100" id="projectDescription" @bind-Value="_createFormModel.ProjectDescription" />
         </p>
 
-        <button type="submit">Submit</button>
+        <button class="button button_actionButton button_padding" type="submit">Submit</button>
 
     </EditForm>
 }

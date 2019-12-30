@@ -1,0 +1,77 @@
+﻿@using Ackee.Data.Model
+
+<EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        <p>@statusMessage</p>
+    }
+
+    <p>
+        <label for="milestoneName">Milestone Name: </label>
+        <InputText class="updateMilestoneForm_milestoneName" id="milestoneName" @bind-Value="updateFormModel.MilestoneName" />
+    </p>
+
+    <p>
+        <label for="milestoneDescription">Milestone Description: </label>
+        <InputTextArea class="updateMilestoneForm_milestoneDescription" id="milestoneDescription" @bind-Value="updateFormModel.MilestoneDescription" />
+    </p>
+
+    <p>
+        <label for="milestoneEndDate">Milestone End Date: </label>
+        <InputDate class="updateMilestoneForm_milestoneEndDate" id="milestoneEndDate" @bind-Value="updateFormModel.MilestoneEndDate" />
+    </p>
+
+    <button class="button button_actionButton button_padding" type="submit">Submit</button>
+
+</EditForm>
+
+
+
+
+@code {
+    [Parameter]
+    public AspNetMilestones Milestone { get; set; }
+
+    [Parameter]
+    public AspNetProjects Project { get; set; }
+
+    private UpdateFormModel updateFormModel = new UpdateFormModel();
+    private string statusMessage = null;
+    private bool success = false;
+
+    private async Task UpdateMilestone()
+    {
+        try
+        {
+            Milestone.MilestoneName = updateFormModel.MilestoneName;
+            Milestone.Description = updateFormModel.MilestoneDescription;
+            Milestone.EndDate = updateFormModel.MilestoneEndDate;
+
+            success = await (new HttpClient()).PutJsonAsync<bool>($"https://ackee.azurewebsites.net/api/projects/{Project.ProjectID}/milestones", Milestone);
+            statusMessage = "Milestone updated successfully!";
+        }
+        catch (Exception e)
+        {
+            statusMessage = "Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await UpdateMilestone();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        updateFormModel.MilestoneName = Milestone.MilestoneName;
+        updateFormModel.MilestoneDescription = Milestone.Description;
+        updateFormModel.MilestoneEndDate = Milestone.EndDate;
+    }
+}
