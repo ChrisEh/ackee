@@ -30,7 +30,9 @@
                     if (projects != null)
                         @foreach (var project in projects)
                         {
-                            <ProjectListItemComponent ProjectName="@project.ProjectName" ProjectID="@project.ProjectID" />
+                            <ProjectListItemComponent ProjectName="@project.ProjectName" 
+                                                      ProjectID="@project.ProjectID"  
+                                                      ProjectMembers="@project.UserProjects"/>
                         }
                     }
                     else
@@ -39,7 +41,7 @@
                     }
             </div>
         </div>
-        @if (currentUser != null)
+        @if (currentUser != null && showModal)
         {
             <ModalWithBackdropComponent Show="@showModal" Header="Add A Project">
                 <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
@@ -78,12 +80,12 @@
 
     private async Task RefreshProjects()
     {        
-        projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
+        projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"https://ackee.azurewebsites.net/api/projects/user/{currentUser.Id}");
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
     }
 }

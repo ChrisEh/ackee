@@ -1,0 +1,71 @@
+﻿@page "/project/{ProjectId}/milestones/{MilestoneId}"
+@using Ackee.Data.Model
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@if (milestone != null)
+{
+    <DashboardLayout Project="@project" PageName="@milestone.MilestoneName">
+        
+    </DashboardLayout>
+}
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public string MilestoneId { get; set; }
+
+    private AspNetMilestones milestone = null;
+    private AspNetProjects project = null;
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+        await RefreshMilestone();
+    }
+
+    private async Task RefreshMilestone()
+    {
+        milestone = await (new HttpClient()).GetJsonAsync<AspNetMilestones>($"https://ackee.azurewebsites.net/api/milestones/{MilestoneId}");
+        StateHasChanged();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{ProjectId}");
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

@@ -1,20 +1,15 @@
-﻿@page "/project/{Id}"
+﻿@page "/project/{Id}/calendar"
 @using Ackee.Data.Model
-@using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (project != null)
 {
-    <DashboardLayout Project=@project PageName="dashboard">
-        <div class="projectDashboard_container">
-            <div class="widgets">
-                <ListOfTasksComponent />
-                <ListOfTasksComponent />
-                <ListOfTasksComponent />
-            </div>
+    <DashboardLayout Project="@project" PageName="calendar">
+        <div class="milestones_content">
+
         </div>
     </DashboardLayout>
 }
-
 
 @code {
     [CascadingParameter]
@@ -26,7 +21,7 @@
     private AspNetProjects project = null;
 
     private ApplicationUser currentUser = null;
-    System.Security.Claims.ClaimsPrincipal CurrentUser;    
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
 
     // Get project object by project ID. If loaded, display it.
     protected override async Task OnInitializedAsync()
@@ -40,11 +35,31 @@
     {
         project = null;
         project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{Id}");
+
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

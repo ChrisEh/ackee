@@ -22,6 +22,9 @@
 @import url('ProjectDashboard/Settings/MembersOverview/membersOverview.css');
 @import url('ProjectDashboard/Settings/MembersOverview/MemberListItem/memberListItem.css');
 
+@import url('ProjectDashboard/Milestones/milestonesOverview.css');
+@import url('ProjectDashboard/Milestones/MilestoneListItem/milestoneListItem.css');
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;

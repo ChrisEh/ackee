@@ -11,6 +11,7 @@ namespace Ackee.Data.Model
     public class AspNetProjects
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ProjectID { get; set; }//PK
 
         [StringLength(128)]

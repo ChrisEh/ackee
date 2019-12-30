@@ -56,7 +56,7 @@
             Project.ProjectName = updateFormModel.ProjectName;
             Project.ProjectDescription = updateFormModel.ProjectDescription;
 
-            success = await (new HttpClient()).PutJsonAsync<bool>($"http://localhost:53508/api/projects/user/{userId}", Project);
+            success = await (new HttpClient()).PutJsonAsync<bool>($"https://ackee.azurewebsites.net/api/projects/user/{userId}", Project);
             statusMessage = "Project updated successfully!";
         }
         catch (Exception e)
@@ -76,6 +76,6 @@
         if (success)
         {
             OnSuccess?.Invoke();
-        }
+        }        
     }
 }

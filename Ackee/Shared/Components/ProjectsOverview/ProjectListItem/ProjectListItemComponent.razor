@@ -13,17 +13,12 @@
             <h5>@ProjectName</h5>
         </div>
         <div class="projectMembers">
-            @*@foreach(var member in ProjectMembers)
+            @foreach(var member in ProjectMembers)
                 {
                     <div class="projectMember">
-                        @member.FirstName @member.LastName
+                        @member.User.Email.ToUpper()[0]
                     </div>
-                }*@
-
-            <div class="projectMember">AN</div>
-            <div class="projectMember">DG</div>
-            <div class="projectMember">RS</div>
-            <div class="projectMember">AL</div>
+                }
         </div>
     </div>
 </div>
@@ -33,7 +28,7 @@
     public string ProjectName { get; set; }
 
     [Parameter]
-    public List<AspNetUsers> ProjectMembers { get; set; }
+    public IEnumerable<UserProject> ProjectMembers { get; set; }
 
     [Parameter]
     public string ProjectID { get; set; }
