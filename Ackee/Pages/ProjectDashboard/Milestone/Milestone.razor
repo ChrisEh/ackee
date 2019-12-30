@@ -1,10 +1,14 @@
-﻿@page "/project/{ProjectId}/milestones/{MilestoneId}"
+﻿@page "/projects/{ProjectId}/milestones/{MilestoneId}"
 @using Ackee.Data.Model
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (milestone != null)
 {
-    <DashboardLayout Project="@project" PageName="@milestone.MilestoneName">
+    <DashboardLayout Project="@project" 
+                     PageName="@milestone.MilestoneName"
+                     PageRoute="@($"/projects/{ProjectId}/milestones/{MilestoneId}")"
+                     PageRouteCustomIndexes=@(new List<int> { 1, 3 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName, milestone.MilestoneName })>
         
     </DashboardLayout>
 }

@@ -71,6 +71,10 @@
     color: white;
 }
 
+.dashboardLayout_content_breadcrumbs {
+    margin-left: 4.3rem;
+}
+
 .dashboardLayout_content_toggleMenu__bigScreens {
     display: none;
 }

@@ -1,6 +1,8 @@
 ﻿@using Ackee.Shared.Components.UI.LeftMenu
 @using Ackee.Data.Model
+@using Ackee.Shared.Services
 @inject Ackee.Shared.Services.StringManipulationService StringManipulationService
+@inject Ackee.Shared.Services.BreadCrumbService BreadCrumbService
 
 <div class="dashboardLayout">
     <AuthorizeView>
@@ -20,15 +22,26 @@
                         <div class="button button_actionButton dashboardLayout_content_toggleMenu dashboardLayout_content_toggleMenu__bigScreens" @onclick="ToggleMenu">
                             <span class="oi @(_menuExpanded ? "oi-arrow-right" : "oi-arrow-left")"></span>
                         </div>
-                    </div>                    
+                    </div>
                     <h1>
                         @StringManipulationService.ToTitleCase(PageName)
                     </h1>
                 </div>
+                @if (breadCrumbs.Count > 0)
+                {
+            <div class="dashboardLayout_content_breadcrumbs">
+                
+                @foreach (BreadCrumb bc in breadCrumbs.Except(new List<BreadCrumb>() { breadCrumbs.Last() }))
+                {
+                    <NavLink href=@bc.Route>@bc.Name</NavLink><span class="mx-1">&nbsp;&gt;</span>
+                }
+                <NavLink href=@breadCrumbs.Last().Route>@breadCrumbs.Last().Name</NavLink>
+            </div>
+                }
                 <main>
                     @ChildContent
                 </main>
-                
+
             </div>
         </Authorized>
         <NotAuthorized>
@@ -45,9 +58,25 @@
     public string PageName { get; set; }
 
     [Parameter]
+    public string PageRoute { get; set; }
+
+    [Parameter]
+    public List<int> PageRouteCustomIndexes { get; set; }
+
+    [Parameter]
+    public List<string> PageRouteCustomNames { get; set; }
+
+    [Parameter]
     public RenderFragment ChildContent { get; set; }
 
     private bool _menuExpanded = false;
+    private List<BreadCrumb> breadCrumbs = new List<BreadCrumb>();
+
+    protected override void OnParametersSet()
+    {
+        breadCrumbs = BreadCrumbService.GetBreadCrumbs(PageRoute, PageRouteCustomIndexes, PageRouteCustomNames);
+    }
+
     private void ToggleMenu()
     {
         _menuExpanded = !_menuExpanded;

@@ -1,4 +1,4 @@
-﻿@page  "/overview"
+﻿@page  "/projects"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI
 @using Ackee.Shared.Components.UI.Modal
@@ -81,7 +81,6 @@
     private async Task RefreshProjects()
     {        
         projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"https://ackee.azurewebsites.net/api/projects/user/{currentUser.Id}");
-        StateHasChanged();
     }
 
     private async Task RefreshUser()

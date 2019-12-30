@@ -1,10 +1,14 @@
-﻿@page "/project/{Id}/calendar"
+﻿@page "/projects/{Id}/calendar"
 @using Ackee.Data.Model
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" PageName="calendar">
+    <DashboardLayout Project="@project" 
+                     PageName="calendar"
+                     PageRoute="@($"/projects/{Id}/calendar")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="milestones_content">
 
         </div>

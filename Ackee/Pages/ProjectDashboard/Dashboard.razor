@@ -1,10 +1,14 @@
-﻿@page "/project/{Id}"
+﻿@page "/projects/{Id}"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
 
 @if (project != null)
 {
-    <DashboardLayout Project=@project PageName="dashboard">
+    <DashboardLayout Project=@project 
+                     PageName="dashboard" 
+                     PageRoute=@($"/projects/{Id}")
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="projectDashboard_container">
             <div class="widgets">
                 <ListOfTasksComponent />
