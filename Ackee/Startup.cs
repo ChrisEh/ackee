@@ -52,9 +52,9 @@ namespace Ackee
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, 
                 RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-            services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<ProjectController>();
+
             services.AddScoped<StringManipulationService>();
+            services.AddScoped<DateTimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

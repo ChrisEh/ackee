@@ -1,0 +1,89 @@
+﻿@using System.Threading
+@using Ackee.Data.Model
+
+@if (milestone == null)
+{
+    <EditForm Model="@createFormModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        @if (!string.IsNullOrEmpty(_statusMessage))
+        {
+            <p>@_statusMessage</p>
+        }
+
+        <p>
+            <label for="milestoneName">Milestone Name: </label>
+            <InputText id="milestoneName" @bind-Value="createFormModel.MilestoneName" />
+        </p>
+
+        <p>
+            <label for="milestoneDescription">Milestone Description: </label>
+            <InputTextArea id="milestoneDescription" @bind-Value="createFormModel.MilestoneDescription" />
+        </p>
+
+        <p>
+            <label for="milestoneEndDate">Milestone End Date: </label>
+            <InputDate id="milestoneEndDate" @bind-Value="createFormModel.MilestoneEndDate"/>
+        </p>
+
+        <button type="submit">Submit</button>
+
+    </EditForm>
+}
+else
+{
+    <h4>Milestone added successfully</h4>
+}
+
+
+@code {
+    private CreateFormModel createFormModel = new CreateFormModel();
+    private AspNetMilestones milestone = null;
+    private string _statusMessage = "";
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    private async Task CreateMilestone(string projectId)
+    {
+        try
+        {
+            AspNetMilestones newMilestone = new AspNetMilestones();
+            newMilestone.MilestoneName = createFormModel.MilestoneName;
+            newMilestone.Description = createFormModel.MilestoneDescription;
+            newMilestone.EndDate = createFormModel.MilestoneEndDate;
+
+            milestone = await (new HttpClient()).PostJsonAsync<AspNetMilestones>($"https://ackee.azurewebsites.net/api/projects/{projectId}/milestones", newMilestone);
+        }
+        catch (Exception e)
+        {
+            _statusMessage = "Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await CreateMilestone(ProjectId);
+
+        if (milestone != null)
+        {
+            OnSuccess?.Invoke();
+        }
+
+        Thread.Sleep(1500);
+        milestone = null;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        createFormModel.MilestoneEndDate = DateTime.Now;
+    }
+}

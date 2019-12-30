@@ -33,7 +33,7 @@
     {
         try
         {
-            await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}", null);
+            await (new HttpClient()).PostJsonAsync<bool>($"https://ackee.azurewebsites.net/api/projects/{ProjectId}/members/{userEmail}", null);
             statusMessage = "Member added successfully!";
         }
         catch (Exception e)
@@ -50,5 +50,6 @@
     {
         await AddMemberToProject(addFormModel.UserEmail);
         OnSuccess?.Invoke();
+        addFormModel.UserEmail = "";
     }
 }

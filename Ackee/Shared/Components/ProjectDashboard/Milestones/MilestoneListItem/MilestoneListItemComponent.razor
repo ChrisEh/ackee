@@ -1,0 +1,40 @@
+﻿@using Ackee.Data.Model
+@inject Ackee.Shared.Services.DateTimeService DateService
+
+@if (Milestone != null)
+{
+    <NavLink href=@($"project/{ProjectId}/milestones/{Milestone.MilestoneID}")>
+        <div class="milestoneListItem">
+            <div class="milestone_info">
+                <h1>@Milestone.MilestoneName</h1>
+                <p class="date">Expires on @DateService.GetDateAsString("D", Milestone.EndDate)</p>
+                <p>Status: <span class="status @DetermineStatus()">@DetermineStatus()</span></p>
+            </div>
+            <div class="milestone_progress_info">
+                <p>Progress bar here</p>
+            </div>
+        </div>
+    </NavLink>    
+}
+
+@code {
+    [Parameter]
+    public AspNetMilestones Milestone { get; set; }
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    private string DetermineStatus()
+    {
+        if (Milestone.Completed)
+        {
+            return "completed";
+        }
+        else if (DateTime.Today.CompareTo(Milestone.EndDate) < 1)
+        {
+            return "open";
+        }
+
+        return "expired";
+    }
+}

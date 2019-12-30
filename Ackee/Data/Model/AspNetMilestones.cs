@@ -10,6 +10,7 @@ namespace Ackee.Data.Model
     public class AspNetMilestones
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string MilestoneID { get; set; }//PK
 
         [StringLength(128)]
@@ -22,5 +23,7 @@ namespace Ackee.Data.Model
 
         [Required]
         public AspNetProjects Project { get; set; }
+
+        public bool Completed { get; set; }
     }
 }

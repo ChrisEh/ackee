@@ -14,9 +14,8 @@
         <ul>
             <li class='@(PageName.Equals("dashboard") ? "active" : "")' @onclick='() => NavigateToProjectPage("")'>Dashboard</li>
             <li class='@(PageName.Equals("calendar") ? "active" : "")' @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
+            <li class='@(PageName.Equals("milestones") ? "active" : "")' @onclick='() => NavigateToProjectPage("milestones")'>Milestones</li>
             <li class='@(PageName.Equals("tasks") ? "active" : "")' @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
-            <li class='@(PageName.Equals("files") ? "active" : "")' @onclick='() => NavigateToProjectPage("files")'>Files</li>
-            <li class='@(PageName.Equals("communication") ? "active" : "")' @onclick='() => NavigateToProjectPage("communication")'>Communication</li>
             <li class='@(PageName.Equals("progress") ? "active" : "")' @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
             <li class='@(PageName.Equals("settings") ? "active" : "")' @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
         </ul>

@@ -14,6 +14,7 @@ namespace Ackee.Data.Controllers
     [Route("api/projects")]
     public class ProjectController : ControllerBase
     {
+        #region PROJECT ENDPOINTS
         //
         //  Project Endpoints
         //
@@ -47,6 +48,9 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
+                var users = ctx.Users.ToList();
+                var userProject = ctx.UserProjects.ToList();
+
                 return await ctx.Projects.Where(p => p.UserProjects.Any(
                     up => up.UserId == userId)).ToListAsync();
             }                
@@ -69,9 +73,7 @@ namespace Ackee.Data.Controllers
                     return BadRequest();
 
                 // Create the new project.
-                var projectId = (ctx.Projects.Count() + 1).ToString();
                 project.Owner = user;
-                project.ProjectID = projectId;
                 project.DateCreated = DateTime.Now;
 
                 // Add project to DB.
@@ -79,13 +81,13 @@ namespace Ackee.Data.Controllers
 
                 var userProject = new UserProject()
                 {
-                    ProjectId = projectId,
+                    ProjectId = project.ProjectID,
                     UserId = user.Id
                 };
 
                 ctx.UserProjects.Add(userProject);
                 await ctx.SaveChangesAsync();
-                return ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
+                return ctx.Projects.FirstOrDefault(p => p.ProjectID == project.ProjectID);
             }
             
         }
@@ -163,6 +165,10 @@ namespace Ackee.Data.Controllers
             return true;
         }
 
+        #endregion
+
+        #region PROJECT MEMBER ENDPOINTS
+
         //
         // Project Member Endpoints
         //
@@ -171,7 +177,7 @@ namespace Ackee.Data.Controllers
         {
             var ctx = new AckeeCtx();
 
-            // Get the project. 
+            // Get the members. 
             var users = await ctx.Users.Where(
                 u => u.UserProjects.Any(up => up.ProjectId == projectId)).ToListAsync();
 
@@ -224,32 +230,59 @@ namespace Ackee.Data.Controllers
             }
         }
 
-        [HttpGet("addMilestone/{projectId}/{endDate}/{name}/{description}")]
-        public async Task<ActionResult<AspNetMilestones>> AddMilestone(
-            string projectId, DateTime endDate, string name, string description)
+        #endregion
+
+        #region PROJECT MILESTONE ENDPOINTS
+        [HttpGet("{projectId}/milestones")]
+        public async Task<IEnumerable<AspNetMilestones>> GetProjectMilestones(string projectId)
+        {
+            var ctx = new AckeeCtx();
+
+            // Get the milestones
+            var milestones = await ctx.Milestones.Where(m => m.Project.ProjectID == projectId).ToListAsync();
+
+            return milestones;
+        }
+
+
+        // This method expects a Milestone object to be sent in the body of the request.
+        // This object can have null for the project and the milestone id, as they will be set inside this method.
+        [HttpPost("{projectId}/milestones")]
+        public async Task<AspNetMilestones> AddProjectMilestone([FromRoute] string projectId, [FromBody] AspNetMilestones newMilestone)
         {
             var ctx = new AckeeCtx();
 
             var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
 
-            if (project == null || string.IsNullOrWhiteSpace(name))
+            if (project == null || string.IsNullOrWhiteSpace(newMilestone.MilestoneName))
                 return null;
 
-            var newMilestone = new AspNetMilestones()
-            {
-                MilestoneID = (await ctx.Milestones.CountAsync()).ToString(),
-                Description = description,
-                EndDate = endDate,
-                MilestoneName = name,
-                Project = project
-            };
+            newMilestone.Project = project;
 
-            project.Milestones.ToList().Add(newMilestone);
-
-            ctx.Update(project);
-
+            ctx.Milestones.Add(newMilestone);
             await ctx.SaveChangesAsync();
-            return CreatedAtAction("Milestone", await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == newMilestone.MilestoneID));
+            return newMilestone;
         }
+
+        [HttpDelete("{projectId}/milestones/{milestoneId}")]
+        public async Task<ActionResult<bool>> DeleteProjectMilestone(string projectId, string milestoneId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var project = await ctx.Projects.FirstOrDefaultAsync(p => p.ProjectID == projectId);
+                var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);                
+
+                if (milestone == null || project == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Remove(milestone);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        #endregion
     }
 }

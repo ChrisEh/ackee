@@ -13,27 +13,15 @@ namespace Ackee.Data.Controllers
     [Route("api/milestones")]
     public class MilestoneController : ControllerBase
     {
-        AckeeCtx ctx = new AckeeCtx();
-
-        [HttpGet]
-        public async Task<IEnumerable<AspNetMilestones>> GetAllMilestones()
+        [HttpGet("{milestoneId}")]
+        public async Task<AspNetMilestones> GetProjectMilestones(string milestoneId)
         {
-            return await ctx.Milestones.ToListAsync();
-        }
+            var ctx = new AckeeCtx();
 
-        [HttpGet("delete/{milestoneId}")]
-        public async Task<bool> DeleteMilestone(string mileStoneId)
-        {
-            var ms = await ctx.Milestones.FirstOrDefaultAsync(
-                m => m.MilestoneID == mileStoneId);
+            // Get the milestones
+            var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);
 
-            if (ms != null)
-            {
-                ctx.Remove(ms);
-                await ctx.SaveChangesAsync();
-                return true;
-            }
-            return false; 
+            return milestone;
         }
     }
 }
