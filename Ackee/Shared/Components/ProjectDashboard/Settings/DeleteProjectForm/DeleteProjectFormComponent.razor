@@ -44,7 +44,7 @@
 
     private async Task DeleteProject()
     {
-        await (new HttpClient()).DeleteAsync($"https://ackee.azurewebsites.net/api/projects/{Project.ProjectID}");
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{Project.ProjectID}");
         StateHasChanged();
     }
 

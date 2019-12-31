@@ -49,3 +49,7 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.button_danger {
+    background-color: red;
+}

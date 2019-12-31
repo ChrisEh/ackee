@@ -1,5 +1,7 @@
 ﻿@using Ackee.Shared.Components.UI.LeftMenu
 @using Ackee.Data.Model
+@using Ackee.Shared.Services
+@using Ackee.Shared.Components.Auxiliary.BreadCrumbs
 @inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 
 <div class="dashboardLayout">
@@ -8,7 +10,7 @@
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
                 @if (Project != null)
                 {
-                    <LeftMenuComponent Project="@Project" PageName="@PageName" />
+                    <LeftMenuComponent Project="@Project" PageName="@PageName" PageRoute="@PageRoute" />
                 }
             </nav>
             <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">
@@ -20,15 +22,18 @@
                         <div class="button button_actionButton dashboardLayout_content_toggleMenu dashboardLayout_content_toggleMenu__bigScreens" @onclick="ToggleMenu">
                             <span class="oi @(_menuExpanded ? "oi-arrow-right" : "oi-arrow-left")"></span>
                         </div>
-                    </div>                    
+                    </div>
                     <h1>
                         @StringManipulationService.ToTitleCase(PageName)
                     </h1>
                 </div>
+                <BreadCrumbsComponent PageRoute=@PageRoute
+                                      PageRouteCustomIndexes=@PageRouteCustomIndexes
+                                      PageRouteCustomNames=@PageRouteCustomNames />
                 <main>
                     @ChildContent
                 </main>
-                
+
             </div>
         </Authorized>
         <NotAuthorized>
@@ -45,9 +50,19 @@
     public string PageName { get; set; }
 
     [Parameter]
+    public string PageRoute { get; set; }
+
+    [Parameter]
+    public List<int> PageRouteCustomIndexes { get; set; }
+
+    [Parameter]
+    public List<string> PageRouteCustomNames { get; set; }
+
+    [Parameter]
     public RenderFragment ChildContent { get; set; }
 
-    private bool _menuExpanded = false;
+    private bool _menuExpanded = false;    
+
     private void ToggleMenu()
     {
         _menuExpanded = !_menuExpanded;

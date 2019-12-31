@@ -3,7 +3,7 @@
 
 @if (Milestone != null)
 {
-    <NavLink href=@($"project/{ProjectId}/milestones/{Milestone.MilestoneID}")>
+    <NavLink href=@($"projects/{ProjectId}/milestones/{Milestone.MilestoneID}")>
         <div class="milestoneListItem">
             <div class="milestone_info">
                 <h1>@Milestone.MilestoneName</h1>

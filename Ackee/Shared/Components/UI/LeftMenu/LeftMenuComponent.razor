@@ -13,11 +13,11 @@
     <div class="leftMenu_navigation">
         <ul>
             <li class='@(PageName.Equals("dashboard") ? "active" : "")' @onclick='() => NavigateToProjectPage("")'>Dashboard</li>
-            <li class='@(PageName.Equals("calendar") ? "active" : "")' @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
-            <li class='@(PageName.Equals("milestones") ? "active" : "")' @onclick='() => NavigateToProjectPage("milestones")'>Milestones</li>
-            <li class='@(PageName.Equals("tasks") ? "active" : "")' @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
-            <li class='@(PageName.Equals("progress") ? "active" : "")' @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
-            <li class='@(PageName.Equals("settings") ? "active" : "")' @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
+            <li class='@(PageRoute.Contains("calendar") ? "active" : "")' @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
+            <li class='@(PageRoute.Contains("milestones") ? "active" : "")' @onclick='() => NavigateToProjectPage("milestones")'>Milestones</li>
+            <li class='@(PageRoute.Contains("tasks") ? "active" : "")' @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
+            <li class='@(PageRoute.Contains("progress") ? "active" : "")' @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
+            <li class='@(PageRoute.Contains("settings") ? "active" : "")' @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
         </ul>
     </div>
 </div>
@@ -27,10 +27,13 @@
     public string PageName { get; set; }
 
     [Parameter]
+    public string PageRoute { get; set; }
+
+    [Parameter]
     public AspNetProjects Project { get; set; }
 
     private void NavigateToProjectPage(string pageName)
     {
-        NavigationManager.NavigateTo($"/project/{Project.ProjectID}/{pageName}");
+        NavigationManager.NavigateTo($"/projects/{Project.ProjectID}/{pageName}");
     }
 }

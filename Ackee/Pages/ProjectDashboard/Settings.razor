@@ -1,4 +1,4 @@
-﻿@page "/project/{Id}/settings"
+﻿@page "/projects/{Id}/settings"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
 @using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview
@@ -7,7 +7,11 @@
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" PageName="settings">
+    <DashboardLayout Project="@project" 
+                     PageName="settings"
+                     PageRoute="@($"/projects/{Id}/settings")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="settings_content">
             @if (project.Owner.Id == currentUser.Id)
             {
@@ -70,7 +74,7 @@
     private async Task RefreshProject()
     {
         project = null;
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{Id}");
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
 
 
         if (!CurrentUserIsMemberOfProject())
@@ -82,7 +86,7 @@
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         StateHasChanged();
     }
 

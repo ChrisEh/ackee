@@ -1,19 +1,19 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Identity
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.Auxiliary.RedirectToProjects
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 
 <AuthorizeView>
     <Authorized>
-        <ProjectsOverview />
+         <RedirectToProjectsComponent />
     </Authorized>
-    <NotAuthorized>     
+    <NotAuthorized>
         <LandingPage />
     </NotAuthorized>
 </AuthorizeView>
-
 
 
 

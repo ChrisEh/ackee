@@ -28,6 +28,7 @@
 .dashboardLayout_content {
     width: 100%;
     word-break: break-word;
+    color: #333;
 }
 
 .dashboardLayout_content main {
@@ -69,6 +70,10 @@
     height: 35px;
     padding-bottom: 3px;
     color: white;
+}
+
+.dashboardLayout_content_breadcrumbs {
+    margin-left: 4.3rem;
 }
 
 .dashboardLayout_content_toggleMenu__bigScreens {

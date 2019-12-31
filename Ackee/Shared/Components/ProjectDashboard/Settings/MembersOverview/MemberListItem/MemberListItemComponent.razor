@@ -40,7 +40,7 @@
     private async Task RemoveMemberFromProject(string userEmail)
     {
 
-        await (new HttpClient()).DeleteAsync($"https://ackee.azurewebsites.net/api/projects/{ProjectId}/members/{userEmail}");
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}");
         StateHasChanged();
 
     }

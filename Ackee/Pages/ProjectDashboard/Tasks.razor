@@ -1,10 +1,14 @@
-﻿@page "/project/{Id}/tasks"
+﻿@page "/projects/{Id}/tasks"
 @using Ackee.Data.Model
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" PageName="tasks">
+    <DashboardLayout Project="@project" 
+                     PageName="tasks"
+                     PageRoute="@($"/projects/{Id}/tasks")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="tasks_content">
 
         </div>
@@ -34,7 +38,7 @@
     private async Task RefreshProject()
     {
         project = null;
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{Id}");
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
 
 
         if (!CurrentUserIsMemberOfProject())
@@ -46,7 +50,7 @@
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         StateHasChanged();
     }
 
