@@ -44,8 +44,27 @@ namespace Ackee.Data.Controllers
                 milestone.MilestoneName = updatedMilestone.MilestoneName;
                 milestone.Description = updatedMilestone.Description;
                 milestone.EndDate = updatedMilestone.EndDate;
+                milestone.Completed = updatedMilestone.Completed;
 
                 // Save changes
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        [HttpDelete("{milestoneId}")]
+        public async Task<ActionResult<bool>> DeleteProjectMember(string milestoneId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);
+
+                if (milestone == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Remove(milestone);
                 await ctx.SaveChangesAsync();
                 return true;
             }

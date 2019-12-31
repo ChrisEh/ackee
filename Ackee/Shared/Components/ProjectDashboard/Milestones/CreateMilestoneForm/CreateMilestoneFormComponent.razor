@@ -59,7 +59,7 @@ else
             newMilestone.Description = createFormModel.MilestoneDescription;
             newMilestone.EndDate = createFormModel.MilestoneEndDate;
 
-            milestone = await (new HttpClient()).PostJsonAsync<AspNetMilestones>($"https://ackee.azurewebsites.net/api/projects/{projectId}/milestones", newMilestone);
+            milestone = await (new HttpClient()).PostJsonAsync<AspNetMilestones>($"http://localhost:53508/api/projects/{projectId}/milestones", newMilestone);
         }
         catch (Exception e)
         {

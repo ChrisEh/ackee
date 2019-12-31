@@ -11,5 +11,7 @@ namespace Ackee.Shared.Components.ProjectDashboard.Milestones.UpdateMilestoneFor
         public string MilestoneDescription { get; set; }
 
         public DateTime MilestoneEndDate { get; set; }
+
+        public bool MilestoneCompleted { get; set; }
     }
 }

@@ -1,0 +1,31 @@
+﻿.updateMilestoneForm {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.updateMilestoneForm h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.updateMilestoneForm .updateMilestoneForm_milestoneName {
+    width: 100%;
+}
+
+.updateMilestoneForm_milestoneCompleted {
+
+}
+
+.updateMilestoneForm_updateAndDeleteButtons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (min-width: 1048px){
+    .updateMilestoneForm_endDateAndCompletedContainer {
+        flex-flow: row;
+        justify-content: space-between;
+    }
+}

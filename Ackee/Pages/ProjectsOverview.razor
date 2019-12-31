@@ -6,6 +6,7 @@
 @using Ackee.Shared.Components.ProjectsOverview.ProjectListItem
 
 
+
     <main class="mainLayout_main__maxWidth">
         <div class="projectsOverview">
             <div class="projectsOverview_header">
@@ -65,7 +66,7 @@
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProjects();
-    }    
+    }
 
     private void OnSelectTab(string tab)
     {
@@ -79,13 +80,15 @@
     }
 
     private async Task RefreshProjects()
-    {        
-        projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"https://ackee.azurewebsites.net/api/projects/user/{currentUser.Id}");
+    {
+        //projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
+        projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        //currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
     }
 }

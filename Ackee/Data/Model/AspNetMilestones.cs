@@ -21,8 +21,7 @@ namespace Ackee.Data.Model
         [StringLength(256)]
         public string Description { get; set; }
 
-        public string ProjectId { get; set; }
-
+        [Required]
         public AspNetProjects Project { get; set; }
 
         public bool Completed { get; set; }

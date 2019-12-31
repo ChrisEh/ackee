@@ -39,11 +39,6 @@ namespace Ackee.Data
             .WithMany(t => t.UserProjects)
             .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Cascade);
 
-            // One-to-many project-milestones
-            modelBuilder.Entity<AspNetMilestones>()
-                .HasOne(m => m.Project)
-                .WithMany(p => p.Milestones);
-
             base.OnModelCreating(modelBuilder);
         }
 

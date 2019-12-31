@@ -42,7 +42,7 @@
 
     private async Task RefreshProject()
     {
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{Id}");
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
 
         if (!CurrentUserIsMemberOfProject())
         {
@@ -53,13 +53,13 @@
 
     private async Task RefreshMilestones()
     {
-        milestones = await (new HttpClient()).GetJsonAsync<List<AspNetMilestones>>($"https://ackee.azurewebsites.net/api/projects/{project.ProjectID}/milestones");
+        milestones = await (new HttpClient()).GetJsonAsync<List<AspNetMilestones>>($"http://localhost:53508/api/projects/{project.ProjectID}/milestones");
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         StateHasChanged();
     }
 

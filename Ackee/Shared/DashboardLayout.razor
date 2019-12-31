@@ -10,7 +10,7 @@
             <nav class="dashboardLayout_leftMenuContainer @(_menuExpanded ? "open" : "")">
                 @if (Project != null)
                 {
-                    <LeftMenuComponent Project="@Project" PageName="@PageName" />
+                    <LeftMenuComponent Project="@Project" PageName="@PageName" PageRoute="@PageRoute" />
                 }
             </nav>
             <div class="dashboardLayout_content @(!_menuExpanded ? "open" : "")">

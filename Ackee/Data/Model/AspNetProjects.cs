@@ -23,9 +23,6 @@ namespace Ackee.Data.Model
         [Required]
         public ApplicationUser Owner { get; set; }
 
-        [Required]
-        public IEnumerable<AspNetMilestones> Milestones { get; set; }
-
         public IEnumerable<UserProject> UserProjects { get; set; }
 
         public DateTime DateCreated { get; set; }

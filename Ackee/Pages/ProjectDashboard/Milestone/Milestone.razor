@@ -5,13 +5,17 @@
 
 @if (milestone != null)
 {
-    <DashboardLayout Project="@project" 
+    
+    <DashboardLayout Project="@project"
                      PageName="@milestone.MilestoneName"
                      PageRoute="@($"/projects/{ProjectId}/milestones/{MilestoneId}")"
                      PageRouteCustomIndexes=@(new List<int> { 1, 3 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName, milestone.MilestoneName })>
-        <UpdateMilestoneFormComponent Milestone="@milestone" Project="@project"/>
+        <div class="milestone">
+            <UpdateMilestoneFormComponent Milestone="@milestone" ProjectId="@ProjectId"/>
+        </div>
     </DashboardLayout>
+     
 }
 
 @code {
@@ -40,13 +44,13 @@
 
     private async Task RefreshMilestone()
     {
-        milestone = await (new HttpClient()).GetJsonAsync<AspNetMilestones>($"https://ackee.azurewebsites.net/api/milestones/{MilestoneId}");
+        milestone = await (new HttpClient()).GetJsonAsync<AspNetMilestones>($"http://localhost:53508/api/milestones/{MilestoneId}");
         StateHasChanged();
     }
 
     private async Task RefreshProject()
     {
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/{ProjectId}");
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{ProjectId}");
 
         if (!CurrentUserIsMemberOfProject())
         {
@@ -57,7 +61,7 @@
 
     private async Task RefreshUser()
     {
-        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"https://ackee.azurewebsites.net/api/users/{CurrentUser.Identity.Name}");
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         StateHasChanged();
     }
 

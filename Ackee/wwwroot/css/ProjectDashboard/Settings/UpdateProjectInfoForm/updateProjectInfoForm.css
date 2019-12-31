@@ -12,6 +12,6 @@
     display: block;
 }
 
-.updateProjectInfoForm textarea, input {
+.updateProjectInfoForm textarea, .updateProjectInfoForm input {
     width: 100%;
 }

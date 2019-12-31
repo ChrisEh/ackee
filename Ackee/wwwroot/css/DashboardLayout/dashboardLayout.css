@@ -28,6 +28,7 @@
 .dashboardLayout_content {
     width: 100%;
     word-break: break-word;
+    color: #333;
 }
 
 .dashboardLayout_content main {

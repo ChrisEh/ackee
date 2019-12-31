@@ -18,3 +18,7 @@
 hr {
     margin: 2rem 0;
 }
+
+.addMemberForm input {
+    width: 100%;
+}

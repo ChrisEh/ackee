@@ -38,7 +38,6 @@ namespace Ackee.Data.Controllers
 
                 return await ctx.Projects.Include(p => p.Owner)
                     .Include(p => p.UserProjects)
-                    .Include(p => p.Milestones)
                     .FirstOrDefaultAsync(p => p.ProjectID == projectId);                
             }           
         }
@@ -240,7 +239,7 @@ namespace Ackee.Data.Controllers
             var ctx = new AckeeCtx();
 
             // Get the milestones
-            var milestones = await ctx.Milestones.Where(m => m.ProjectId == projectId).ToListAsync();
+            var milestones = await ctx.Milestones.Where(m => m.Project.ProjectID == projectId).ToListAsync();
 
             return milestones;
         }
@@ -264,31 +263,7 @@ namespace Ackee.Data.Controllers
                 await ctx.SaveChangesAsync();
                 return newMilestone;
             }            
-        }
-
-        [HttpPut("{projectId}/milestones")]
-        public async Task<Object> UpdateMilestoneById([FromRoute] string projectId, [FromBody] AspNetMilestones updatedMilestone)
-        {
-            using (var ctx = new AckeeCtx())
-            {
-                // Get the project 
-                var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectId);
-
-                // Get the milestone
-                var milestone = ctx.Milestones.FirstOrDefault(m => m.MilestoneID == updatedMilestone.MilestoneID);                
-
-                // Update the milestone
-                milestone.ProjectId = updatedMilestone.ProjectId;
-                milestone.Project = updatedMilestone.Project;
-                milestone.MilestoneName = updatedMilestone.MilestoneName;
-                milestone.Description = updatedMilestone.Description;
-                milestone.EndDate = updatedMilestone.EndDate;
-
-                // Save changes
-                await ctx.SaveChangesAsync();
-                return true;
-            }
-        }
+        }        
 
         [HttpDelete("{projectId}/milestones/{milestoneId}")]
         public async Task<ActionResult<bool>> DeleteProjectMilestone(string projectId, string milestoneId)

@@ -1,31 +1,50 @@
 ﻿@using Ackee.Data.Model
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    @if (!string.IsNullOrEmpty(statusMessage))
-    {
-        <p>@statusMessage</p>
-    }
+<div class="updateMilestoneForm">
+    <EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <p>
-        <label for="milestoneName">Milestone Name: </label>
-        <InputText class="updateMilestoneForm_milestoneName" id="milestoneName" @bind-Value="updateFormModel.MilestoneName" />
-    </p>
+        <h1>Milestone Details</h1>
 
-    <p>
-        <label for="milestoneDescription">Milestone Description: </label>
-        <InputTextArea class="updateMilestoneForm_milestoneDescription" id="milestoneDescription" @bind-Value="updateFormModel.MilestoneDescription" />
-    </p>
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <p>@statusMessage</p>
+        }
 
-    <p>
-        <label for="milestoneEndDate">Milestone End Date: </label>
-        <InputDate class="updateMilestoneForm_milestoneEndDate" id="milestoneEndDate" @bind-Value="updateFormModel.MilestoneEndDate" />
-    </p>
+        <p>
+            <label for="milestoneName">Milestone Name: </label>
+            <InputText class="updateMilestoneForm_milestoneName" id="milestoneName" @bind-Value="updateFormModel.MilestoneName" />
+        </p>
 
-    <button class="button button_actionButton button_padding" type="submit">Submit</button>
+        <p>
+            <label for="milestoneDescription">Milestone Description: </label>
+            <InputTextArea class="updateMilestoneForm_milestoneDescription" id="milestoneDescription" @bind-Value="updateFormModel.MilestoneDescription" />
+        </p>
 
-</EditForm>
+
+        <p>
+            <label for="milestoneEndDate">Milestone End Date: </label>
+            <InputDate class="updateMilestoneForm_milestoneEndDate" id="milestoneEndDate" @bind-Value="updateFormModel.MilestoneEndDate" />
+        </p>
+
+        <p>
+            <label for="milestoneCompleted">Milestone Completed: </label>
+            <InputCheckbox class="updateMilestoneForm_milestoneCompleted" id="milestoneCompleted" @bind-Value="updateFormModel.MilestoneCompleted" />
+        </p>
+
+
+        <div class="updateMilestoneForm_updateAndDeleteButtons">
+            <button class="button button_actionButton button_padding" type="submit">Update Milestone</button>
+            <div class="button button_actionButton button_padding bg-danger"
+                 @onclick="async () => await DeleteMilestone()">Delete Milestone</div>
+        </div>
+
+
+    </EditForm>
+</div>
+
 
 
 
@@ -35,7 +54,7 @@
     public AspNetMilestones Milestone { get; set; }
 
     [Parameter]
-    public AspNetProjects Project { get; set; }
+    public string ProjectId { get; set; }
 
     private UpdateFormModel updateFormModel = new UpdateFormModel();
     private string statusMessage = null;
@@ -48,8 +67,9 @@
             Milestone.MilestoneName = updateFormModel.MilestoneName;
             Milestone.Description = updateFormModel.MilestoneDescription;
             Milestone.EndDate = updateFormModel.MilestoneEndDate;
+            Milestone.Completed = updateFormModel.MilestoneCompleted;
 
-            success = await (new HttpClient()).PutJsonAsync<bool>($"https://ackee.azurewebsites.net/api/projects/{Project.ProjectID}/milestones", Milestone);
+            success = await (new HttpClient()).PutJsonAsync<bool>($"http://localhost:53508/api/milestones/{Milestone.MilestoneID}", Milestone);
             statusMessage = "Milestone updated successfully!";
         }
         catch (Exception e)
@@ -60,6 +80,13 @@
         {
             StateHasChanged();
         }
+    }
+
+    private async Task DeleteMilestone()
+    {
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/milestones/{Milestone.MilestoneID}");
+        NavigationManager.NavigateTo($"/projects/{ProjectId}/milestones");
+        StateHasChanged();
     }
 
     private async void HandleValidSubmit()
@@ -73,5 +100,6 @@
         updateFormModel.MilestoneName = Milestone.MilestoneName;
         updateFormModel.MilestoneDescription = Milestone.Description;
         updateFormModel.MilestoneEndDate = Milestone.EndDate;
+        updateFormModel.MilestoneCompleted = Milestone.Completed;
     }
 }

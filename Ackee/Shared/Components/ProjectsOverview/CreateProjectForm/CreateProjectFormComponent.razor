@@ -52,7 +52,7 @@ else
             newProject.ProjectName = projectName;
             newProject.ProjectDescription = projectDescription;
 
-            _updatedProject = await (new HttpClient()).PostJsonAsync<AspNetProjects>($"https://ackee.azurewebsites.net/api/projects/user/{userId}", newProject);
+            _updatedProject = await (new HttpClient()).PostJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/user/{userId}", newProject);
         }
         catch (Exception e)
         {
