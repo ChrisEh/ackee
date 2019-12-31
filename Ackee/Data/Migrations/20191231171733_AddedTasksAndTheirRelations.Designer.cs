@@ -4,14 +4,16 @@ using Ackee.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ackee.Data.Migrations
 {
     [DbContext(typeof(AckeeCtx))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191231171733_AddedTasksAndTheirRelations")]
+    partial class AddedTasksAndTheirRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace Ackee.Data.Migrations
 
                     b.HasKey("TaskID");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("AspNetTasks");
                 });
 
             modelBuilder.Entity("Ackee.Data.Model.MilestoneTask", b =>
@@ -195,7 +197,7 @@ namespace Ackee.Data.Migrations
 
                     b.HasIndex("TaskID");
 
-                    b.ToTable("MilestoneTasks");
+                    b.ToTable("MilestoneTask");
                 });
 
             modelBuilder.Entity("Ackee.Data.Model.UserProject", b =>
@@ -225,7 +227,7 @@ namespace Ackee.Data.Migrations
 
                     b.HasIndex("TaskID");
 
-                    b.ToTable("UserTasks");
+                    b.ToTable("UserTask");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

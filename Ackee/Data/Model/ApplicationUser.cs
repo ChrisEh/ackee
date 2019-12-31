@@ -18,5 +18,7 @@ namespace Ackee.Data.Model
         public int StudentNumber { get; set; }
 
         public IEnumerable<UserProject> UserProjects { get; set; }
+
+        public IEnumerable<UserTask> UserTasks { get; set; }
     }
 }

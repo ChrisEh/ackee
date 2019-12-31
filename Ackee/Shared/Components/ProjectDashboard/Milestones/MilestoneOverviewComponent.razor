@@ -25,7 +25,7 @@
 
         @if (showModal)
         {
-            <ModalWithBackdropComponent Show="@showModal" Header="Add A Milestone">
+            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Milestone">
                 <CreateMilestoneFormComponent ProjectId="@ProjectId" OnSuccess="@OnMilestonesUpdated" />
             </ModalWithBackdropComponent>
         }

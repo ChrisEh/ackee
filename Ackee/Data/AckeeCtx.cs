@@ -13,6 +13,9 @@ namespace Ackee.Data
         public DbSet<AspNetProjects> Projects { get; set; }
         public DbSet<AspNetMilestones> Milestones { get; set; }   
         public DbSet<UserProject> UserProjects { get; set; }
+        public DbSet<AspNetTasks> Tasks { get; set; }
+        public DbSet<MilestoneTask> MilestoneTasks { get; set; }
+        public DbSet<UserTask> UserTasks { get; set; }
 
         public AckeeCtx() : base()
         {
@@ -38,6 +41,34 @@ namespace Ackee.Data
             .HasOne(pt => pt.Project)
             .WithMany(t => t.UserProjects)
             .HasForeignKey(pt => pt.ProjectId).OnDelete(DeleteBehavior.Cascade);
+
+            // Many-to-many Task/Milestone
+            modelBuilder.Entity<MilestoneTask>()
+                .HasKey(m => new { m.MilestoneID, m.TaskID });
+
+            modelBuilder.Entity<MilestoneTask>()
+            .HasOne(mt => mt.Task)
+            .WithMany(t => t.MilestoneTasks)
+            .HasForeignKey(mt => mt.TaskID).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MilestoneTask>()
+            .HasOne(mt => mt.Milestone)
+            .WithMany(m => m.MilestoneTasks)
+            .HasForeignKey(mt => mt.MilestoneID).OnDelete(DeleteBehavior.NoAction);
+
+            // Many-to-many Task/User
+            modelBuilder.Entity<UserTask>()
+                .HasKey(u => new { u.UserID, u.TaskID });
+
+            modelBuilder.Entity<UserTask>()
+            .HasOne(ut => ut.Task)
+            .WithMany(t => t.UserTasks)
+            .HasForeignKey(ut => ut.TaskID).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserTask>()
+            .HasOne(ut => ut.User)
+            .WithMany(u => u.UserTasks)
+            .HasForeignKey(ut => ut.UserID).OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,16 +1,16 @@
-﻿@page "/projects/{Id}/tasks"
+﻿@page "/projects/{ProjectId}/tasks/{TaskId}"
 @using Ackee.Data.Model
-@using Ackee.Shared.Components.ProjectDashboard.Tasks
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-@if (project != null){
-    <DashboardLayout Project="@project" 
-                     PageName="tasks"
-                     PageRoute="@($"/projects/{Id}/tasks")"
-                     PageRouteCustomIndexes=@(new List<int> { 1 })
-                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
+@if (project != null)
+{
+    <DashboardLayout Project="@project"
+                     PageName="@task.TaskName"
+                     PageRoute="@($"/projects/{ProjectId}/tasks/{TaskId}")"
+                     PageRouteCustomIndexes=@(new List<int> { 1, 3 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName, task.TaskName })>
         <div class="tasks_content">
-            <TaskOverviewComponent ProjectId="@Id" AllTasks="@tasks" />
+            <h1>Create a task here!</h1>
         </div>
     </DashboardLayout>
 }
@@ -20,10 +20,14 @@
     Task<AuthenticationState> authenticationStateTask { get; set; }
 
     [Parameter]
-    public string Id { get; set; }
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public string TaskId { get; set; }
 
     private AspNetProjects project = null;
-    private List<AspNetTasks> tasks = null;
+    private AspNetTasks task = null;
+
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
@@ -33,12 +37,11 @@
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProject();
-        await RefreshTasks();
     }
 
     private async Task RefreshProject()
     {
-        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{ProjectId}");
 
 
         if (!CurrentUserIsMemberOfProject())
@@ -48,9 +51,9 @@
         StateHasChanged();
     }
 
-    private async Task RefreshTasks()
+    private async Task RefreshTask()
     {
-        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/tasks");
+        task = await (new HttpClient()).GetJsonAsync<AspNetTasks>($"http://localhost:53508/api/tasks/{TaskId}");
     }
 
     private async Task RefreshUser()
@@ -72,3 +75,4 @@
         return false;
     }
 }
+

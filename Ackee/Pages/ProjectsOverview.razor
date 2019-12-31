@@ -44,7 +44,7 @@
         </div>
         @if (currentUser != null && showModal)
         {
-            <ModalWithBackdropComponent Show="@showModal" Header="Add A Project">
+            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Project">
                 <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
             </ModalWithBackdropComponent>
         }

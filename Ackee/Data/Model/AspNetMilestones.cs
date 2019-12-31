@@ -25,5 +25,7 @@ namespace Ackee.Data.Model
         public AspNetProjects Project { get; set; }
 
         public bool Completed { get; set; }
+
+        public IEnumerable<MilestoneTask> MilestoneTasks { get; set; }
     }
 }

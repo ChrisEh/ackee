@@ -38,6 +38,7 @@ namespace Ackee.Data.Controllers
 
                 return await ctx.Projects.Include(p => p.Owner)
                     .Include(p => p.UserProjects)
+                    .Include(p => p.Milestones)
                     .FirstOrDefaultAsync(p => p.ProjectID == projectId);                
             }           
         }
