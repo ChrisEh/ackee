@@ -44,7 +44,7 @@
         </div>
         @if (currentUser != null && showModal)
         {
-            <ModalWithBackdropComponent Show="@showModal" Header="Add A Project">
+            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Project">
                 <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
             </ModalWithBackdropComponent>
         }
@@ -81,14 +81,12 @@
 
     private async Task RefreshProjects()
     {
-        //projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
         projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
-        //currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
     }
 }

@@ -1,0 +1,35 @@
+﻿@media screen and (min-width: 1048px){
+    .createTaskForm {
+        margin-left: 3.3rem;
+        width: 800px;
+    }
+
+    .createTaskForm_startDateAndEndDate {
+        display: flex;
+    }
+
+    .createTaskForm_marginLeftOnBigScreens {
+        margin-left: 2rem;
+    }
+}
+
+.createTaskForm h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.createTaskForm_taskName {
+    width: 100%;
+}
+
+.createTaskForm input[type='checkbox'] {
+    -webkit-appearance: none;
+    width: 1.7rem;
+    height: 1.7rem;
+    background-color: red;
+    border: 1px solid darkgrey;
+}
+
+.createTaskForm input[type='checkbox']:checked {
+    background-color: green;
+}

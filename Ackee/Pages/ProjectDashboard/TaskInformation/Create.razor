@@ -1,16 +1,17 @@
-﻿@page "/projects/{Id}/tasks"
+﻿@page "/projects/{Id}/tasks/create"
 @using Ackee.Data.Model
-@using Ackee.Shared.Components.ProjectDashboard.Tasks
+@using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-@if (project != null){
-    <DashboardLayout Project="@project" 
-                     PageName="tasks"
-                     PageRoute="@($"/projects/{Id}/tasks")"
+@if (project != null)
+{
+    <DashboardLayout Project="@project"
+                     PageName="create task"
+                     PageRoute="@($"/projects/{Id}/tasks/create")"
                      PageRouteCustomIndexes=@(new List<int> { 1 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="tasks_content">
-            <TaskOverviewComponent ProjectId="@Id" AllTasks="@tasks" />
+            <CreateTaskFormComponent Project="@project" Members="@members" Milestones="@milestones"/>
         </div>
     </DashboardLayout>
 }
@@ -23,7 +24,9 @@
     public string Id { get; set; }
 
     private AspNetProjects project = null;
-    private List<AspNetTasks> tasks = null;
+    private List<AspNetMilestones> milestones = null;
+    private List<ApplicationUser> members = null;
+
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
@@ -33,11 +36,14 @@
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProject();
-        await RefreshTasks();
+        await RefreshMembers();
+        await RefreshMilestones();
+        StateHasChanged();
     }
 
     private async Task RefreshProject()
     {
+        project = null;
         project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
 
 
@@ -45,18 +51,21 @@
         {
             NavigationManager.NavigateTo("/");
         }
-        StateHasChanged();
-    }
-
-    private async Task RefreshTasks()
-    {
-        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{Id}/tasks");
     }
 
     private async Task RefreshUser()
     {
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
-        StateHasChanged();
+    }
+
+    private async Task RefreshMilestones()
+    {
+        milestones = await (new HttpClient()).GetJsonAsync<List<AspNetMilestones>>($"http://localhost:53508/api/projects/{project.ProjectID}/milestones");
+    }
+    
+    private async Task RefreshMembers()
+    {
+        members = await (new HttpClient()).GetJsonAsync<List<ApplicationUser>>($"http://localhost:53508/api/projects/{project.ProjectID}/members");
     }
 
     private bool CurrentUserIsMemberOfProject()

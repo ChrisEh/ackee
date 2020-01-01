@@ -38,6 +38,8 @@ namespace Ackee.Data.Controllers
 
                 return await ctx.Projects.Include(p => p.Owner)
                     .Include(p => p.UserProjects)
+                    .Include(p => p.Milestones)
+                    .Include(p => p.Tasks)
                     .FirstOrDefaultAsync(p => p.ProjectID == projectId);                
             }           
         }
@@ -285,5 +287,76 @@ namespace Ackee.Data.Controllers
         }
 
         #endregion
+
+        #region PROJECT TASKS ENDPOINTS
+        [HttpGet("{projectId}/tasks")]
+        public async Task<IEnumerable<AspNetTasks>> GetProjectTasks(string projectId)
+        {
+            var ctx = new AckeeCtx();
+
+            var users = ctx.ApplicationUser.ToList();
+            var milestones = ctx.Milestones.ToList();
+
+            // Get the milestones
+            var tasks = await ctx.Tasks
+                .Include(t => t.MilestoneTasks)
+                .Include(t => t.UserTasks)
+                .Include(t => t.Project)
+                .Include(t => t.Project.UserProjects)
+                .Where(t => t.Project.ProjectID == projectId).ToListAsync();
+
+            return tasks;
+        }
+
+        // Add milestone to task
+        [HttpPost("{projectId}/tasks/{taskName}/milestones")]
+        public async Task<object> AddMilestoneToTask([FromRoute] string projectId, [FromRoute] string taskName, [FromBody] string milestoneId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName && t.Project.ProjectID == projectId);
+                var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);
+
+                if (task == null || milestone == null)
+                {
+                    return NotFound();
+                }
+
+                var milestoneTask = new MilestoneTask();
+                milestoneTask.MilestoneID = milestone.MilestoneID;
+                milestoneTask.TaskID = task.TaskID;
+
+                ctx.MilestoneTasks.Add(milestoneTask);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        // Add assignee to task
+        [HttpPost("{projectId}/tasks/{taskName}/assignees")]
+        public async Task<ActionResult<bool>> AddAssigneeToTask([FromRoute] string projectId, [FromRoute] string taskName, [FromBody] string userId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName && t.Project.ProjectID == projectId);
+                var assignee = await ctx.ApplicationUser.FirstOrDefaultAsync(a => a.Id == userId);
+
+                if (task == null || assignee == null)
+                {
+                    return NotFound();
+                }
+
+                var userTask = new UserTask();
+                userTask.UserID = assignee.Id;
+                userTask.TaskID = task.TaskID;
+
+                ctx.UserTasks.Add(userTask);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        #endregion
+
     }
 }
