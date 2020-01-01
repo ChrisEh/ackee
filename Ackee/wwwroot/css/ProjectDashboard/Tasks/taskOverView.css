@@ -1,0 +1,43 @@
+﻿.taskOverview {
+}
+
+.taskOverview_filterBox {
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid darkgrey;
+    display: flex;
+    flex-flow: column;
+}
+
+.taskOverview_filterBox input, .taskOverview_filterBox select {
+    width: 100%;
+}
+
+.taskOverview_header {
+    margin: 1rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskOverview_header h1{
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 1048px) {
+    .taskOverview_filterBox{
+        flex-flow: row;
+        justify-content: space-between;
+    }
+
+    .filterBox_searchBar{
+        width: 45%;
+    }
+
+    .filterBox_orderBy {
+        width: 45%;
+    }
+}
+

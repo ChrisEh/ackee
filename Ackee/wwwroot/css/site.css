@@ -28,6 +28,10 @@
 @import url('ProjectDashboard/Milestones/UpdateMilestoneForm/updateMilestoneForm.css');
 @import url('ProjectDashboard/Milestones/Milestone/milestone.css');
 
+@import url('ProjectDashboard/Tasks/taskOverview.css');
+@import url('ProjectDashboard/Tasks/createTaskForm.css');
+@import url('ProjectDashboard/Tasks/taskTable.css');
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;

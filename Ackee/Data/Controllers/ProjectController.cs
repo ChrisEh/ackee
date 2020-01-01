@@ -287,5 +287,25 @@ namespace Ackee.Data.Controllers
         }
 
         #endregion
+
+        #region PROJECT TASKS ENDPOINTS
+        [HttpGet("{projectId}/tasks")]
+        public async Task<IEnumerable<AspNetTasks>> GetProjectTasks(string projectId)
+        {
+            var ctx = new AckeeCtx();
+
+            // Get the milestones
+            var tasks = await ctx.Tasks
+                .Include(t => t.MilestoneTasks)
+                .Include(t => t.UserTasks)
+                .Include(t => t.Project)
+                .Include(t => t.Project.UserProjects)
+                .Where(t => t.Project.ProjectID == projectId).ToListAsync();
+
+            return tasks;
+        }
+
+        #endregion
+
     }
 }

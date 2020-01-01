@@ -4,31 +4,34 @@
 
 @if (Tasks != null && Tasks.Count != 0)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Task Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Milestones</th>
-                <th scope="col">Assignees</th>
-                <th scope="col">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var task in Tasks)
-            {
-                <tr @onclick="() => NavigateToTaskInformationPage(task.TaskID)">
-                    <td>@task.TaskName</td>
-                    <td>@DateTimeService.GetDateAsString("d", task.StartDate)</td>
-                    <td>@DateTimeService.GetDateAsString("d", task.EndDate)</td>
-                    <td>milestones here</td>
-                    <td>members here</td>
-                    <td>status here</td>
+    <div class="taskTableComponent">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Task Name</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Milestones</th>
+                    <th scope="col">Assignees</th>
+                    <th scope="col">Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var task in Tasks)
+                {
+                    <tr @onclick="() => NavigateToTaskInformationPage(task.TaskID)">
+                        <td>@task.TaskName</td>
+                        <td>@DateTimeService.GetDateAsString("d", task.StartDate)</td>
+                        <td>@DateTimeService.GetDateAsString("d", task.EndDate)</td>
+                        <td>milestones here</td>
+                        <td>members here</td>
+                        <td>status here</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
 }
 else
 {

@@ -50,7 +50,7 @@
 
     private async Task RefreshTasks()
     {
-        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/tasks");
+        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{Id}/tasks");
     }
 
     private async Task RefreshUser()

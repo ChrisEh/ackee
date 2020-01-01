@@ -81,14 +81,12 @@
 
     private async Task RefreshProjects()
     {
-        //projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
         projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
         StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
-        //currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
     }
 }
