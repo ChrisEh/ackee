@@ -18,15 +18,50 @@ namespace Ackee.Data.Controllers
         [HttpGet]
         public async Task<IEnumerable<AspNetTasks>> GetAllTasks()
         {
-            var ctx = new AckeeCtx();
+            using (var ctx = new AckeeCtx())
+            {
+                var users = ctx.ApplicationUser.ToList();
+                var milestones = ctx.Milestones.ToList();
 
-            var users = ctx.ApplicationUser.ToList();
-            var milestones = ctx.Milestones.ToList();
+                return await ctx.Tasks
+                    .Include(t => t.MilestoneTasks)
+                    .Include(t => t.UserTasks)
+                    .Include(t => t.Project)
+                    .Include(t => t.Project.UserProjects)
+                    .ToListAsync();
+            }            
+        }
 
-            return await ctx.Tasks
-                .Include(t => t.MilestoneTasks)
-                .Include(t => t.UserTasks)
-                .ToListAsync();
+        [HttpPost]
+        public async Task<object> CreateTask([FromBody] AspNetTasks task)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var existingTask = ctx.Tasks.FirstOrDefault(t => t.TaskID == task.TaskID);
+
+                if (task == null || existingTask != null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Tasks.Add(task);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        [HttpGet("{taskId}")]
+        public async Task<AspNetTasks> GetTaskById(string taskId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                return await ctx.Tasks
+                    .Include(t => t.MilestoneTasks)
+                    .Include(t => t.UserTasks)
+                    .Include(t => t.Project)
+                    .Include(t => t.Project.UserProjects)
+                    .FirstOrDefaultAsync(t => t.TaskID == taskId);
+            }
         }
     }
 }

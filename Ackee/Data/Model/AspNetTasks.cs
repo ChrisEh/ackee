@@ -17,6 +17,8 @@ namespace Ackee.Data.Model
         [StringLength(256)]
         public string TaskDescription { get; set; }
 
+        public AspNetProjects Project { get; set; }
+
         public IEnumerable<MilestoneTask> MilestoneTasks { get; set; }
 
         public IEnumerable<UserTask> UserTasks { get; set; }
