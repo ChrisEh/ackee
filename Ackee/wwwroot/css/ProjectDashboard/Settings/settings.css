@@ -1,0 +1,24 @@
+﻿.settings_content {
+    max-width: 800px;
+    margin-left: 3.3rem;
+}
+
+.settings_content h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.settings_content h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+hr {
+    margin: 2rem 0;
+}
+
+.addMemberForm input {
+    width: 100%;
+}

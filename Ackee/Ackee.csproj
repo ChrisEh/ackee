@@ -1,16 +1,61 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>aspnet-Ackee-7FB02378-24C0-4EFB-BA2B-2D6E1DCC0D66</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
+    <Compile Remove="Services\**" />
+    <Content Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.cs" />
+    <Compile Remove="Data\Migrations\20191112122558_ExtendedApplicationUserAndProjectsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.cs" />
+    <Compile Remove="Data\Migrations\20191119122611_Projects.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.cs" />
+    <Compile Remove="Data\Migrations\20191119135736_AspNetMilestones.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191129111530_projectTable6.cs" />
+    <Compile Remove="Data\Migrations\20191129111530_projectTable6.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191204122839_fixedDelete.cs" />
+    <Compile Remove="Data\Migrations\20191204122839_fixedDelete.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191210154411_addedRelationshipForMilestones.cs" />
+    <Compile Remove="Data\Migrations\20191210154411_addedRelationshipForMilestones.Designer.cs" />
+    <Compile Remove="Pages\Shared\UserDetails.cshtml.cs" />
+    <Compile Remove="Pages\UserView.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Shared\UserDetails.cshtml" />
+    <Content Remove="Pages\UserView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.0.0-preview8.19405.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="morelinq" Version="3.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\ProjectDashboard\Settings\MembersOverview\AddMemberForm\" />
   </ItemGroup>
 
 </Project>

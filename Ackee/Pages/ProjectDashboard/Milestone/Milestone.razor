@@ -1,0 +1,80 @@
+﻿@page "/projects/{ProjectId}/milestones/{MilestoneId}"
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Milestones.UpdateMilestoneForm
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@if (milestone != null)
+{
+    
+    <DashboardLayout Project="@project"
+                     PageName="@milestone.MilestoneName"
+                     PageRoute="@($"/projects/{ProjectId}/milestones/{MilestoneId}")"
+                     PageRouteCustomIndexes=@(new List<int> { 1, 3 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName, milestone.MilestoneName })>
+        <div class="milestone">
+            <UpdateMilestoneFormComponent Milestone="@milestone" ProjectId="@ProjectId"/>
+        </div>
+    </DashboardLayout>
+     
+}
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public string MilestoneId { get; set; }
+
+    private AspNetMilestones milestone = null;
+    private AspNetProjects project = null;
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+        await RefreshMilestone();
+    }
+
+    private async Task RefreshMilestone()
+    {
+        milestone = await (new HttpClient()).GetJsonAsync<AspNetMilestones>($"http://localhost:53508/api/milestones/{MilestoneId}");
+        StateHasChanged();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{ProjectId}");
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

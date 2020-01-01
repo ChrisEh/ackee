@@ -1,0 +1,22 @@
+﻿@using Ackee.Data.Model
+
+<div class="memberListItem">
+    <p class="emailAddress">
+        @Milestone.MilestoneName
+    </p>
+
+    <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+</div>
+
+@code {
+    [Parameter]
+    public AspNetMilestones Milestone { get; set; }
+
+    [Parameter]
+    public Action OnMilestoneRemovedSuccessfully { get; set; }
+
+    public void OnDelete()
+    {
+        OnMilestoneRemovedSuccessfully?.Invoke();
+    }
+}

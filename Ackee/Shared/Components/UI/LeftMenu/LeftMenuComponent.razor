@@ -1,0 +1,39 @@
+﻿@using Ackee.Data.Model
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+<div class="leftMenu">
+    <div class="leftMenu_projectIcon">
+        <h1>@StringManipulationService.GetStringAbbreviation(Project.ProjectName)</h1>
+    </div>
+    @if (Project != null)
+    {
+        <p class="leftMenu_projectName">@Project.ProjectName</p>
+    }
+    <div class="leftMenu_navigation">
+        <ul>
+            <li class='@(PageName.Equals("dashboard") ? "active" : "")' @onclick='() => NavigateToProjectPage("")'>Dashboard</li>
+            <li class='@(PageRoute.Contains("calendar") ? "active" : "")' @onclick='() => NavigateToProjectPage("calendar")'>Calendar</li>
+            <li class='@(PageRoute.Contains("milestones") ? "active" : "")' @onclick='() => NavigateToProjectPage("milestones")'>Milestones</li>
+            <li class='@(PageRoute.Contains("tasks") ? "active" : "")' @onclick='() => NavigateToProjectPage("tasks")'>Tasks</li>
+            <li class='@(PageRoute.Contains("progress") ? "active" : "")' @onclick='() => NavigateToProjectPage("progress")'>Progress</li>
+            <li class='@(PageRoute.Contains("settings") ? "active" : "")' @onclick='() => NavigateToProjectPage("settings")'>Settings</li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string PageName { get; set; }
+
+    [Parameter]
+    public string PageRoute { get; set; }
+
+    [Parameter]
+    public AspNetProjects Project { get; set; }
+
+    private void NavigateToProjectPage(string pageName)
+    {
+        NavigationManager.NavigateTo($"/projects/{Project.ProjectID}/{pageName}");
+    }
+}

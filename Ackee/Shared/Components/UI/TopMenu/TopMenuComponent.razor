@@ -1,0 +1,56 @@
+﻿<div class="topMenu">
+    <div class="topMenu_container @(!IsUserAuthenticated ? "topMenu_container__landingPage" : "")">
+        <div class="topMenu_hamburgerAndLogoContainer">
+            <div id="menu-toggle" class="@(_isMenuExpanded ? "open" : "")" @onclick="ToggleMenu">
+                <div id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div id="cross">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div class="topMenu_logo">
+                <a href="/">ACKEE</a>
+            </div>
+        </div>
+        <nav class="@(_isMenuExpanded ? "expanded" : "")">
+            <ul>
+                @if (IsUserAuthenticated)
+                {
+                    <li>
+                        <a href="Identity/Account/Manage">My Profile</a>
+                    </li>
+                    <li>
+                        <form method="post" action="Identity/Account/LogOut">
+                            <button type="submit" class="">Log out</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="/Identity/Account/Login">Log in</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary" href="/Identity/Account/Register">Sign Up!</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsUserAuthenticated { get; set; } = false;
+
+    private bool _isMenuExpanded = false;
+
+    private void ToggleMenu()
+    {
+        _isMenuExpanded = !_isMenuExpanded;
+    }
+}

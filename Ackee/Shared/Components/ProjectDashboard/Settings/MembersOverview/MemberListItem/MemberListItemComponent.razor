@@ -1,0 +1,53 @@
+﻿@using Ackee.Data.Model
+
+    <div class="memberListItem">
+        <p class="emailAddress">
+            @User.Email
+        </p>
+
+        @if (CurrentUserId == ProjectOwnerId)
+        {
+            @if (ProjectOwnerId != User.Id)
+            {
+                <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+            }
+        }
+        else
+        {
+            @if (CurrentUserId == User.Id)
+            {
+                <span class="removeIcon oi oi-x" @onclick="@OnDelete"></span>
+            }
+        }
+    </div>
+
+@code {
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public ApplicationUser User { get; set; }
+
+    [Parameter]
+    public string CurrentUserId { get; set; }
+
+    [Parameter]
+    public string ProjectOwnerId { get; set; }
+
+    [Parameter]
+    public Action OnMemberRemovedSuccessfully { get; set; }
+
+    private async Task RemoveMemberFromProject(string userEmail)
+    {
+
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{ProjectId}/members/{userEmail}");
+        StateHasChanged();
+
+    }
+
+    public async Task OnDelete()
+    {
+        await RemoveMemberFromProject(User.Email);
+        OnMemberRemovedSuccessfully?.Invoke();
+    }
+}

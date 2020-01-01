@@ -1,0 +1,54 @@
+﻿@page "/projects/{Id}"
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
+
+@if (project != null)
+{
+    <DashboardLayout Project=@project 
+                     PageName="dashboard" 
+                     PageRoute=@($"/projects/{Id}")
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
+        <div class="projectDashboard_container">
+            <div class="widgets">
+                <ListOfTasksComponent />
+                <ListOfTasksComponent />
+                <ListOfTasksComponent />
+            </div>
+        </div>
+    </DashboardLayout>
+}
+
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private AspNetProjects project = null;
+
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;    
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = null;
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+    }
+}

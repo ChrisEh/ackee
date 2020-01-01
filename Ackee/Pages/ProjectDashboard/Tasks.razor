@@ -1,0 +1,74 @@
+﻿@page "/projects/{Id}/tasks"
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Tasks
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@if (project != null){
+    <DashboardLayout Project="@project" 
+                     PageName="tasks"
+                     PageRoute="@($"/projects/{Id}/tasks")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
+        <div class="tasks_content">
+            <TaskOverviewComponent ProjectId="@Id" AllTasks="@tasks" />
+        </div>
+    </DashboardLayout>
+}
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private AspNetProjects project = null;
+    private List<AspNetTasks> tasks = null;
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+        await RefreshTasks();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshTasks()
+    {
+        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{Id}/tasks");
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

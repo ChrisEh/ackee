@@ -1,0 +1,69 @@
+﻿@page "/projects/{Id}/calendar"
+@using Ackee.Data.Model
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@if (project != null)
+{
+    <DashboardLayout Project="@project" 
+                     PageName="calendar"
+                     PageRoute="@($"/projects/{Id}/calendar")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
+        <div class="milestones_content">
+
+        </div>
+    </DashboardLayout>
+}
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private AspNetProjects project = null;
+
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = null;
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

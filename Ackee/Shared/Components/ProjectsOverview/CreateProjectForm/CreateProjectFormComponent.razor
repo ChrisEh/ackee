@@ -1,0 +1,79 @@
+﻿@using System.Threading
+@using Ackee.Data.Model
+
+@if (_updatedProject == null)
+{
+    <EditForm Model="@_createFormModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        @if (!string.IsNullOrEmpty(_statusMessage))
+        {
+            <p>@_statusMessage</p>
+        }
+
+        <p>
+            <label class="d-block" for="projectName">Project Name: </label>
+            <InputText id="projectName" @bind-Value="_createFormModel.ProjectName" />
+        </p>
+
+        <p>
+            <label class="d-block" for="projectDescription">Project Description: </label>
+            <InputTextArea class="w-100" id="projectDescription" @bind-Value="_createFormModel.ProjectDescription" />
+        </p>
+
+        <button class="button button_actionButton button_padding" type="submit">Submit</button>
+
+    </EditForm>
+}
+else
+{
+    <h4>Project added successfully</h4>
+}
+
+
+@code {
+    private CreateFormModel _createFormModel = new CreateFormModel();
+    private AspNetProjects _updatedProject = null;
+    private string _statusMessage = "";
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    private async Task CreateProject(string userId)
+    {
+        try
+        {
+            string projectName = _createFormModel.ProjectName;
+            string projectDescription = _createFormModel.ProjectDescription;
+            AspNetProjects newProject = new AspNetProjects();
+            newProject.ProjectName = projectName;
+            newProject.ProjectDescription = projectDescription;
+
+            _updatedProject = await (new HttpClient()).PostJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/user/{userId}", newProject);
+        }
+        catch (Exception e)
+        {
+            _statusMessage ="Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await CreateProject(UserId);
+
+        if (_updatedProject != null)
+        {
+            OnSuccess?.Invoke();
+        }
+
+        Thread.Sleep(1500);
+        _updatedProject = null;
+    }
+}

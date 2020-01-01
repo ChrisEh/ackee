@@ -1,0 +1,110 @@
+﻿@page "/projects/{Id}/settings"
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
+@using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview
+@using Ackee.Shared.Components.ProjectDashboard.Settings.DeleteProjectForm
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@if (project != null)
+{
+    <DashboardLayout Project="@project" 
+                     PageName="settings"
+                     PageRoute="@($"/projects/{Id}/settings")"
+                     PageRouteCustomIndexes=@(new List<int> { 1 })
+                     PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
+        <div class="settings_content">
+            @if (project.Owner.Id == currentUser.Id)
+            {
+                <UpdateProjectInformationComponent OnSuccess="async () => await RefreshProject()"
+                                                   Project="@project"
+                                                   UserId="@currentUser.Id" />
+            }
+            else
+            {
+                <h1>Project General Information</h1>
+
+                <h2>Project Name</h2>
+                <p>@project.ProjectName</p>
+
+                <h2>Project Description</h2>
+                <p>@project.ProjectDescription</p>
+            }
+            <hr />
+
+            <MembersOverviewComponent Project="@project"
+                                      CurrentUser="@currentUser"
+                                      OnMemberAddedSuccessfully="async () => await RefreshProject()"
+                                      OnMemberRemovedSuccessfully="async () => await RefreshProject()" />
+
+
+
+            @if (project.Owner.Id == currentUser.Id)
+            {
+                <hr />
+
+                <DeleteProjectFormComponent UserId="@currentUser.Id"
+                                            Project="@project"
+                                            OnSuccess="@RedirectToProjectsOverview" />
+            }
+
+        </div>
+    </DashboardLayout>
+}
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private AspNetProjects project = null;
+
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Get project object by project ID. If loaded, display it.
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProject();
+    }
+
+    private async Task RefreshProject()
+    {
+        project = null;
+        project = await (new HttpClient()).GetJsonAsync<AspNetProjects>($"http://localhost:53508/api/projects/{Id}");
+
+
+        if (!CurrentUserIsMemberOfProject())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+        StateHasChanged();
+    }
+
+    private void RedirectToProjectsOverview()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private bool CurrentUserIsMemberOfProject()
+    {
+        foreach (var userProject in project.UserProjects)
+        {
+            if (currentUser.Id == userProject.UserId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

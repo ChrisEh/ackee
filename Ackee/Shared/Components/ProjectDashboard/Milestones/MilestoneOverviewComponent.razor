@@ -1,0 +1,54 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.UI
+@using Ackee.Shared.Components.UI.Modal
+@using Ackee.Shared.Components.ProjectDashboard.Milestones.CreateMilestoneForm
+@using Ackee.Shared.Components.ProjectDashboard.Milestones.MilestoneListItem
+
+@if (Milestones != null)
+{
+    <div class="milestonesOverview">
+        <div class="milestonesOverview_header">
+            <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a milestone</Button>
+        </div>
+
+        @if (Milestones.Count == 0)
+        {
+            <p>This project doesn't have any milestones yet.</p>
+        }
+        else
+        {
+            @foreach(var milestone in Milestones)
+            {
+                <MilestoneListItemComponent Milestone="@milestone" ProjectId="@ProjectId" />
+            }
+        }
+
+        @if (showModal)
+        {
+            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Milestone">
+                <CreateMilestoneFormComponent ProjectId="@ProjectId" OnSuccess="@OnMilestonesUpdated" />
+            </ModalWithBackdropComponent>
+        }
+    </div>
+}
+
+
+
+@code {
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    [Parameter]
+    public List<AspNetMilestones> Milestones { get; set; }
+
+    [Parameter]
+    public Action OnMilestonesUpdated { get; set; }
+
+    private bool showModal = false;
+
+    private void ShowModal()
+    {
+        showModal = true;
+        StateHasChanged();
+    }
+}

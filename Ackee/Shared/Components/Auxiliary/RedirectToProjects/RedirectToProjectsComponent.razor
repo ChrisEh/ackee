@@ -1,0 +1,16 @@
+﻿@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+@code {
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        RedirectToProjectsOverview();
+    }
+
+
+    private void RedirectToProjectsOverview()
+    {
+        NavigationManager.NavigateTo("/projects");
+    }
+}

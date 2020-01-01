@@ -1,0 +1,63 @@
+﻿.milestoneListItem {
+    display: flex;
+    flex-flow: column;
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    color: #333;
+}
+
+.milestoneListItem:hover {
+    background-color: #FFEEFF;
+}
+
+@media screen and (min-width: 1048px){
+    .milestoneListItem {
+        flex-flow: row;
+        align-items: center;
+    }
+
+    .milestone_info {
+        width: 40%;
+    }
+
+}
+
+.milestoneListItem p {
+    margin: 0;
+}
+
+.milestoneListItem .milestone_info, .milestoneListItem .milestone_progress_info {
+    display: flex;
+    flex-flow: column;
+}
+
+.milestoneListItem .milestone_info h1 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.milestoneListItem .milestone_info p.date {
+    font-size: 1rem;
+    color: #444;
+}
+
+.milestoneListItem .milestone_info span.status {
+    font-weight: bold;
+}
+
+.milestoneListItem .milestone_info span.completed {
+    color: green;
+}
+
+.milestoneListItem .milestone_info span.open {
+    color: orangered;
+}
+
+.milestoneListItem .milestone_info span.expired {
+    color: red;
+}

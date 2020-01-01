@@ -1,0 +1,92 @@
+﻿@page  "/projects"
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.UI
+@using Ackee.Shared.Components.UI.Modal
+@using Ackee.Shared.Components.ProjectsOverview.CreateProjectForm
+@using Ackee.Shared.Components.ProjectsOverview.ProjectListItem
+
+
+
+    <main class="mainLayout_main__maxWidth">
+        <div class="projectsOverview">
+            <div class="projectsOverview_header">
+                <h3>Projects</h3>
+                <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
+            </div>
+
+            <div class="projectsOverview_navigation">
+                <ul>
+                    <li class="@(selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
+                        ALL
+                    </li>
+                    <li class="@(selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
+                        MY TASKS
+                    </li>
+                </ul>
+            </div>
+
+            <div class="projectsOverview_content">
+                @if (selectedTab.Equals("ALL"))
+                {
+                    if (projects != null)
+                        @foreach (var project in projects)
+                        {
+                            <ProjectListItemComponent ProjectName="@project.ProjectName" 
+                                                      ProjectID="@project.ProjectID"  
+                                                      ProjectMembers="@project.UserProjects"/>
+                        }
+                    }
+                    else
+                    {
+                        <h1>My personal tasks</h1>
+                    }
+            </div>
+        </div>
+        @if (currentUser != null && showModal)
+        {
+            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Project">
+                <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
+            </ModalWithBackdropComponent>
+        }
+    </main>
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private string selectedTab = "ALL";
+    private bool showModal = false;
+    private List<AspNetProjects> projects;
+
+    private ApplicationUser currentUser = null;
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (await authenticationStateTask).User;
+        await RefreshUser();
+        await RefreshProjects();
+    }
+
+    private void OnSelectTab(string tab)
+    {
+        selectedTab = tab;
+    }
+
+    private void ShowModal()
+    {
+        showModal = true;
+        StateHasChanged();
+    }
+
+    private async Task RefreshProjects()
+    {
+        projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
+        StateHasChanged();
+    }
+
+    private async Task RefreshUser()
+    {
+        currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+    }
+}

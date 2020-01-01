@@ -1,0 +1,283 @@
+﻿.topMenu {
+    width: 100%;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(135deg, rgba(77,38,77,1) 0%, rgba(102,51,102, 1) 50%, rgba(179,89,179,1) 100%);
+    min-height: 4rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.topMenu_container {
+    min-height: 4rem;
+    display: flex;
+    flex-flow: column;
+    padding: 0.5rem;
+}
+
+.topMenu_container__landingPage {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.topMenu_hamburgerAndLogoContainer {
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.topMenu_logo {
+    margin-right: 0.5rem;
+}
+
+.topMenu_logo a {
+    color: inherit;
+}
+
+/* ***************************************** */
+/* HAMBURGER ICON INTO CROSS ANIMATION START */
+/* ***************************************** */
+.topMenu_hamburgerAndLogoContainer span {
+    display: block;
+    background: #663366;
+    border-radius: 2px;
+}
+
+.topMenu_hamburgerAndLogoContainer * {
+    transition: .25s ease-in-out;
+    box-sizing: border-box;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle {
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255,255,255,.4);
+    border-radius: 3px;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle:hover {
+    background: rgba(255,255,255,.8);
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle:hover span {
+    background: #B359B3;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #hamburger {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #hamburger span {
+    width: 30px;
+    height: 3px;
+    position: relative;
+    top: 12px;
+    left: 10px;
+    margin: 5px 0;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #hamburger span:nth-child(1) {
+    transition-delay: .5s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #hamburger span:nth-child(2) {
+    transition-delay: .625s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #hamburger span:nth-child(3) {
+    transition-delay: .75s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #cross {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: rotate(45deg);
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #cross span:nth-child(1) {
+    height: 0%;
+    width: 3px;
+    position: absolute;
+    top: 10%;
+    left: 24px;
+    transition-delay: 0s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle #cross span:nth-child(2) {
+    height: 0%;
+    width: 3px;
+    position: absolute;
+    bottom: 10%;
+    right: 24px;
+    transition-delay: .25s;
+    transform: rotate(270deg);
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #hamburger span {
+    width: 0%;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #hamburger span:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #hamburger span:nth-child(2) {
+    transition-delay: .125s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #hamburger span:nth-child(3) {
+    transition-delay: .25s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #cross span:nth-child(1) {
+    height: 80%;
+    transition-delay: .625s;
+}
+
+.topMenu_hamburgerAndLogoContainer #menu-toggle.open #cross span:nth-child(2) {
+    height: 80%;
+    transition-delay: .375s;
+}
+
+/* *************************************** */
+/* HAMBURGER ICON INTO CROSS ANIMATION END */
+/* *************************************** */
+
+/* **************** */
+/* MENU ITEMS START */
+/* **************** */
+
+.topMenu nav {
+    width: 100%;
+    height: 0;
+    visibility: hidden;
+    transition: height 0.5s ease-in-out;
+}
+
+.topMenu nav.expanded {
+    height: 6rem;
+    padding-top: 0.5rem;
+    visibility: visible;
+    overflow-y: hidden;
+    animation: slide-in 0.5s;
+}
+
+.topMenu nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.topMenu nav ul li {
+    margin: 0;
+    padding-left: 0.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+}
+
+.topMenu nav ul li form {
+    margin: 0;
+    padding: 0;
+}
+
+.topMenu nav ul li form button {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.topMenu nav ul li form button:hover {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    color: #FFCCFF;
+}
+
+.topMenu nav ul li * {
+    color: white;
+}
+
+.topMenu nav ul li:hover * {
+    color: #FFCCFF;
+}
+
+.topMenu nav ul li:hover > a.btn {
+    color: white;
+}
+
+/* ************** */
+/* MENU ITEMS END */
+/* ************** */
+
+/* ******************** */
+/* BIGGER SCREENS START */
+/* ******************** */
+
+@media (min-device-width: 600px) {
+    .topMenu_container {
+        width: 100%;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .topMenu_container #menu-toggle {
+        display: none;
+    }
+
+    .topMenu_container nav {
+        height: auto;
+        width: auto;
+        visibility: visible;
+    }
+
+    .topMenu_container nav ul {
+        height: 100%;
+        display: flex;
+        flex-flow: row;
+    }
+
+    .topMenu_container nav ul li {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .topMenu nav ul li form button {
+        margin-left: 0.5rem;
+    }
+}
+
+@media screen and (min-width: 1040px){
+    .topMenu_container__landingPage {
+        padding: 0.5rem 0;
+    }
+
+    .topMenu_container {
+
+    }
+}
+
+@keyframes slide-in {
+    100% {
+        visibility: visible;
+    }
+}

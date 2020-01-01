@@ -1,15 +1,33 @@
-﻿@inherits LayoutComponentBase
+﻿@using Ackee.Shared.Components.UI.TopMenu
+@using Microsoft.AspNetCore.Identity
+@using Ackee.Data.Model
+@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="mainLayout d-flex flex-column">
+
+    <AuthorizeView>
+        <Authorized>
+            <header>
+                <TopMenuComponent IsUserAuthenticated=true />
+            </header>
+        </Authorized>
+        <NotAuthorized>
+            <header>
+                <TopMenuComponent IsUserAuthenticated=false />
+            </header>
+        </NotAuthorized>
+    </AuthorizeView>
+
+
+    @* Render the pages here, the pages are wrapped in a main element *@
+    @Body 
 </div>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
-    </div>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+@code
+{
+
+}

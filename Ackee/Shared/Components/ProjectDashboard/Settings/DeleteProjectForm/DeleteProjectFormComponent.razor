@@ -1,0 +1,69 @@
+﻿@using Ackee.Data.Model
+
+<div class="updateProjectInfoForm">
+    <EditForm Model="@deleteFormModel" OnValidSubmit="@HandleValidSubmit">
+        <h1>Delete Project</h1>
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <p>
+            <label for="projectName">Please enter the name of the project and click outside of the input field. You will then be able to delete your project. </label>
+            <InputText id="projectName" @bind-Value="deleteFormModel.ProjectName" placeholder="@Project.ProjectName" />
+        </p>
+
+        <button class="button button_actionButton button_padding d-inline-block" type="submit" disabled=@ButtonDisabled()>Delete Project</button>
+
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <p class="my-2">@statusMessage</p>
+        }
+
+    </EditForm>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public AspNetProjects Project { get; set; }
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    private DeleteFormModel deleteFormModel = new DeleteFormModel();
+    private string statusMessage = "";
+
+    protected override void OnInitialized()
+    {
+        deleteFormModel.ProjectName = "";
+    }
+
+    private async Task DeleteProject()
+    {
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/projects/{Project.ProjectID}");
+        StateHasChanged();
+    }
+
+    private bool ButtonDisabled()
+    {
+        if (UserId == Project.Owner.Id)
+        {
+            if (deleteFormModel.ProjectName == Project.ProjectName)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await DeleteProject();
+        OnSuccess?.Invoke();
+    }
+}
