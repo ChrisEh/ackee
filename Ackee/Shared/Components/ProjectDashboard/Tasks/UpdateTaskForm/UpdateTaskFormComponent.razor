@@ -1,0 +1,246 @@
+﻿@using System.Threading
+@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.MilestoneListItem
+@using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.AssigneeListItem
+
+<div class="createTaskForm">
+    <EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <p>
+            <label class="d-block" for="taskName">Name: </label>
+            <InputText class="createTaskForm_taskName" id="taskName" @bind-Value="updateFormModel.TaskName" />
+        </p>
+
+        <p>
+            <label class="d-block" for="taskDescription">Description: </label>
+            <InputTextArea class="createTaskForm_taskDescription" id="taskDescription" @bind-Value="updateFormModel.TaskDescription" />
+        </p>
+
+        <div class="createTaskForm_startDateAndEndDate">
+            <p>
+                <label class="d-block" for="taskStartDate">Start date: </label>
+                <InputDate class="createTaskForm_taskStartDate" id="taskStartDate" @bind-Value="updateFormModel.TaskStartDate" />
+            </p>
+            <p class="createTaskForm_marginLeftOnBigScreens">
+                <label class="d-block" for="taskEndDate">End date: </label>
+                <InputDate class="createTaskForm_taskEndDate" id="taskEndDate" @bind-Value="updateFormModel.TaskEndDate" />
+            </p>
+
+            <p class="createTaskForm_marginLeftOnBigScreens">
+                <label class="d-block" for="taskCompleted">Completed: </label>
+                <InputCheckbox class="createTaskForm_taskCompleted" id="taskCompleted" @bind-Value="updateFormModel.TaskCompleted" />
+            </p>
+        </div>
+
+        @* Add Milestones to task *@
+        <hr class="my-2" />
+        <h1>Assign milestones to the task</h1>
+        <select @onchange="@AddMilestone">
+            <option value="EMPTY"> -- Select a milestone -- </option>
+            @foreach (var milestone in Milestones)
+            {
+                <option value="@milestone.MilestoneName">@milestone.MilestoneName</option>
+            }
+        </select>
+
+        @if (assignedMilestones.Count > 0)
+        {
+            @foreach (var milestone in assignedMilestones)
+            {
+                <MilestoneListItemComponent Milestone="@milestone" OnMilestoneRemovedSuccessfully="() => RemoveMilestone(milestone)" />
+            }
+        }
+
+        @* Add Members to task *@
+        <hr class="my-2" />
+        <h1>Assign members to the task</h1>
+        <select @onchange="@AddAssignee">
+            <option value="EMPTY"> -- Select a milestone -- </option>
+            @foreach (var member in Members)
+            {
+                <option value="@member.Email">@member.Email</option>
+            }
+        </select>
+
+        @if (assignees.Count > 0)
+        {
+            @foreach (var assignee in assignees)
+            {
+                <AssigneeListItemComponent User="@assignee" OnAssigneeRemovedSuccessfully="() => RemoveAssignee(assignee)" />
+            }
+        }
+
+        <hr class="my-2" />
+
+        <button class="button button_actionButton button_padding" type="submit">Update Task</button>
+
+        @if (!string.IsNullOrEmpty(_statusMessage))
+        {
+            <p>@_statusMessage</p>
+        }
+
+
+    </EditForm>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public AspNetProjects Project { get; set; }
+
+    [Parameter]
+    public AspNetTasks CurrentTask { get; set; }
+
+    [Parameter]
+    public List<AspNetMilestones> Milestones { get; set; }
+
+    [Parameter]
+    public List<ApplicationUser> Members { get; set; }
+
+    [Parameter]
+    public Action OnSuccess { get; set; }
+
+    private UpdateFormModel updateFormModel = new UpdateFormModel();
+    private string _statusMessage = "";
+    private List<ApplicationUser> assignees = new List<ApplicationUser>();
+    private List<AspNetMilestones> assignedMilestones = new List<AspNetMilestones>();
+
+    private async Task UpdateTask()
+    {
+        try
+        {
+            CurrentTask.TaskName = updateFormModel.TaskName;
+            CurrentTask.TaskDescription = updateFormModel.TaskDescription;
+            CurrentTask.StartDate = updateFormModel.TaskStartDate;
+            CurrentTask.EndDate = updateFormModel.TaskEndDate;
+            CurrentTask.Completed = updateFormModel.TaskCompleted;
+            CurrentTask.Project = Project;
+
+            await (new HttpClient()).PutJsonAsync<bool>($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}", CurrentTask);
+
+            // If the milestone was added in the update, create it using the api
+            if (assignedMilestones.Count > 0)
+            {
+                foreach (var milestone in assignedMilestones)
+                {
+                    if (!CurrentTask.MilestoneTasks.Any(mt => mt.Milestone.MilestoneID == milestone.MilestoneID))
+                    {
+                        await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{Project.ProjectID}/tasks/{CurrentTask.TaskName}/milestones", milestone.MilestoneID);
+                    }
+                }
+            }
+
+            // If the milestone was removed in the updated, remove it using the api
+            if (CurrentTask.MilestoneTasks.Count() > 0)
+            {
+                foreach (var milestoneTask in CurrentTask.MilestoneTasks)
+                {
+                    if (!assignedMilestones.Contains(milestoneTask.Milestone))
+                    {
+                        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}/milestones/{milestoneTask.Milestone.MilestoneID}");
+                    }
+                }
+            }
+
+            // If the assignee was added in the update, create it using the api
+            if (assignees.Count > 0)
+            {
+                foreach (var assignee in assignees)
+                {
+                    if (!CurrentTask.UserTasks.Any(ut => ut.User.Id == assignee.Id))
+                    {
+                        await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{Project.ProjectID}/tasks/{CurrentTask.TaskName}/assignees", assignee.Id);
+                    }
+                }
+            }
+
+            // If the assignee was removed in the updated, remove it using the api
+            if (CurrentTask.UserTasks.Count() > 0)
+            {
+                foreach (var userTask in CurrentTask.UserTasks)
+                {
+                    if (!assignees.Contains(userTask.User))
+                    {
+                        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}/assignees/{userTask.User.Id}");
+                    }
+                }
+            }
+
+            _statusMessage = "Task updated successfully!";
+            OnSuccess?.Invoke();
+        }
+        catch (Exception e)
+        {
+            _statusMessage = "Something went wrong:\n" + e.Message;
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await UpdateTask();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        updateFormModel.TaskName = CurrentTask.TaskName;
+        updateFormModel.TaskDescription = CurrentTask.TaskDescription;
+        updateFormModel.TaskStartDate = CurrentTask.StartDate;
+        updateFormModel.TaskEndDate = CurrentTask.EndDate;
+        updateFormModel.TaskCompleted = CurrentTask.Completed;
+
+        if (CurrentTask.MilestoneTasks.Count() > 0)
+        {
+            @foreach (var milestoneTask in CurrentTask.MilestoneTasks)
+            {
+                assignedMilestones.Add(milestoneTask.Milestone);
+            }
+        }
+
+        if (CurrentTask.UserTasks.Count() > 0)
+        {
+            @foreach (var userTask in CurrentTask.UserTasks)
+            {
+                assignees.Add(userTask.User);
+            }
+        }
+    }
+
+    private void AddMilestone(ChangeEventArgs e)
+    {
+        if (!assignedMilestones.Exists(m => m.MilestoneName == e.Value.ToString()) && !e.Value.ToString().Equals("EMPTY"))
+        {
+            assignedMilestones.Add(Milestones.First(m => m.MilestoneName == e.Value.ToString()));
+        }
+        StateHasChanged();
+    }
+
+    private void RemoveMilestone(AspNetMilestones milestone)
+    {
+        assignedMilestones.Remove(milestone);
+        StateHasChanged();
+    }
+
+    private void AddAssignee(ChangeEventArgs e)
+    {
+        if (!assignees.Exists(a => a.Email == e.Value.ToString()) && !e.Value.ToString().Equals("EMPTY"))
+        {
+            assignees.Add(Members.First(m => m.Email == e.Value.ToString()));
+        }
+
+        StateHasChanged();
+    }
+
+    private void RemoveAssignee(ApplicationUser assignee)
+    {
+        assignees.Remove(assignee);
+        StateHasChanged();
+    }
+}

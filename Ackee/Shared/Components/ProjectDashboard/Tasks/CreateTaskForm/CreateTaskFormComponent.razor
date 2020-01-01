@@ -111,6 +111,7 @@
             newTask.TaskDescription = createFormModel.TaskDescription;
             newTask.StartDate = createFormModel.TaskStartDate;
             newTask.EndDate = createFormModel.TaskEndDate;
+            newTask.Completed = createFormModel.TaskCompleted;
             newTask.Project = Project;
 
             await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/tasks", newTask);

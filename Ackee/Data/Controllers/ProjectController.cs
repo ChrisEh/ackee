@@ -308,6 +308,54 @@ namespace Ackee.Data.Controllers
             return tasks;
         }
 
+        // Add milestone to task
+        [HttpPost("{projectId}/tasks/{taskName}/milestones")]
+        public async Task<object> AddMilestoneToTask([FromRoute] string projectId, [FromRoute] string taskName, [FromBody] string milestoneId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName && t.Project.ProjectID == projectId);
+                var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);
+
+                if (task == null || milestone == null)
+                {
+                    return NotFound();
+                }
+
+                var milestoneTask = new MilestoneTask();
+                milestoneTask.MilestoneID = milestone.MilestoneID;
+                milestoneTask.TaskID = task.TaskID;
+
+                ctx.MilestoneTasks.Add(milestoneTask);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        // Add assignee to task
+        [HttpPost("{projectId}/tasks/{taskName}/assignees")]
+        public async Task<ActionResult<bool>> AddAssigneeToTask([FromRoute] string projectId, [FromRoute] string taskName, [FromBody] string userId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName && t.Project.ProjectID == projectId);
+                var assignee = await ctx.ApplicationUser.FirstOrDefaultAsync(a => a.Id == userId);
+
+                if (task == null || assignee == null)
+                {
+                    return NotFound();
+                }
+
+                var userTask = new UserTask();
+                userTask.UserID = assignee.Id;
+                userTask.TaskID = task.TaskID;
+
+                ctx.UserTasks.Add(userTask);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
         #endregion
 
     }

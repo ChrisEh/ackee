@@ -58,6 +58,9 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
+                var users = ctx.ApplicationUser.ToList();
+                var milestones = ctx.Milestones.ToList();
+
                 return await ctx.Tasks
                     .Include(t => t.MilestoneTasks)
                     .Include(t => t.UserTasks)
@@ -67,30 +70,28 @@ namespace Ackee.Data.Controllers
             }
         }
 
-
-        // Add milestone to task
-        [HttpPost("{taskName}/milestones")]
-        public async Task<object> AddMilestoneToTask([FromRoute] string taskName, [FromBody] string milestoneId)
+        [HttpPut("{taskId}")]
+        public async Task<object> UpdateTask([FromRoute] string taskId, [FromBody] AspNetTasks updatedTask)
         {
             using (var ctx = new AckeeCtx())
             {
-                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName);
-                var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneId);
-
-                if (task == null || milestone == null)
+                var task = ctx.Tasks.FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
+                
+                if (task == null)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
 
-                var milestoneTask = new MilestoneTask();
-                milestoneTask.MilestoneID = milestone.MilestoneID;
-                milestoneTask.TaskID = task.TaskID;
+                task.TaskName = updatedTask.TaskName;
+                task.TaskDescription = updatedTask.TaskDescription;
+                task.StartDate = updatedTask.StartDate;
+                task.EndDate = updatedTask.EndDate;
+                task.Completed = updatedTask.Completed;
 
-                ctx.MilestoneTasks.Add(milestoneTask);
                 await ctx.SaveChangesAsync();
                 return true;
             }
-        }
+        }        
 
         // Remove milestone from task
         [HttpDelete("{taskId}/milestones/{milestoneId}")]
@@ -113,29 +114,7 @@ namespace Ackee.Data.Controllers
             }
         }
 
-        // Add assignee to task
-        [HttpPost("{taskName}/assignees")]
-        public async Task<ActionResult<bool>> AddAssigneeToTask([FromRoute] string taskName, [FromBody] string userId)
-        {
-            using (var ctx = new AckeeCtx())
-            {
-                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskName == taskName);
-                var assignee = await ctx.ApplicationUser.FirstOrDefaultAsync(a => a.Id == userId);
-
-                if (task == null || assignee == null)
-                {
-                    return NotFound();
-                }
-
-                var userTask = new UserTask();
-                userTask.UserID = assignee.Id;
-                userTask.TaskID = task.TaskID;
-
-                ctx.UserTasks.Add(userTask);
-                await ctx.SaveChangesAsync();
-                return true;
-            }
-        }
+        
 
         // Remove milestone from task
         [HttpDelete("{taskId}/assignees/{userId}")]
