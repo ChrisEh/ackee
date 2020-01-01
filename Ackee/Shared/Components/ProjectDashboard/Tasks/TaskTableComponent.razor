@@ -1,11 +1,14 @@
 ﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.Auxiliary.Tooltip
 @inject Ackee.Shared.Services.DateTimeService DateTimeService
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
+
 
 @if (Tasks != null && Tasks.Count != 0)
 {
     <div class="taskTableComponent">
-        <table class="table table-hover">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Task Name</th>
@@ -19,19 +22,39 @@
             <tbody>
                 @foreach (var task in Tasks)
                 {
-                    <tr @onclick="() => NavigateToTaskInformationPage(task.TaskID)">
+                    <tr  @onclick="() => NavigateToTaskInformationPage(task.TaskID)">
                         <td>@task.TaskName</td>
                         <td>@DateTimeService.GetDateAsString("d", task.StartDate)</td>
                         <td>@DateTimeService.GetDateAsString("d", task.EndDate)</td>
-                        <td>milestones here</td>
-                        <td>members here</td>
-                        <td>status here</td>
+                        <td>
+                            @foreach (var milestoneTask in task.MilestoneTasks)
+                            {
+                                <TooltipComponent TooltipText="@StringManipulationService.GetFirstXCharacters(milestoneTask.Milestone.MilestoneName, 25)">
+                                    <div class="itemIcon">
+                                        @milestoneTask.Milestone.MilestoneName.ToUpper()[0]
+                                    </div>                                    
+                                </TooltipComponent>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var userTask in task.UserTasks)
+                            {
+                                <TooltipComponent TooltipText="@StringManipulationService.GetFirstXCharacters(userTask.User.Email, 25)">
+                                    <div class="itemIcon">
+                                        @userTask.User.Email.ToUpper()[0]
+                                    </div>
+                                </TooltipComponent>
+                            }
+                        </td>
+                        <td>
+                            <span class="status @DetermineStatus(task)">@DetermineStatus(task)</span>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    
+
 }
 else
 {
@@ -50,5 +73,19 @@ else
     private void NavigateToTaskInformationPage(string taskId)
     {
         NavigationManager.NavigateTo($"/projects/{ProjectId}/tasks/{taskId}");
+    }
+
+    private string DetermineStatus(AspNetTasks task)
+    {
+        if (task.Completed)
+        {
+            return "completed";
+        }
+        else if (DateTime.Today.CompareTo(task.EndDate) < 1)
+        {
+            return "open";
+        }
+
+        return "expired";
     }
 }

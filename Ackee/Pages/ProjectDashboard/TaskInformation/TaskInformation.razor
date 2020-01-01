@@ -10,7 +10,7 @@
                      PageRouteCustomIndexes=@(new List<int> { 1, 3 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName, task.TaskName })>
         <div class="tasks_content">
-            <h1>Create a task here!</h1>
+            TaskInformation
         </div>
     </DashboardLayout>
 }
@@ -37,6 +37,7 @@
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProject();
+        await RefreshTask();
     }
 
     private async Task RefreshProject()
@@ -48,7 +49,6 @@
         {
             NavigationManager.NavigateTo("/");
         }
-        StateHasChanged();
     }
 
     private async Task RefreshTask()

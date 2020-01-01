@@ -32,6 +32,8 @@
 @import url('ProjectDashboard/Tasks/createTaskForm.css');
 @import url('ProjectDashboard/Tasks/taskTable.css');
 
+@import url('Auxiliary/Tooltip/tooltip.css');
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;

@@ -48,6 +48,19 @@ namespace Ackee.Shared.Services
         public string ToTitleCase(string input)
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower());
-        }        
+        }      
+        
+        public string GetFirstXCharacters(string input, int amountOfCharacters)
+        {
+            if (input.Length <= amountOfCharacters)
+            {
+                return input;
+            }
+            else
+            {
+                return input.Substring(0, amountOfCharacters - 3) + "...";
+            }
+            
+        }
     }
 }

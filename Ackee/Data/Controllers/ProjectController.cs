@@ -294,6 +294,9 @@ namespace Ackee.Data.Controllers
         {
             var ctx = new AckeeCtx();
 
+            var users = ctx.ApplicationUser.ToList();
+            var milestones = ctx.Milestones.ToList();
+
             // Get the milestones
             var tasks = await ctx.Tasks
                 .Include(t => t.MilestoneTasks)
