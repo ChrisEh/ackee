@@ -86,7 +86,6 @@
     {
         await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/milestones/{Milestone.MilestoneID}");
         NavigationManager.NavigateTo($"/projects/{ProjectId}/milestones");
-        StateHasChanged();
     }
 
     private async void HandleValidSubmit()
