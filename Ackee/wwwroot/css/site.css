@@ -3,17 +3,19 @@
 
 @import url('landingPage.css');
 @import url('scaffoldingCustomLayout.css');
-@import url('projectsOverview.css');
 
 @import url('UI/ProjectListItem/projectListItem.css');
 @import url('UI/Button/button.css');
 @import url('UI/TopMenu/topMenu.css');
 @import url('UI/TopMenu/topMenuIdentity.css');
 
+@import url('ProjectsOverview/projectsOverview.css');
+@import url('ProjectsOverview/UserTaskOverview/userTaskDay.css');
+@import url('ProjectsOverview/UserTaskOverview/projectWithTasks.css');
+
 @import url('DashboardLayout/dashboardLayout.css');
 @import url('DashboardLayout/LeftMenu/leftMenu.css');
 @import url('UI/Modal/modalWithBackdrop.css');
-
 @import url('ProjectDashboard/projectDashboard.css');
 @import url('UI/DashboardWidgets/dashboardWidgets.css');
 

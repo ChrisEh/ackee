@@ -1,0 +1,33 @@
+﻿@using Ackee.Shared.Services.Model
+@using Ackee.Shared.Components.ProjectsOverview.UserTasksOverview.UserTaskDay.ProjectWithTasks
+@inject Ackee.Shared.Services.DateTimeService DateTimeService
+
+@if(DayWithProjects != null)
+{
+    <div class="userTaskDay">
+        <div class="dayInfo">
+            <h1>
+                @if (DayWithProjects.Date == DateTime.Today)
+                {
+                    @("Today")
+                }
+                else
+                {
+                    @DayWithProjects.Date.DayOfWeek.ToString()
+                }
+            </h1>
+            <h2>@DateTimeService.GetDateAsString("MMMM dd, yyyy", DayWithProjects.Date)</h2>
+        </div>
+        <div class="dailyTasksPerProject">
+            @foreach(var projectWithTasks in DayWithProjects.ProjectsWithTasks)
+            {
+                <ProjectWithTasksComponent ProjectWithTasks="@projectWithTasks" />
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public DayProjects DayWithProjects { get; set; }
+}

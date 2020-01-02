@@ -1,0 +1,46 @@
+﻿.userTaskDay {
+    display: flex;
+    flex-flow: column;
+    padding: 2rem 0.5rem;
+    border-bottom: 1px solid darkgrey;
+}
+
+.userTaskDay:first-of-type {
+    border-top: 1px solid darkgrey;
+}
+
+.userTaskDay:hover {
+    background-color: #F8F8F8;
+}
+
+.userTaskDay .dayInfo {
+    width: 100%;
+}
+
+.userTaskDay .dayInfo h1 {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.userTaskDay .dayInfo h2{
+    font-size: 1rem;
+    margin: 0.8rem 0 0;
+    padding: 0;
+}
+
+.userTaskDay .dailyTasksPerProject {
+    margin-top: 2rem;
+    flex-grow: 1
+}
+
+@media screen and (min-width: 1048px){
+    .userTaskDay {
+        flex-flow: row;
+    }
+
+    .userTaskDay .dayInfo {
+        width: 12rem;
+    }    
+}

@@ -37,6 +37,10 @@
     padding: 6px 16px;
 }
 
+.button_padding__small {
+    padding: 6px;
+}
+
 .button_fontSmaller {
     font-size: 0.875rem;
 }

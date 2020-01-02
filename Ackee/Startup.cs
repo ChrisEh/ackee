@@ -58,6 +58,7 @@ namespace Ackee
             services.AddScoped<BreadCrumbService>();
             services.AddScoped<SortService>();
             services.AddScoped<FilterService>();
+            services.AddScoped<UserTasksService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
