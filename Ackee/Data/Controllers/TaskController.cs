@@ -70,6 +70,24 @@ namespace Ackee.Data.Controllers
             }
         }
 
+        [HttpDelete("{taskId}")]
+        public async Task<object> DeleteTaskById(string taskId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = ctx.Tasks.FirstOrDefault(t => t.TaskID == taskId);
+
+                if ( task == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Tasks.Remove(task);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
         [HttpPut("{taskId}")]
         public async Task<object> UpdateTask([FromRoute] string taskId, [FromBody] AspNetTasks updatedTask)
         {

@@ -1,5 +1,8 @@
 ﻿@using Ackee.Data.Model
+@using Ackee.Shared.Services
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inject Ackee.Shared.Services.SortService SortService
+@inject Ackee.Shared.Services.FilterService FilterService
 
 @if (AllTasks != null)
 {
@@ -13,7 +16,7 @@
             <div class="filterBox_searchBar">
                 <p>
                     <label for="searchField">Search: </label>
-                    <input id="searchField" class="filterBox_searchBar_searchField" />
+                    <input id="searchField" @onchange="@FilterTasks" class="filterBox_searchBar_searchField" />
                 </p>
                 <p>
                     You can use this searchbar to filter the tasks on name, assignees or milestones!
@@ -22,10 +25,11 @@
             <div class="filterBox_orderBy">
                 <p>
                     <label for="orderByField">Order by:</label>
-                    <select id="orderByField" class="filterBox_orderBy_orderByField">
-                        @* @foreach(var orderOption in orderOptions){
-                        <option>orderOption</option>
-                        }*@
+                    <select id="orderByField" class="filterBox_orderBy_orderByField" @onchange="@SortTasks">
+                        @foreach(var option in SortService.GetOrderOptions())
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
                     </select>
                 </p>
             </div>
@@ -43,15 +47,29 @@
     public string ProjectId { get; set; }
 
     private List<AspNetTasks> filteredTasks = null;
+    private List<AspNetTasks> sortedTasks = null;
+    private string searchTerm = "";
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         filteredTasks = AllTasks;
+        sortedTasks = AllTasks;
     }
 
     private void NavigateToCreateTaskPage()
     {
         NavigationManager.NavigateTo($"/projects/{ProjectId}/tasks/create");
+    }
+
+    private void SortTasks(ChangeEventArgs e)
+    {
+        sortedTasks = SortService.OrderTasksBy(AllTasks, e.Value.ToString());
+        filteredTasks = SortService.OrderTasksBy(filteredTasks, e.Value.ToString());
+    }
+
+    private void FilterTasks(ChangeEventArgs e)
+    {
+        filteredTasks = FilterService.FindInTasks(sortedTasks, e.Value.ToString());
     }
 }

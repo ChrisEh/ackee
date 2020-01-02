@@ -2,6 +2,7 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.MilestoneListItem
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.AssigneeListItem
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <div class="createTaskForm">
     <EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
@@ -74,7 +75,11 @@
 
         <hr class="my-2" />
 
-        <button class="button button_actionButton button_padding" type="submit">Update Task</button>
+        <div class="updateMilestoneForm_updateAndDeleteButtons">
+            <button class="button button_actionButton button_padding" type="submit">Update Task</button>
+            <div class="button button_actionButton button_padding bg-danger"
+                 @onclick="async () => await DeleteTask()">Delete Task</div>
+        </div>
 
         @if (!string.IsNullOrEmpty(_statusMessage))
         {
@@ -185,6 +190,12 @@
     private async void HandleValidSubmit()
     {
         await UpdateTask();
+    }
+
+    private async Task DeleteTask()
+    {
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}");
+        NavigationManager.NavigateTo($"/projects/{Project.ProjectID}/tasks");
     }
 
     protected override void OnInitialized()

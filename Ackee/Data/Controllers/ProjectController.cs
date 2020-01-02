@@ -25,7 +25,7 @@ namespace Ackee.Data.Controllers
         {
             var ctx = new AckeeCtx();
 
-            return await ctx.Projects.ToListAsync();
+            return await ctx.Projects.OrderBy(p => p.DateCreated).ToListAsync();
         }
 
         [HttpGet("{projectId}")]
@@ -54,7 +54,7 @@ namespace Ackee.Data.Controllers
                 var userProject = ctx.UserProjects.ToList();
 
                 return await ctx.Projects.Where(p => p.UserProjects.Any(
-                    up => up.UserId == userId)).ToListAsync();
+                    up => up.UserId == userId)).OrderByDescending(p => p.DateCreated).ToListAsync();
             }                
         }
 
@@ -241,7 +241,10 @@ namespace Ackee.Data.Controllers
             var ctx = new AckeeCtx();
 
             // Get the milestones
-            var milestones = await ctx.Milestones.Where(m => m.Project.ProjectID == projectId).ToListAsync();
+            var milestones = await ctx.Milestones
+                .Where(m => m.Project.ProjectID == projectId)
+                .OrderBy(m => m.EndDate)
+                .ToListAsync();
 
             return milestones;
         }
@@ -303,7 +306,9 @@ namespace Ackee.Data.Controllers
                 .Include(t => t.UserTasks)
                 .Include(t => t.Project)
                 .Include(t => t.Project.UserProjects)
-                .Where(t => t.Project.ProjectID == projectId).ToListAsync();
+                .Where(t => t.Project.ProjectID == projectId)
+                .OrderBy(t => t.EndDate)
+                .ToListAsync();
 
             return tasks;
         }
