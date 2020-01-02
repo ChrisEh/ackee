@@ -32,6 +32,7 @@ namespace Ackee.Shared.Services
             List<AspNetTasks> distinctDays = listOfTasks
                 .GroupBy(t => t.EndDate.Date)
                 .Select(g => g.First())
+                .OrderBy(t => t.EndDate)
                 .ToList();
 
             foreach(var day in distinctDays)
