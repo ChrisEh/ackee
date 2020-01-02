@@ -62,7 +62,7 @@
         <hr class="my-2" />
         <h1>Assign members to the task</h1>
         <select @onchange="@AddAssignee">
-            <option value="EMPTY"> -- Select a milestone -- </option>
+            <option value="EMPTY"> -- Select a member -- </option>
             @foreach (var member in Members)
             {
                 <option value="@member.Email">@member.Email</option>
@@ -120,7 +120,7 @@
             {
                 foreach (var milestone in assignedMilestones)
                 {
-                    await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/tasks/{newTask.TaskName}/milestones", milestone.MilestoneID);
+                    await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{Project.ProjectID}/tasks/{newTask.TaskName}/milestones", milestone.MilestoneID);
                 }
             }
 
@@ -128,7 +128,7 @@
             {
                 foreach (var assignee in assignees)
                 {
-                    await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/tasks/{newTask.TaskName}/assignees", assignee.Id);
+                    await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/projects/{Project.ProjectID}/tasks/{newTask.TaskName}/assignees", assignee.Id);
                 }
             }
 

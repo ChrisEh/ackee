@@ -58,7 +58,7 @@
         <hr class="my-2" />
         <h1>Assign members to the task</h1>
         <select @onchange="@AddAssignee">
-            <option value="EMPTY"> -- Select a milestone -- </option>
+            <option value="EMPTY"> -- Select a member -- </option>
             @foreach (var member in Members)
             {
                 <option value="@member.Email">@member.Email</option>

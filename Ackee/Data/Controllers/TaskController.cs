@@ -130,9 +130,7 @@ namespace Ackee.Data.Controllers
                 await ctx.SaveChangesAsync();
                 return true;
             }
-        }
-
-        
+        }        
 
         // Remove milestone from task
         [HttpDelete("{taskId}/assignees/{userId}")]
