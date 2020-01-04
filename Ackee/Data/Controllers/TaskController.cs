@@ -82,7 +82,26 @@ namespace Ackee.Data.Controllers
                     return BadRequest();
                 }
 
+                var milestoneTasks = task.MilestoneTasks;
+
                 ctx.Tasks.Remove(task);
+                await ctx.SaveChangesAsync();
+
+                // Get all the milestones related to the task
+                foreach (var milestoneTask in milestoneTasks)
+                {
+                    // foreach task related to the milestone, check if all tasks are completed
+                    var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneTask.MilestoneID);
+                    if (milestone.MilestoneTasks.All(mt => mt.Task.Completed))
+                    {
+                        milestone.Completed = true;
+                    }
+                    else
+                    {
+                        milestone.Completed = false;
+                    }
+                }
+
                 await ctx.SaveChangesAsync();
                 return true;
             }
@@ -121,6 +140,10 @@ namespace Ackee.Data.Controllers
                     if (milestone.MilestoneTasks.All(mt => mt.Task.Completed))
                     {
                         milestone.Completed = true;
+                    }
+                    else
+                    {
+                        milestone.Completed = false;
                     }
                 }
 
