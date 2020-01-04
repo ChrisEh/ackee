@@ -4,11 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ackee.Data.Model;
 using Ackee.Shared.Services.Model;
+using Ackee.Shared.Services;
 
 namespace Ackee.Shared.Services
 {
-    public class UserTasksService
+    public class TaskService
     {
+        private DateTimeService dateService;
+
+        public TaskService(DateTimeService dateService)
+        {
+            this.dateService = dateService;
+        }
+
         public List<List<AspNetTasks>> GetTasksGroupedPerDay(List<AspNetTasks> listOfTasks)
         {
             return listOfTasks
@@ -61,6 +69,18 @@ namespace Ackee.Shared.Services
             }
 
             return tasksGroupedPerDayPerProject;
+        }
+
+        public List<List<AspNetTasks>> GetTasksByWeekNrGroupedByDay(List<AspNetTasks> tasks, int weekNr)
+        {
+            List<DateTime> datesOfWeek = dateService.GetAllDatesPerWeek(weekNr);
+
+            return tasks                            
+                .Where(t => datesOfWeek.Contains(t.EndDate.Date))
+                .OrderBy(t => t.EndDate)
+                .GroupBy(t => t.EndDate.Date)
+                .Select(g => g.ToList())
+                .ToList();
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿@using Ackee.Data.Model
+@inject Ackee.Shared.Services.DateTimeService DateTimeService
+
+    <div class="calendar_dayOverview">
+        @if (Tasks != null || Tasks.Count > 0)
+        {
+            <div class="calendar_dayOverview_dayInfo">
+                <h1>
+                    @if (Tasks[0].EndDate.Date == DateTime.Today)
+                    {
+                        @("Today")
+                    }
+                    else
+                    {
+                        @Tasks[0].EndDate.Date.DayOfWeek.ToString()
+                    }
+                </h1>
+                <h2>@DateTimeService.GetDateAsString("MMMM dd, yyyy", Tasks[0].EndDate.Date)</h2>
+            </div>
+            <div class="calendar_dayOverview_dailyTasks">
+                @foreach (var task in Tasks)
+                {
+                    <NavLink href="@($"/projects/{task.Project.ProjectID}/tasks/{task.TaskID}")">
+                        <div class="calendar_dayOverview_taskItem">
+
+                            <span class="calendar_dayOverview_taskItem_taskName">@task.TaskName</span>
+                            <span>&nbsp;&mdash;&nbsp;&nbsp;</span>
+                            <span class="calendar_dayOverview_taskItem_status @DetermineStatus(task)">
+                                @DetermineStatus(task)
+                            </span>
+
+                        </div>
+                    </NavLink>
+                }
+            </div>
+        }
+
+    </div>
+
+@code {
+    [Parameter]
+    public List<AspNetTasks> Tasks { get; set; }
+
+     private string DetermineStatus(AspNetTasks task)
+    {
+        if (task.Completed)
+        {
+            return "completed";
+        }
+        else if (DateTime.Today.CompareTo(task.EndDate) < 1)
+        {
+            return "open";
+        }
+
+        return "expired";
+    }
+}

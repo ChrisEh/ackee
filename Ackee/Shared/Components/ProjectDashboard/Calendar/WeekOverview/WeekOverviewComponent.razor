@@ -1,0 +1,22 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.ProjectDashboard.Calendar.WeekOverview.DayOfWeek
+
+<div class="calendar_weekOverview">
+    @if (TasksPerDay != null || TasksPerDay.Count > 0)
+    {
+        @foreach (var day in TasksPerDay)
+        {
+            <DayOfWeekComponent Tasks="@day" />
+        }
+    }
+    else
+    {
+        <p>There are no tasks this week.</p>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public List<List<AspNetTasks>> TasksPerDay { get; set; } = null;
+}

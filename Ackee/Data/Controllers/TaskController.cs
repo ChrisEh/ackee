@@ -93,7 +93,9 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
-                var task = ctx.Tasks.FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
+                var task = ctx.Tasks
+                    .Include(t => t.MilestoneTasks)
+                    .FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
                 
                 if (task == null)
                 {
@@ -105,6 +107,22 @@ namespace Ackee.Data.Controllers
                 task.StartDate = updatedTask.StartDate;
                 task.EndDate = updatedTask.EndDate;
                 task.Completed = updatedTask.Completed;
+
+                await ctx.SaveChangesAsync();
+
+                // Set completed milestones to complete
+                task = ctx.Tasks.FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
+
+                // Get all the milestones related to the task
+                foreach (var milestoneTask in task.MilestoneTasks)
+                {
+                    // foreach task related to the milestone, check if all tasks are completed
+                    var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneTask.MilestoneID);
+                    if (milestone.MilestoneTasks.All(mt => mt.Task.Completed))
+                    {
+                        milestone.Completed = true;
+                    }
+                }
 
                 await ctx.SaveChangesAsync();
                 return true;

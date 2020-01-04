@@ -1,7 +1,7 @@
 ﻿@using Ackee.Data.Model
 @using Ackee.Shared.Services.Model
 @using Ackee.Shared.Components.ProjectsOverview.UserTasksOverview.UserTaskDay
-@inject Ackee.Shared.Services.UserTasksService UserTasksService
+@inject Ackee.Shared.Services.TaskService TaskService
 
 <div class="userTasksOverview">
     @if (userTasksPerDay == null || AllUserTasks.Count == 0)
@@ -27,6 +27,6 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        userTasksPerDay = UserTasksService.GetTasksGroupedPerDayPerProject(AllUserTasks);        
+        userTasksPerDay = TaskService.GetTasksGroupedPerDayPerProject(AllUserTasks);        
     }
 }
