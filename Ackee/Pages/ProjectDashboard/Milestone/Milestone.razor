@@ -1,6 +1,7 @@
 ﻿@page "/projects/{ProjectId}/milestones/{MilestoneId}"
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.Milestones.UpdateMilestoneForm
+@using Ackee.Shared.Components.ProjectDashboard.Tasks
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (milestone != null)
@@ -12,7 +13,34 @@
                      PageRouteCustomIndexes=@(new List<int> { 1, 3 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName, milestone.MilestoneName })>
         <div class="milestone">
-            <UpdateMilestoneFormComponent Milestone="@milestone" ProjectId="@ProjectId"/>
+            <div class="milestone_header">
+                <div class="milestone_navigation">
+                    <ul>
+                        <li class="@(selectedTab.Equals("INFO") ? "active" : "")" @onclick='() => OnSelectTab("INFO")'>
+                            INFO
+                        </li>
+                        <li class="@(selectedTab.Equals("TASKS") ? "active" : "")" @onclick='() => OnSelectTab("TASKS")'>
+                            TASKS
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="milestone_content">
+                @if (selectedTab.Equals("INFO"))
+                {
+                    <UpdateMilestoneFormComponent Milestone="@milestone" ProjectId="@ProjectId" />
+                }
+                else
+                {
+                    // Task Table
+                    if (milestoneTasks != null)
+                    {
+                        <TaskTableComponent ProjectId="@ProjectId" Tasks="@milestoneTasks" />
+                    }
+                }
+            </div>
+            
         </div>
     </DashboardLayout>
      
@@ -32,6 +60,8 @@
     private AspNetProjects project = null;
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;
+    private string selectedTab = "INFO";
+    private List<AspNetTasks> milestoneTasks = null;
 
     // Get project object by project ID. If loaded, display it.
     protected override async Task OnInitializedAsync()
@@ -40,6 +70,7 @@
         await RefreshUser();
         await RefreshProject();
         await RefreshMilestone();
+        await RefreshTasks();
     }
 
     private async Task RefreshMilestone()
@@ -59,6 +90,11 @@
         StateHasChanged();
     }
 
+    private async Task RefreshTasks()
+    {
+        milestoneTasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{ProjectId}/milestones/{MilestoneId}/tasks");
+    }
+
     private async Task RefreshUser()
     {
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
@@ -76,5 +112,10 @@
         }
 
         return false;
+    }
+
+     private void OnSelectTab(string tab)
+    {
+        selectedTab = tab;
     }
 }

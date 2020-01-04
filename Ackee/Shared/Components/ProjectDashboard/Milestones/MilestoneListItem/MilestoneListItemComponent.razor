@@ -1,4 +1,5 @@
 ﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.ProgressBar
 @inject Ackee.Shared.Services.DateTimeService DateService
 
 @if (Milestone != null)
@@ -11,7 +12,12 @@
                 <p>Status: <span class="status @DetermineStatus()">@DetermineStatus()</span></p>
             </div>
             <div class="milestone_progress_info">
-                <p>Progress bar here</p>
+                @if (milestoneTasks != null)
+                {
+                    <p>Progress: @($"{NumberOfCompletedTasks()} / {milestoneTasks.Count} tasks completed")</p>
+                    <ProgressBarComponent Total="@milestoneTasks.Count"
+                                          Completed="@NumberOfCompletedTasks()" />
+                }
             </div>
         </div>
     </NavLink>    
@@ -23,6 +29,18 @@
 
     [Parameter]
     public string ProjectId { get; set; }
+
+    private List<AspNetTasks> milestoneTasks = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshTasks();
+    }
+
+    private async Task RefreshTasks()
+    {
+        milestoneTasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{ProjectId}/milestones/{Milestone.MilestoneID}/tasks");
+    }
 
     private string DetermineStatus()
     {
@@ -36,5 +54,10 @@
         }
 
         return "expired";
+    }
+
+    private int NumberOfCompletedTasks()
+    {
+        return milestoneTasks.Where(t => t.Completed).ToList().Count;
     }
 }

@@ -1,3 +1,49 @@
-﻿.milestone {
+﻿.milestone  {
+    width: 100%;
     margin-top: 1rem;
+}
+
+.milestone .milestone_header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 3.3rem;
+    margin-bottom: 1rem;
+}
+
+.milestone .milestone_navigation {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.milestone .milestone_navigation ul {
+    display: flex;
+    flex-flow: row;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.milestone .milestone_navigation li {
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.5rem;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+}
+
+.milestone .milestone_navigation li.active {
+    border-bottom-color: #0078E0;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+.milestone .milestone_navigation li:hover {
+    border-bottom-color: #CC0070;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+@media screen and (min-width: 1048px){
+    .milestone_content {
+        padding: 0 3.3rem;
+    }
 }
