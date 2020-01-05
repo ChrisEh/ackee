@@ -28,6 +28,7 @@ namespace Ackee.Data.Controllers
                     .Include(t => t.UserTasks)
                     .Include(t => t.Project)
                     .Include(t => t.Project.UserProjects)
+                    .Include(t => t.TaskLabels)
                     .ToListAsync();
             }            
         }
@@ -66,6 +67,7 @@ namespace Ackee.Data.Controllers
                     .Include(t => t.UserTasks)
                     .Include(t => t.Project)
                     .Include(t => t.Project.UserProjects)
+                    .Include(t => t.TaskLabels)
                     .FirstOrDefaultAsync(t => t.TaskID == taskId);
             }
         }
@@ -197,14 +199,15 @@ namespace Ackee.Data.Controllers
         #region TASK_LABELS
         // Task Labels
         [HttpPost("{taskId}/labels")]
-        public async Task<object> AddLabelToTask([FromRoute] string taskId, [FromBody] AspNetLabels label)
+        public async Task<object> AddLabelToTask([FromRoute] string taskId, [FromBody] string labelId)
         {
             using (var ctx = new AckeeCtx())
             {
                 var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskID == taskId);
-                var existingTaskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.TaskID == taskId && tl.LabelID == label.LabelID);
+                var label = await ctx.Labels.FirstOrDefaultAsync(l => l.LabelID == labelId);
+                var existingTaskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.TaskID == taskId && tl.LabelID == labelId);
 
-                if (task == null || label == null || existingTaskLabel != null)
+                if (task == null || existingTaskLabel != null)
                 {
                     return BadRequest();
                 }

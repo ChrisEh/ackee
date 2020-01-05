@@ -321,6 +321,7 @@ namespace Ackee.Data.Controllers
 
             var users = ctx.ApplicationUser.ToList();
             var milestones = ctx.Milestones.ToList();
+            var labels = ctx.Labels.ToList();
 
             // Get the tasks
             var tasks = await ctx.Tasks
@@ -328,6 +329,7 @@ namespace Ackee.Data.Controllers
                 .Include(t => t.UserTasks)
                 .Include(t => t.Project)
                 .Include(t => t.Project.UserProjects)
+                .Include(t => t.TaskLabels)                
                 .Where(t => t.Project.ProjectID == projectId)
                 .OrderBy(t => t.EndDate)
                 .ToListAsync();

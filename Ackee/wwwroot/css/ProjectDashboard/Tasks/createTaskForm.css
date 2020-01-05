@@ -33,3 +33,8 @@
 .createTaskForm input[type='checkbox']:checked {
     background-color: green;
 }
+
+.taskLabels {
+    height: 2rem;
+    display: flex;
+}

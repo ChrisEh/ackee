@@ -1,14 +1,16 @@
 ﻿@using Ackee.Data.Model
 
-@if (OnSelect != null && OnDeselect != null)
+
+@if (Label != null)
 {
-    @if (selected)
+    @if (Selected)
     {
         <div class="taskLabel taskLabel_selected"
              style="background-color: @($"{Label.LabelColor}")"
              @onclick="@DeselectLabel">
         </div>
     }
+    else
     {
         <div class="taskLabel"
              style="background-color: @($"{Label.LabelColor}")"
@@ -16,7 +18,6 @@
         </div>
     }
 }
-
 
 
 @code {
@@ -29,18 +30,19 @@
     [Parameter]
     public Action OnDeselect { get; set; }
 
-    private bool selected = false;
+    [Parameter]
+    public bool Selected { get; set; }
 
     private void SelectLabel()
     {
-        selected = true;
+        Selected = true;
         OnSelect?.Invoke();
         StateHasChanged();
     }
 
     private void DeselectLabel()
     {
-        selected = false;
+        Selected = false;
         OnDeselect?.Invoke();
         StateHasChanged();
     }

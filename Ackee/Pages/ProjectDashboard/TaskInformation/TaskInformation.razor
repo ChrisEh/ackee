@@ -15,7 +15,8 @@
                                      CurrentTask="@task"
                                      Milestones="@milestones"
                                      Members="@members" 
-                                     OnSuccess="async () => await RefreshTask()"/>
+                                     OnSuccess="async () => await RefreshTask()"
+                                     OnUpdateTask="async () => await RefreshTask()"/>
         </div>
     </DashboardLayout>
 }
