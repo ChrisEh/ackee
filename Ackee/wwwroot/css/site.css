@@ -39,6 +39,7 @@
 @import url('ProjectDashboard/Calendar/calendarDayOfWeek.css');
 
 @import url('Auxiliary/Tooltip/tooltip.css');
+@import url('Auxiliary/TaskLabel/taskLabel.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

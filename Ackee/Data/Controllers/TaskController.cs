@@ -193,5 +193,56 @@ namespace Ackee.Data.Controllers
                 return true;
             }
         }
+
+        #region TASK_LABELS
+        // Task Labels
+        [HttpPost("{taskId}/labels")]
+        public async Task<object> AddLabelToTask([FromRoute] string taskId, [FromBody] AspNetLabels label)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskID == taskId);
+                var existingTaskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.TaskID == taskId && tl.LabelID == label.LabelID);
+
+                if (task == null || label == null || existingTaskLabel != null)
+                {
+                    return BadRequest();
+                }
+
+                // Create the task label
+                TaskLabel taskLabel = new TaskLabel
+                {
+                    Task = task,
+                    Label = label
+                };
+
+                ctx.TaskLabels.Add(taskLabel);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        // Remove label from task
+        [HttpDelete("{taskId}/labels/{labelId}")]
+        public async Task<ActionResult<bool>> RemoveLabelFromTask(string taskId, string labelId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskID == taskId);
+                var label = await ctx.Labels.FirstOrDefaultAsync(l => l.LabelID == labelId);
+                var taskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.LabelID == labelId && tl.TaskID == taskId);
+
+                if (task == null || label == null || taskLabel == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Remove(taskLabel);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        #endregion
     }
 }

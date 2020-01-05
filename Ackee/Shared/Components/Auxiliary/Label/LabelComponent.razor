@@ -1,0 +1,47 @@
+﻿@using Ackee.Data.Model
+
+@if (OnSelect != null && OnDeselect != null)
+{
+    @if (selected)
+    {
+        <div class="taskLabel taskLabel_selected"
+             style="background-color: @($"{Label.LabelColor}")"
+             @onclick="@DeselectLabel">
+        </div>
+    }
+    {
+        <div class="taskLabel"
+             style="background-color: @($"{Label.LabelColor}")"
+             @onclick="@SelectLabel">
+        </div>
+    }
+}
+
+
+
+@code {
+    [Parameter]
+    public AspNetLabels Label { get; set; }
+
+    [Parameter]
+    public Action OnSelect { get; set; }
+
+    [Parameter]
+    public Action OnDeselect { get; set; }
+
+    private bool selected = false;
+
+    private void SelectLabel()
+    {
+        selected = true;
+        OnSelect?.Invoke();
+        StateHasChanged();
+    }
+
+    private void DeselectLabel()
+    {
+        selected = false;
+        OnDeselect?.Invoke();
+        StateHasChanged();
+    }
+}

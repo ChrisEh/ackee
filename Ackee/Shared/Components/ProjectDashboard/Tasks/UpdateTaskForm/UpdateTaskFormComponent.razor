@@ -2,6 +2,7 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.MilestoneListItem
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.AssigneeListItem
+@using Ackee.Shared.Components.Auxiliary.Label
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <div class="createTaskForm">
@@ -73,6 +74,15 @@
             }
         }
 
+        @* Add labels to the task *@
+        <hr class="my-2" />
+
+        <div class="taskLabels">
+            <LabelComponent Label="@label" />
+        </div>
+
+        @* Action buttons *@
+
         <hr class="my-2" />
 
         <div class="updateMilestoneForm_updateAndDeleteButtons">
@@ -112,6 +122,12 @@
     private string _statusMessage = "";
     private List<ApplicationUser> assignees = new List<ApplicationUser>();
     private List<AspNetMilestones> assignedMilestones = new List<AspNetMilestones>();
+
+    private AspNetLabels label = new AspNetLabels()
+    {
+        LabelName = "Green",
+        LabelColor = "green"
+    };
 
     private async Task UpdateTask()
     {
