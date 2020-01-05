@@ -34,6 +34,10 @@
 @import url('ProjectDashboard/Tasks/createTaskForm.css');
 @import url('ProjectDashboard/Tasks/taskTable.css');
 
+@import url('ProjectDashboard/Calendar/calendar.css');
+@import url('ProjectDashboard/Calendar/calendarWeekOverview.css');
+@import url('ProjectDashboard/Calendar/calendarDayOfWeek.css');
+
 @import url('Auxiliary/Tooltip/tooltip.css');
 
 html, body {

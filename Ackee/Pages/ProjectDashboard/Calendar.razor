@@ -3,6 +3,7 @@
 @using Ackee.Shared.Components.ProjectDashboard.Calendar.WeekOverview
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject Ackee.Shared.Services.TaskService TaskService
+@inject Ackee.Shared.Services.DateTimeService DateTimeService
 
 @if (project != null)
 {
@@ -13,14 +14,21 @@
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="calendar_content">
             <div class="calendar_selectWeek">
-                <div class="button button_actionButton button_fontSmaller button_padding"
-                     @onclick="@DecrementWeek">
-                    Previous week
-                </div>
+                <div class="calendar_selectWeek_buttons">
+                    <div class="button button_actionButton button_fontSmaller button_padding"
+                         @onclick="@DecrementWeek">
+                        Previous week
+                    </div>
 
-                <div class="button button_actionButton button_fontSmaller button_padding"
-                     @onclick="@IncrementWeek">
-                    Next week
+                    <div class="button button_actionButton button_fontSmaller button_padding"
+                         @onclick="@IncrementWeek">
+                        Next week
+                    </div>
+                </div>
+                <div class="calendar_selectWeek_currentWeek">
+                    <h1>
+                        @($"{firstDayOfWeek.DayOfWeek.ToString()}, {DateTimeService.GetDateAsString("MMM dd, yyyy", firstDayOfWeek)} until {lastDayOfWeek.DayOfWeek.ToString()}, {DateTimeService.GetDateAsString("MMM dd, yyyy", lastDayOfWeek)}")
+                    </h1>
                 </div>
             </div>
 
@@ -43,6 +51,8 @@
     private List<AspNetTasks> tasks = null;
     private List<List<AspNetTasks>> tasksPerDay = null;
     private int currentWeek = 0;
+    private DateTime firstDayOfWeek;
+    private DateTime lastDayOfWeek;
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
@@ -77,6 +87,8 @@
     {
         tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{Id}/tasks");
         tasksPerDay = TaskService.GetTasksByWeekNrGroupedByDay(tasks, currentWeek);
+        firstDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).First();
+        lastDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).Last();
     }
 
     private bool CurrentUserIsMemberOfProject()
@@ -96,6 +108,8 @@
     {
         currentWeek++;
         tasksPerDay = TaskService.GetTasksByWeekNrGroupedByDay(tasks, currentWeek);
+        firstDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).First();
+        lastDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).Last();
         StateHasChanged();
     }
 
@@ -103,6 +117,8 @@
     {
         currentWeek--;
         tasksPerDay = TaskService.GetTasksByWeekNrGroupedByDay(tasks, currentWeek);
+        firstDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).First();
+        lastDayOfWeek = DateTimeService.GetAllDatesPerWeek(currentWeek).Last();
         StateHasChanged();
     }
 }
