@@ -28,6 +28,7 @@ namespace Ackee.Data.Controllers
                     .Include(t => t.UserTasks)
                     .Include(t => t.Project)
                     .Include(t => t.Project.UserProjects)
+                    .Include(t => t.TaskLabels)
                     .ToListAsync();
             }            
         }
@@ -66,7 +67,45 @@ namespace Ackee.Data.Controllers
                     .Include(t => t.UserTasks)
                     .Include(t => t.Project)
                     .Include(t => t.Project.UserProjects)
+                    .Include(t => t.TaskLabels)
                     .FirstOrDefaultAsync(t => t.TaskID == taskId);
+            }
+        }
+
+        [HttpDelete("{taskId}")]
+        public async Task<object> DeleteTaskById(string taskId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = ctx.Tasks.FirstOrDefault(t => t.TaskID == taskId);
+
+                if ( task == null)
+                {
+                    return BadRequest();
+                }
+
+                var milestoneTasks = task.MilestoneTasks;
+
+                ctx.Tasks.Remove(task);
+                await ctx.SaveChangesAsync();
+
+                // Get all the milestones related to the task
+                foreach (var milestoneTask in milestoneTasks)
+                {
+                    // foreach task related to the milestone, check if all tasks are completed
+                    var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneTask.MilestoneID);
+                    if (milestone.MilestoneTasks.All(mt => mt.Task.Completed))
+                    {
+                        milestone.Completed = true;
+                    }
+                    else
+                    {
+                        milestone.Completed = false;
+                    }
+                }
+
+                await ctx.SaveChangesAsync();
+                return true;
             }
         }
 
@@ -75,7 +114,9 @@ namespace Ackee.Data.Controllers
         {
             using (var ctx = new AckeeCtx())
             {
-                var task = ctx.Tasks.FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
+                var task = ctx.Tasks
+                    .Include(t => t.MilestoneTasks)
+                    .FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
                 
                 if (task == null)
                 {
@@ -87,6 +128,26 @@ namespace Ackee.Data.Controllers
                 task.StartDate = updatedTask.StartDate;
                 task.EndDate = updatedTask.EndDate;
                 task.Completed = updatedTask.Completed;
+
+                await ctx.SaveChangesAsync();
+
+                // Set completed milestones to complete
+                task = ctx.Tasks.FirstOrDefault(t => t.TaskID == updatedTask.TaskID);
+
+                // Get all the milestones related to the task
+                foreach (var milestoneTask in task.MilestoneTasks)
+                {
+                    // foreach task related to the milestone, check if all tasks are completed
+                    var milestone = await ctx.Milestones.FirstOrDefaultAsync(m => m.MilestoneID == milestoneTask.MilestoneID);
+                    if (milestone.MilestoneTasks.All(mt => mt.Task.Completed))
+                    {
+                        milestone.Completed = true;
+                    }
+                    else
+                    {
+                        milestone.Completed = false;
+                    }
+                }
 
                 await ctx.SaveChangesAsync();
                 return true;
@@ -112,9 +173,7 @@ namespace Ackee.Data.Controllers
                 await ctx.SaveChangesAsync();
                 return true;
             }
-        }
-
-        
+        }        
 
         // Remove milestone from task
         [HttpDelete("{taskId}/assignees/{userId}")]
@@ -136,5 +195,57 @@ namespace Ackee.Data.Controllers
                 return true;
             }
         }
+
+        #region TASK_LABELS
+        // Task Labels
+        [HttpPost("{taskId}/labels")]
+        public async Task<object> AddLabelToTask([FromRoute] string taskId, [FromBody] string labelId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskID == taskId);
+                var label = await ctx.Labels.FirstOrDefaultAsync(l => l.LabelID == labelId);
+                var existingTaskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.TaskID == taskId && tl.LabelID == labelId);
+
+                if (task == null || existingTaskLabel != null)
+                {
+                    return BadRequest();
+                }
+
+                // Create the task label
+                TaskLabel taskLabel = new TaskLabel
+                {
+                    Task = task,
+                    Label = label
+                };
+
+                ctx.TaskLabels.Add(taskLabel);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        // Remove label from task
+        [HttpDelete("{taskId}/labels/{labelId}")]
+        public async Task<ActionResult<bool>> RemoveLabelFromTask(string taskId, string labelId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var task = await ctx.Tasks.FirstOrDefaultAsync(t => t.TaskID == taskId);
+                var label = await ctx.Labels.FirstOrDefaultAsync(l => l.LabelID == labelId);
+                var taskLabel = await ctx.TaskLabels.FirstOrDefaultAsync(tl => tl.LabelID == labelId && tl.TaskID == taskId);
+
+                if (task == null || label == null || taskLabel == null)
+                {
+                    return BadRequest();
+                }
+
+                ctx.Remove(taskLabel);
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        #endregion
     }
 }

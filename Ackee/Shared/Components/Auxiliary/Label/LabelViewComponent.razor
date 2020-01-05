@@ -1,0 +1,13 @@
+﻿@using Ackee.Data.Model
+
+@if (Label != null)
+{
+    <div class="taskLabel"
+         style="background-color: @($"{Label.LabelColor}")">
+    </div>
+}
+
+    @code {
+[Parameter]
+    public AspNetLabels Label { get; set; }
+    }

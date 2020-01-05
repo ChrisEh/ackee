@@ -23,6 +23,8 @@ namespace Ackee.Data.Model
 
         public IEnumerable<UserTask> UserTasks { get; set; }
 
+        public IEnumerable<TaskLabel> TaskLabels { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }

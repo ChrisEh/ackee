@@ -1,0 +1,50 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Services.Model
+
+@if (ProjectWithTasks != null)
+{
+    <div class="projectWithTasks">
+        <NavLink href="@($"/projects/{ProjectWithTasks.ProjectID}")">
+            <h1>@ProjectWithTasks.ProjectName</h1>
+        </NavLink>
+        
+        <div class="projectWithTasks_taskItems">
+            @foreach (var task in ProjectWithTasks.ListOfTasks)
+            {
+            <NavLink href="@($"/projects/{task.Project.ProjectID}/tasks/{task.TaskID}")">
+                <div class="projectWithTasks_taskItem">
+
+                    <span class="projectWithTasks_taskItem_taskName">@task.TaskName</span>
+                    <span>&nbsp;&mdash;&nbsp;&nbsp;</span>
+                    <span class="projectWithTasks_taskItem_status @DetermineStatus(task)">
+                        @DetermineStatus(task)
+                    </span>
+
+                </div>
+            </NavLink>                
+            }
+        </div>
+        
+
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public ProjectTasks ProjectWithTasks { get; set; }
+
+    private string DetermineStatus(AspNetTasks task)
+    {
+        if (task.Completed)
+        {
+            return "completed";
+        }
+        else if (DateTime.Today.CompareTo(task.EndDate) < 1)
+        {
+            return "open";
+        }
+
+        return "expired";
+    }
+}

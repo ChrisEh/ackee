@@ -1,0 +1,35 @@
+﻿.calendar_selectWeek {
+    display: flex;
+    flex-flow: column;
+}
+
+.calendar_selectWeek h1 {
+    font-size: 1.3rem;
+}
+
+.calendar_selectWeek_currentWeek {
+    margin-top: 1rem;
+}
+
+@media screen and (min-width: 1048px) {
+    .calendar_content {
+        padding: 0 3.3rem;
+    }
+
+    .calendar_selectWeek {
+        flex-flow: row;
+        align-items: stretch;
+    }
+
+    .calendar_selectWeek_currentWeek {
+        display: flex;
+        align-items: center;
+        margin-top: 0;
+    }
+
+    .calendar_selectWeek_currentWeek h1 {
+        margin: 0;
+        padding: 0;
+        margin-left: 1rem;
+    }
+}

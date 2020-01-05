@@ -1,0 +1,54 @@
+﻿.projectWithTasks {
+    width: 100%;    
+}
+
+.projectWithTasks:not(:first-of-type) {
+    margin-top: 2rem;
+}
+
+.projectWithTasks h1 {
+    font-size: 1.5rem;
+}
+
+.projectWithTasks_taskItems {
+    display: flex;
+    flex-flow: column;
+}
+
+.projectWithTasks_taskItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    color: black;
+}
+
+.projectWithTasks_taskItem:hover .projectWithTasks_taskItem_taskName {
+    text-decoration: underline;
+}
+
+.projectWithTasks_taskItem .projectWithTasks_taskItem_taskName {
+    padding: 0.3rem;
+}
+
+.projectWithTasks_taskItem_status {
+    font-weight: bold;
+}
+
+.projectWithTasks_taskItem_status.completed {
+    color: green;
+}
+
+.projectWithTasks_taskItem_status.open {
+    color: orangered;
+}
+
+.projectWithTasks_taskItem_status.expired {
+    color: red;
+}
+
+@media screen and (min-width: 1048px) {
+    .projectWithTasks_taskItems {
+        margin-left: 8rem;
+    }
+}

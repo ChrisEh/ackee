@@ -1,5 +1,6 @@
 ﻿@using Ackee.Data.Model
 @using Ackee.Shared.Components.Auxiliary.Tooltip
+@using Ackee.Shared.Components.Auxiliary.Label
 @inject Ackee.Shared.Services.DateTimeService DateTimeService
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject Ackee.Shared.Services.StringManipulationService StringManipulationService
@@ -16,7 +17,8 @@
                     <th scope="col">End Date</th>
                     <th scope="col">Milestones</th>
                     <th scope="col">Assignees</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Labels</th>
+                    <th scope="col">Status</th>                    
                 </tr>
             </thead>
             <tbody>
@@ -45,6 +47,14 @@
                                     </div>
                                 </TooltipComponent>
                             }
+                        </td>
+                        <td>
+                            <div class="taskLabels">
+                                @foreach (var taskLabel in task.TaskLabels)
+                                {
+                                    <LabelViewComponent Label="@taskLabel.Label"></LabelViewComponent>
+                                }
+                            </div>                                
                         </td>
                         <td>
                             <span class="status @DetermineStatus(task)">@DetermineStatus(task)</span>

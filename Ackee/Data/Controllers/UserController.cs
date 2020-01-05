@@ -49,5 +49,16 @@ namespace Ackee.Data.Controllers
                 return await ctx.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
             }                
         }
+
+        [HttpGet("{userEmail}/tasks")]
+        public async Task<List<AspNetTasks>> GetUserTasks(string userEmail)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                return await ctx.Tasks
+                    .Include(t => t.Project)
+                    .Where(t => t.UserTasks.Any(ut => ut.User.Email == userEmail)).ToListAsync();                
+            }
+        }
     }
 }

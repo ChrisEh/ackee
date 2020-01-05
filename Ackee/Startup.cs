@@ -56,6 +56,9 @@ namespace Ackee
             services.AddScoped<StringManipulationService>();
             services.AddScoped<DateTimeService>();
             services.AddScoped<BreadCrumbService>();
+            services.AddScoped<SortService>();
+            services.AddScoped<FilterService>();
+            services.AddScoped<TaskService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

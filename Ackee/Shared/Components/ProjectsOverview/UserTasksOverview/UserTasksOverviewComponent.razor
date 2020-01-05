@@ -1,0 +1,32 @@
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Services.Model
+@using Ackee.Shared.Components.ProjectsOverview.UserTasksOverview.UserTaskDay
+@inject Ackee.Shared.Services.TaskService TaskService
+
+<div class="userTasksOverview">
+    @if (userTasksPerDay == null || AllUserTasks.Count == 0)
+    {
+        <p>You don't have any tasks yet.</p>
+    }
+    else
+    {
+        @foreach (var day in userTasksPerDay)
+        {
+            <UserTaskDayComponent DayWithProjects="@day" />
+        }
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public List<AspNetTasks> AllUserTasks { get; set; }
+
+    private List<DayProjects> userTasksPerDay = null;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        userTasksPerDay = TaskService.GetTasksGroupedPerDayPerProject(AllUserTasks);        
+    }
+}

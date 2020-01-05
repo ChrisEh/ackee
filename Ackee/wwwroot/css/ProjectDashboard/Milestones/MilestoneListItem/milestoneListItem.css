@@ -18,12 +18,13 @@
     .milestoneListItem {
         flex-flow: row;
         align-items: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .milestone_info {
-        width: 40%;
+        width: 60%;
     }
-
 }
 
 .milestoneListItem p {
@@ -60,4 +61,8 @@
 
 .milestoneListItem .milestone_info span.expired {
     color: red;
+}
+
+.milestone_progress_info {
+    width: 100%;
 }

@@ -2,6 +2,8 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.MilestoneListItem
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm.AssigneeListItem
+@using Ackee.Shared.Components.Auxiliary.Label
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <div class="createTaskForm">
     <EditForm Model="@updateFormModel" OnValidSubmit="@HandleValidSubmit">
@@ -57,7 +59,7 @@
         <hr class="my-2" />
         <h1>Assign members to the task</h1>
         <select @onchange="@AddAssignee">
-            <option value="EMPTY"> -- Select a milestone -- </option>
+            <option value="EMPTY"> -- Select a member -- </option>
             @foreach (var member in Members)
             {
                 <option value="@member.Email">@member.Email</option>
@@ -72,9 +74,32 @@
             }
         }
 
+        @* Add labels to the task *@
         <hr class="my-2" />
 
-        <button class="button button_actionButton button_padding" type="submit">Update Task</button>
+        <div class="taskLabels">
+            @if (labels != null)
+            {
+                @foreach(var label in labels)
+                {
+                    <LabelComponent Label="@label"
+                                    OnSelect="async () => await AddLabel(label.LabelID)"
+                                    OnDeselect="async () => await RemoveLabel(label.LabelID)"
+                                    Selected="@(CurrentTask.TaskLabels.Any(tl => tl.LabelID == label.LabelID) ? true : false)"
+                                    />
+                }                
+            }
+        </div>
+
+        @* Action buttons *@
+
+        <hr class="my-2" />
+
+        <div class="updateMilestoneForm_updateAndDeleteButtons">
+            <button class="button button_actionButton button_padding" type="submit">Update Task</button>
+            <div class="button button_actionButton button_padding bg-danger"
+                 @onclick="async () => await DeleteTask()">Delete Task</div>
+        </div>
 
         @if (!string.IsNullOrEmpty(_statusMessage))
         {
@@ -103,10 +128,25 @@
     [Parameter]
     public Action OnSuccess { get; set; }
 
+    [Parameter]
+    public Action OnUpdateTask { get; set; }
+
     private UpdateFormModel updateFormModel = new UpdateFormModel();
     private string _statusMessage = "";
     private List<ApplicationUser> assignees = new List<ApplicationUser>();
     private List<AspNetMilestones> assignedMilestones = new List<AspNetMilestones>();
+    private List<AspNetLabels> labels = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshLabels();
+        StateHasChanged();
+    }
+
+    private async Task RefreshLabels()
+    {
+        labels = await (new HttpClient()).GetJsonAsync<List<AspNetLabels>>($"http://localhost:53508/api/labels");
+    }
 
     private async Task UpdateTask()
     {
@@ -187,6 +227,12 @@
         await UpdateTask();
     }
 
+    private async Task DeleteTask()
+    {
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}");
+        NavigationManager.NavigateTo($"/projects/{Project.ProjectID}/tasks");
+    }
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -236,11 +282,23 @@
         }
 
         StateHasChanged();
-    }
+    }    
 
     private void RemoveAssignee(ApplicationUser assignee)
     {
         assignees.Remove(assignee);
         StateHasChanged();
+    }
+
+    private async Task AddLabel(string labelId)
+    {
+        await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}/labels", labelId);
+        OnUpdateTask?.Invoke();
+    }
+
+    private async Task RemoveLabel(string labelId)
+    {
+        await (new HttpClient()).DeleteAsync($"http://localhost:53508/api/tasks/{CurrentTask.TaskID}/labels/{labelId}");
+        OnUpdateTask?.Invoke();
     }
 }

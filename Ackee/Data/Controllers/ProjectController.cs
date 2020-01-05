@@ -25,7 +25,7 @@ namespace Ackee.Data.Controllers
         {
             var ctx = new AckeeCtx();
 
-            return await ctx.Projects.ToListAsync();
+            return await ctx.Projects.OrderBy(p => p.DateCreated).ToListAsync();
         }
 
         [HttpGet("{projectId}")]
@@ -54,7 +54,7 @@ namespace Ackee.Data.Controllers
                 var userProject = ctx.UserProjects.ToList();
 
                 return await ctx.Projects.Where(p => p.UserProjects.Any(
-                    up => up.UserId == userId)).ToListAsync();
+                    up => up.UserId == userId)).OrderByDescending(p => p.DateCreated).ToListAsync();
             }                
         }
 
@@ -241,7 +241,10 @@ namespace Ackee.Data.Controllers
             var ctx = new AckeeCtx();
 
             // Get the milestones
-            var milestones = await ctx.Milestones.Where(m => m.Project.ProjectID == projectId).ToListAsync();
+            var milestones = await ctx.Milestones
+                .Where(m => m.Project.ProjectID == projectId)
+                .OrderBy(m => m.EndDate)
+                .ToListAsync();
 
             return milestones;
         }
@@ -286,6 +289,28 @@ namespace Ackee.Data.Controllers
             }
         }
 
+        [HttpGet("{projectId}/milestones/{milestoneId}/tasks")]
+        public async Task<IEnumerable<AspNetTasks>> GetMilestoneTasks(string projectId, string milestoneId)
+        {
+            using (var ctx = new AckeeCtx())
+            {
+                var users = ctx.ApplicationUser.ToList();
+                var milestones = ctx.Milestones.ToList();
+
+                // Get the tasks
+                var tasks = await ctx.Tasks
+                    .Include(t => t.MilestoneTasks)
+                    .Include(t => t.UserTasks)
+                    .Include(t => t.Project)
+                    .Include(t => t.Project.UserProjects)
+                    .Where(t => t.Project.ProjectID == projectId && t.MilestoneTasks.Any(mt => mt.MilestoneID == milestoneId))
+                    .OrderBy(t => t.EndDate)
+                    .ToListAsync();
+
+                return tasks;
+            }
+        }
+
         #endregion
 
         #region PROJECT TASKS ENDPOINTS
@@ -296,14 +321,18 @@ namespace Ackee.Data.Controllers
 
             var users = ctx.ApplicationUser.ToList();
             var milestones = ctx.Milestones.ToList();
+            var labels = ctx.Labels.ToList();
 
-            // Get the milestones
+            // Get the tasks
             var tasks = await ctx.Tasks
                 .Include(t => t.MilestoneTasks)
                 .Include(t => t.UserTasks)
                 .Include(t => t.Project)
                 .Include(t => t.Project.UserProjects)
-                .Where(t => t.Project.ProjectID == projectId).ToListAsync();
+                .Include(t => t.TaskLabels)                
+                .Where(t => t.Project.ProjectID == projectId)
+                .OrderBy(t => t.EndDate)
+                .ToListAsync();
 
             return tasks;
         }
@@ -355,7 +384,6 @@ namespace Ackee.Data.Controllers
                 return true;
             }
         }
-
         #endregion
 
     }

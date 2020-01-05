@@ -14,8 +14,10 @@ namespace Ackee.Data
         public DbSet<AspNetMilestones> Milestones { get; set; }   
         public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<AspNetTasks> Tasks { get; set; }
+        public DbSet<AspNetLabels> Labels { get; set; }
         public DbSet<MilestoneTask> MilestoneTasks { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
+        public DbSet<TaskLabel> TaskLabels { get; set; }
 
         public AckeeCtx() : base()
         {
@@ -69,6 +71,20 @@ namespace Ackee.Data
             .HasOne(ut => ut.User)
             .WithMany(u => u.UserTasks)
             .HasForeignKey(ut => ut.UserID).OnDelete(DeleteBehavior.Cascade);
+
+            // Many-to-many Task/Label
+            modelBuilder.Entity<TaskLabel>()
+                .HasKey(tl => new { tl.LabelID, tl.TaskID });
+
+            modelBuilder.Entity<TaskLabel>()
+            .HasOne(tl => tl.Task)
+            .WithMany(t => t.TaskLabels)
+            .HasForeignKey(tl => tl.TaskID).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TaskLabel>()
+            .HasOne(tl => tl.Label)
+            .WithMany(l => l.TaskLabels)
+            .HasForeignKey(tl => tl.LabelID).OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

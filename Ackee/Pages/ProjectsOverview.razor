@@ -4,51 +4,56 @@
 @using Ackee.Shared.Components.UI.Modal
 @using Ackee.Shared.Components.ProjectsOverview.CreateProjectForm
 @using Ackee.Shared.Components.ProjectsOverview.ProjectListItem
+@using Ackee.Shared.Components.ProjectsOverview.UserTasksOverview
+@inject Ackee.Shared.Services.StringManipulationService StringManipulationService
 
-
-
-    <main class="mainLayout_main__maxWidth">
-        <div class="projectsOverview">
-            <div class="projectsOverview_header">
-                <h3>Projects</h3>
-                <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
-            </div>
-
-            <div class="projectsOverview_navigation">
-                <ul>
-                    <li class="@(selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
-                        ALL
-                    </li>
-                    <li class="@(selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
-                        MY TASKS
-                    </li>
-                </ul>
-            </div>
-
-            <div class="projectsOverview_content">
-                @if (selectedTab.Equals("ALL"))
-                {
-                    if (projects != null)
-                        @foreach (var project in projects)
-                        {
-                            <ProjectListItemComponent ProjectName="@project.ProjectName" 
-                                                      ProjectID="@project.ProjectID"  
-                                                      ProjectMembers="@project.UserProjects"/>
-                        }
-                    }
-                    else
-                    {
-                        <h1>My personal tasks</h1>
-                    }
-            </div>
+<main class="mainLayout_main__maxWidth">
+    <div class="projectsOverview">
+        <div class="projectsOverview_header">
+            <h3>Projects</h3>
+            <Button ActionButton Round Padding FontSmaller Uppercase OnClick="() => ShowModal()">Add a project</Button>
         </div>
-        @if (currentUser != null && showModal)
-        {
-            <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Project">
-                <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()"/>
-            </ModalWithBackdropComponent>
-        }
-    </main>
+
+        <div class="projectsOverview_navigation">
+            <ul>
+                <li class="@(selectedTab.Equals("ALL") ? "active" : "")" @onclick='() => OnSelectTab("ALL")'>
+                    ALL
+                </li>
+                <li class="@(selectedTab.Equals("MY TASKS") ? "active" : "")" @onclick='() => OnSelectTab("MY TASKS")'>
+                    MY TASKS
+                </li>
+            </ul>
+        </div>
+
+        <div class="projectsOverview_content">
+            @if (selectedTab.Equals("ALL"))
+            {
+                @if (projects != null)
+                {
+                    @foreach (var project in projects)
+                    {
+                        <ProjectListItemComponent ProjectName="@project.ProjectName"
+                                                  ProjectID="@project.ProjectID"
+                                                  ProjectMembers="@project.UserProjects" />
+                    }
+                }
+            }
+            else
+            {
+                @if (userTasks != null)
+                {
+                    <UserTasksOverviewComponent AllUserTasks="@userTasks" />
+                }
+            }
+        </div>
+    </div>
+    @if (currentUser != null && showModal)
+    {
+        <ModalWithBackdropComponent Size_500x500 Show="@showModal" Header="Add A Project">
+            <CreateProjectFormComponent UserId="@currentUser.Id" OnSuccess="async () => await RefreshProjects()" />
+        </ModalWithBackdropComponent>
+    }
+</main>
 
 @code {
     [CascadingParameter]
@@ -57,6 +62,7 @@
     private string selectedTab = "ALL";
     private bool showModal = false;
     private List<AspNetProjects> projects;
+    private List<AspNetTasks> userTasks;
 
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;
@@ -66,6 +72,8 @@
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProjects();
+        await RefreshUserTasks();
+        StateHasChanged();
     }
 
     private void OnSelectTab(string tab)
@@ -82,11 +90,35 @@
     private async Task RefreshProjects()
     {
         projects = await (new HttpClient()).GetJsonAsync<List<AspNetProjects>>($"http://localhost:53508/api/projects/user/{currentUser.Id}");
-        StateHasChanged();
     }
 
     private async Task RefreshUser()
     {
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
     }
+
+    private async Task RefreshUserTasks()
+    {
+        userTasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}/tasks");
+    }
+
+    // Used to seed database with labels
+    //    private async Task AddLabelsToDatabase()
+    //    {
+    //        List<string> colors = new List<string>()
+    //{
+    //            "red", "orange", "yellow", "lime", "green", "cyan", "cornflowerblue", "rebeccapurple", "magenta", "grey"
+    //        };
+
+    //        foreach (var color in colors)
+    //        {
+    //            AspNetLabels label = new AspNetLabels()
+    //            {
+    //                LabelName = StringManipulationService.CapitalizeFirstLetterOfString(color),
+    //                LabelColor = color
+    //            };
+
+    //            await (new HttpClient()).PostJsonAsync<bool>($"http://localhost:53508/api/labels", label);
+    //        }
+    //    }
 }
