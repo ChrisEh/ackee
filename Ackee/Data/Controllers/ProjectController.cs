@@ -303,6 +303,7 @@ namespace Ackee.Data.Controllers
                     .Include(t => t.UserTasks)
                     .Include(t => t.Project)
                     .Include(t => t.Project.UserProjects)
+                    .Include(t => t.TaskLabels)
                     .Where(t => t.Project.ProjectID == projectId && t.MilestoneTasks.Any(mt => mt.MilestoneID == milestoneId))
                     .OrderBy(t => t.EndDate)
                     .ToListAsync();
