@@ -1,11 +1,12 @@
 ﻿@page "/projects/{Id}/milestones"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Milestones
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" 
+    <DashboardLayout Project="@project"
                      PageName="milestones"
                      PageRoute="@($"/projects/{Id}/milestones")"
                      PageRouteCustomIndexes=@(new List<int> { 1 })
@@ -13,9 +14,13 @@
         <div class="milestones_content">
             <MilestoneOverviewComponent ProjectId="@project.ProjectID"
                                         Milestones="@milestones"
-                               OnMilestonesUpdated="async () => await RefreshMilestones()" />
+                                        OnMilestonesUpdated="async () => await RefreshMilestones()" />
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {

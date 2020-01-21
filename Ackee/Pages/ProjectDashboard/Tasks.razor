@@ -1,10 +1,12 @@
 ﻿@page "/projects/{Id}/tasks"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Tasks
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-@if (project != null){
-    <DashboardLayout Project="@project" 
+@if (project != null)
+{
+    <DashboardLayout Project="@project"
                      PageName="tasks"
                      PageRoute="@($"/projects/{Id}/tasks")"
                      PageRouteCustomIndexes=@(new List<int> { 1 })
@@ -13,6 +15,10 @@
             <TaskOverviewComponent ProjectId="@Id" AllTasks="@tasks" />
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {

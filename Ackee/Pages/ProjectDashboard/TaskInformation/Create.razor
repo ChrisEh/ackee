@@ -1,5 +1,6 @@
 ﻿@page "/projects/{Id}/tasks/create"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Tasks.CreateTaskForm
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
@@ -11,9 +12,13 @@
                      PageRouteCustomIndexes=@(new List<int> { 1 })
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="tasks_content">
-            <CreateTaskFormComponent Project="@project" Members="@members" Milestones="@milestones"/>
+            <CreateTaskFormComponent Project="@project" Members="@members" Milestones="@milestones" />
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {
@@ -62,7 +67,7 @@
     {
         milestones = await (new HttpClient()).GetJsonAsync<List<AspNetMilestones>>($"http://localhost:53508/api/projects/{project.ProjectID}/milestones");
     }
-    
+
     private async Task RefreshMembers()
     {
         members = await (new HttpClient()).GetJsonAsync<List<ApplicationUser>>($"http://localhost:53508/api/projects/{project.ProjectID}/members");

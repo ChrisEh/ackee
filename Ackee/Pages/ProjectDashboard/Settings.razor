@@ -1,5 +1,6 @@
 ﻿@page "/projects/{Id}/settings"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Settings.UpdateProjectInformationForm
 @using Ackee.Shared.Components.ProjectDashboard.Settings.MembersOverview
 @using Ackee.Shared.Components.ProjectDashboard.Settings.DeleteProjectForm
@@ -7,7 +8,7 @@
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" 
+    <DashboardLayout Project="@project"
                      PageName="settings"
                      PageRoute="@($"/projects/{Id}/settings")"
                      PageRouteCustomIndexes=@(new List<int> { 1 })
@@ -49,6 +50,10 @@
 
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {

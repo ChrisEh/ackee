@@ -2,6 +2,7 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI
 @using Ackee.Shared.Components.UI.Modal
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectsOverview.CreateProjectForm
 @using Ackee.Shared.Components.ProjectsOverview.ProjectListItem
 @using Ackee.Shared.Components.ProjectsOverview.UserTasksOverview
@@ -37,12 +38,20 @@
                                                   ProjectMembers="@project.UserProjects" />
                     }
                 }
+                else
+                {
+                    <SpinnerComponent />
+                }
             }
             else
             {
                 @if (userTasks != null)
                 {
                     <UserTasksOverviewComponent AllUserTasks="@userTasks" />
+                }
+                else
+                {
+                    <SpinnerComponent />
                 }
             }
         </div>

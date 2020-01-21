@@ -1,12 +1,13 @@
 ﻿@page "/projects/{ProjectId}/milestones/{MilestoneId}"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Milestones.UpdateMilestoneForm
 @using Ackee.Shared.Components.ProjectDashboard.Tasks
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 @if (milestone != null)
 {
-    
+
     <DashboardLayout Project="@project"
                      PageName="@milestone.MilestoneName"
                      PageRoute="@($"/projects/{ProjectId}/milestones/{MilestoneId}")"
@@ -40,10 +41,14 @@
                     }
                 }
             </div>
-            
+
         </div>
     </DashboardLayout>
-     
+
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {
@@ -114,7 +119,7 @@
         return false;
     }
 
-     private void OnSelectTab(string tab)
+    private void OnSelectTab(string tab)
     {
         selectedTab = tab;
     }

@@ -18,6 +18,7 @@
 @import url('UI/Modal/modalWithBackdrop.css');
 @import url('ProjectDashboard/projectDashboard.css');
 @import url('UI/DashboardWidgets/dashboardWidgets.css');
+@import url('UI/Spinner/spinner.css');
 
 @import url('ProjectDashboard/Settings/settings.css'); 
 @import url('ProjectDashboard/Settings/UpdateProjectInfoForm/updateProjectInfoForm.css');

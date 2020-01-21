@@ -1,5 +1,6 @@
 ﻿@page "/projects/{Id}/calendar"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.Calendar.WeekOverview
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject Ackee.Shared.Services.TaskService TaskService
@@ -7,7 +8,7 @@
 
 @if (project != null)
 {
-    <DashboardLayout Project="@project" 
+    <DashboardLayout Project="@project"
                      PageName="calendar"
                      PageRoute="@($"/projects/{Id}/calendar")"
                      PageRouteCustomIndexes=@(new List<int> { 1 })
@@ -32,12 +33,16 @@
                 </div>
             </div>
 
-            @if(tasksPerDay != null)
+            @if (tasksPerDay != null)
             {
                 <WeekOverviewComponent TasksPerDay="@tasksPerDay" />
-            }            
+            }
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {

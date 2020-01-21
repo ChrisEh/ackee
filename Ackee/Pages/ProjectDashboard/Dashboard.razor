@@ -1,5 +1,6 @@
 ﻿@page "/projects/{Id}"
 @using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
 
 @if (project != null)
@@ -17,6 +18,10 @@
             </div>
         </div>
     </DashboardLayout>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 
