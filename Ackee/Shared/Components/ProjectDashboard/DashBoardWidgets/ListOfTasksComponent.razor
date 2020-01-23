@@ -1,35 +1,24 @@
-﻿<div class="widget">
-    <h4 class="widget_header">Tasks</h4>
+﻿@using Ackee.Data.Model
+@using Ackee.Shared.Components.UI.Spinner
+
+<div class="widget">
+    <h4 class="widget_header">@Title</h4>
     <div class="widget_frame">
         <div class="widget_content scrollbar" id="style">
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_done"></span>
-                <h6 class="p-1">Task one</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_done"></span>
-                <h6 class="p-1">Task two</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_done"></span>
-                <h6 class="p-1">Task three</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_notDone"></span>
-                <h6 class="p-1">Task four</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_notDone"></span>
-                <h6 class="p-1">Task four</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_notDone"></span>
-                <h6 class="p-1">Task four</h6>
-            </div>
-            <div class="widget_task widget_task__border d-flex">
-                <span class="dashboard_widget__span_notDone"></span>
-                <h6 class="p-1">Task four</h6>
-            </div>
+            @if(Tasks != null)
+            {
+                @foreach (var task in Tasks)
+                {
+                    <div class="widget_task widget_task__border d-flex">
+                        <span class='@(task.Completed ? "dashboard_widget__span_done" : "dashboard_widget__span_notDone")'></span>
+                        <h6 class="p-1">@task.TaskName</h6>
+                    </div>
+                }
+            }
+            else
+            {
+                <SpinnerComponent />
+            }
         </div>
 
         <div class="widget_task widget_task__legend">
@@ -46,5 +35,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Title { get; set; }
 
+    [Parameter]
+    public List<AspNetTasks> Tasks { get; set; }
 }

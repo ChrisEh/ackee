@@ -82,5 +82,22 @@ namespace Ackee.Shared.Services
                 .Select(g => g.ToList())
                 .ToList();
         }
+
+        public List<AspNetTasks> GetTasksPerDateRange(List<AspNetTasks> tasks, DateTime startDay, DateTime endDay)
+        {
+            return tasks
+                .Where(t => t.StartDate.Date >= startDay && t.EndDate.Date <= endDay)
+                .OrderBy(t => t.EndDate.Date)
+                .ToList();
+        }
+
+        public List<AspNetTasks> GetPersonalTasksPerDateRange(List<AspNetTasks> tasks, DateTime startDay, DateTime endDay, ApplicationUser user)
+        {
+            return tasks
+                .Where(t => (t.StartDate.Date >= startDay && t.EndDate.Date <= endDay))
+                .Where(t => t.UserTasks.Any(ut => ut.UserID == user.Id))
+                .OrderBy(t => t.EndDate.Date)
+                .ToList();
+        }
     }
 }

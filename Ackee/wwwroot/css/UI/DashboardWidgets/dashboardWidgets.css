@@ -2,15 +2,18 @@
     width: 100%;
 }
 
+.widget:not(:first-child) {
+    margin-top: 2rem;
+}
+
 @media screen and (min-width: 600px){
     .widget {
         width: 48%;
+        margin-top: 0;
     }
-}
 
-@media screen and (min-width: 1048px){
-    .widget {
-        width: 30%;
+    .widget:not(:first-child) {
+        margin-top: 0;
     }
 }
 

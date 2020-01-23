@@ -2,6 +2,8 @@
 @using Ackee.Data.Model
 @using Ackee.Shared.Components.UI.Spinner
 @using Ackee.Shared.Components.ProjectDashboard.DashBoardWidgets
+@inject Ackee.Shared.Services.TaskService TaskService
+@inject Ackee.Shared.Services.DateTimeService DateTimeService
 
 @if (project != null)
 {
@@ -12,9 +14,15 @@
                      PageRouteCustomNames=@(new List<string>() { project.ProjectName })>
         <div class="projectDashboard_container">
             <div class="widgets">
-                <ListOfTasksComponent />
-                <ListOfTasksComponent />
-                <ListOfTasksComponent />
+                @if (tasksThisWeek != null)
+                {
+                    <ListOfTasksComponent Title="Upcoming Tasks" Tasks="@tasksThisWeek"/>
+                    <ListOfTasksComponent Title="Personal Upcoming Tasks" Tasks="@personalTasksThisWeek"/>
+                }
+                else
+                {
+                    <SpinnerComponent />
+                }
             </div>
         </div>
     </DashboardLayout>
@@ -33,6 +41,9 @@ else
     public string Id { get; set; }
 
     private AspNetProjects project = null;
+    private List<AspNetTasks> tasks = null;
+    private List<AspNetTasks> tasksThisWeek = null;
+    private List<AspNetTasks> personalTasksThisWeek = null;
 
     private ApplicationUser currentUser = null;
     System.Security.Claims.ClaimsPrincipal CurrentUser;    
@@ -43,6 +54,7 @@ else
         CurrentUser = (await authenticationStateTask).User;
         await RefreshUser();
         await RefreshProject();
+        await RefreshTasks();
     }
 
     private async Task RefreshProject()
@@ -55,5 +67,14 @@ else
     private async Task RefreshUser()
     {
         currentUser = await (new HttpClient()).GetJsonAsync<ApplicationUser>($"http://localhost:53508/api/users/{CurrentUser.Identity.Name}");
+    }
+
+        private async Task RefreshTasks()
+    {
+        tasks = await (new HttpClient()).GetJsonAsync<List<AspNetTasks>>($"http://localhost:53508/api/projects/{Id}/tasks");
+        List<DateTime> datesCurrentWeek = DateTimeService.GetAllDatesPerWeek(0);
+        tasksThisWeek = TaskService.GetTasksPerDateRange(tasks, datesCurrentWeek.First(), datesCurrentWeek.Last());
+        personalTasksThisWeek = TaskService.GetPersonalTasksPerDateRange(tasks, datesCurrentWeek.First(), datesCurrentWeek.Last(), currentUser);
+        StateHasChanged();
     }
 }

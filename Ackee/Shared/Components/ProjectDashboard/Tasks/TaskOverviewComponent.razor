@@ -1,5 +1,6 @@
 ﻿@using Ackee.Data.Model
 @using Ackee.Shared.Services
+@using Ackee.Shared.Components.UI.Spinner
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject Ackee.Shared.Services.SortService SortService
 @inject Ackee.Shared.Services.FilterService FilterService
@@ -37,6 +38,10 @@
 
         <TaskTableComponent Tasks="@filteredTasks" ProjectId="@ProjectId" />
     </div>
+}
+else
+{
+    <SpinnerComponent />
 }
 
 @code {
